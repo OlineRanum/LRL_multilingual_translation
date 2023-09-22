@@ -30,6 +30,9 @@ class DFPreprocessor:
         
         # Remove punctuation and other special characters
         df = self.apply_remove_characters(df)
+
+        # Write to output file
+        self.write_df_to_headfile(df)
         
         return df
     
@@ -44,7 +47,7 @@ class DFPreprocessor:
 
     def preprocess_dataframe(self, path):
         """
-        Preprocess a dataframe comprised of parallel corpa.
+        Preprocess a dataframe comprised of parallel documents.
         
         Parameters:
             path (str): path to df of parallel documents to preprocess.
@@ -60,6 +63,32 @@ class DFPreprocessor:
         
         return preprocessed_df
     
+    def write_df_to_headfile(self, df, output_directory  = '../Data/Preprocessed'):
+        """
+        Write each column of a DataFrame to separate text files compatible with the xnmt framework
+
+        Parameters:
+        df (df): The DataFrame to extract data from.
+        output_directory (str): The directory where the text files will be saved.
+
+        Output:
+        file (txt): One text file per column, with each row in the text file representing a cell from that column.
+        """
+        # Create the output directory if it doesn't exist
+        import os
+        os.makedirs(output_directory, exist_ok=True)
+        
+        # Loop through each column in the DataFrame and create txt file
+        for column_name, column_data in df.items():
+            output_file_path = os.path.join(output_directory, f"head_{column_name}.txt")
+            
+            # Write the column data to the text file
+            with open(output_file_path, "w") as text_file:
+                text_file.write("\n".join(map(str, column_data)))
+                
+            print(f"Saved '{column_name}' to {output_file_path}")
+
+
 
 
 if __name__ == "__main__":

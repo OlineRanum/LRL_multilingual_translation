@@ -36,6 +36,7 @@ class DFPreprocessor:
 
         # Write to output file
         self.write_df_to_headfile(df)
+        self.extract_vocabulary_from_dataframe(df)
         
         return df
     
@@ -60,6 +61,68 @@ class DFPreprocessor:
                         df.drop(index, inplace=True)
             return df
 
+    
+    def extract_vocabulary_from_dataframe(self, df, output_dir = '../Data/Preprocessed'):
+        """
+        Write each column of a DataFrame to separate vocabulary files compatible with the xnmt framework
+
+        Parameters:
+        df (df): The DataFrame to extract data from.
+        output_directory (str): The directory where the text files will be saved.
+
+        Output:
+        file (txt): comprised of vocabulary extracted from each column/language.
+        """
+        # Create a dictionary to store vocabularies for each language
+        vocabularies = {}
+        
+        # Iterate over columns (languages) in the DataFrame
+        for column in df.columns:
+            # Initialize an empty set to store unique words
+            word_set = set()
+            
+            for text in df[column]:
+                # Tokenize the text into words
+                words = word_tokenize(text)
+                
+                # Add the words to the set to ensure uniqueness
+                word_set.update(words)
+            
+            vocabularies[column] = word_set
+            
+            # Write the vocabulary to a text file
+            output_file = f"{output_dir}/{column}.vocab.txt"
+            with open(output_file, 'w', encoding='utf-8') as file:
+                file.write('\n'.join(word_set))
+        
+        return vocabularies
+        
+    def write_df_to_headfile(self, df, output_directory  = '../Data/Preprocessed'):
+        """
+        Write each column of a DataFrame to separate text files compatible with the xnmt framework
+
+        Parameters:
+        df (df): The DataFrame to extract data from.
+        output_directory (str): The directory where the text files will be saved.
+
+        Output:
+        file (txt): One text file per column, with each row in the text file representing a cell from that column.
+        """
+        # Create the output directory if it doesn't exist
+        import os
+        os.makedirs(output_directory, exist_ok=True)
+        
+        # Loop through each column in the DataFrame and create txt file
+        for column_name, column_data in df.items():
+            output_file_path = os.path.join(output_directory, f"head.{column_name}.txt")
+            
+            # Write the column data to the text file
+            with open(output_file_path, "w") as text_file:
+                text_file.write("\n".join(map(str, column_data)))
+                
+            print(f"Saved '{column_name}' to {output_file_path}")
+
+
 
     def preprocess_dataframe(self, path):
         """
@@ -78,33 +141,6 @@ class DFPreprocessor:
         preprocessed_df = self.clean_df(dev)
         
         return preprocessed_df
-    
-    def write_df_to_headfile(self, df, output_directory  = '../Data/Preprocessed'):
-        """
-        Write each column of a DataFrame to separate text files compatible with the xnmt framework
-
-        Parameters:
-        df (df): The DataFrame to extract data from.
-        output_directory (str): The directory where the text files will be saved.
-
-        Output:
-        file (txt): One text file per column, with each row in the text file representing a cell from that column.
-        """
-        # Create the output directory if it doesn't exist
-        import os
-        os.makedirs(output_directory, exist_ok=True)
-        
-        # Loop through each column in the DataFrame and create txt file
-        for column_name, column_data in df.items():
-            output_file_path = os.path.join(output_directory, f"head_{column_name}.txt")
-            
-            # Write the column data to the text file
-            with open(output_file_path, "w") as text_file:
-                text_file.write("\n".join(map(str, column_data)))
-                
-            print(f"Saved '{column_name}' to {output_file_path}")
-
-
 
 
 if __name__ == "__main__":

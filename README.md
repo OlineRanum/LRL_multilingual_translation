@@ -10,5 +10,5 @@ cd DLNLP_Project
 conda env create -f env.yml
 conda activate dlnlp
 
-bash setup.sh
+bash setup_ubuntu_gpu.sh
 ```

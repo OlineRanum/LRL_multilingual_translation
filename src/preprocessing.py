@@ -8,7 +8,7 @@ class DFPreprocessor:
         #self.stopwords = set(stopwords.words('english'))
         #self.stemmer = nltk.PorterStemmer()  
 
-        self.languages = ['en', 'es']
+        self.languages = ['en', 'be']
         #self.languages = ['talk_name'] + self.languages
 
         # Characters to remove from text
@@ -31,6 +31,9 @@ class DFPreprocessor:
         # Remove punctuation and other special characters
         df = self.apply_remove_characters(df)
 
+        # Remove all null pairs
+        df = self.apply_remove_null_columns(df)
+
         # Write to output file
         self.write_df_to_headfile(df)
         
@@ -43,6 +46,19 @@ class DFPreprocessor:
         for char in self.remove_char:
             df = df.applymap(lambda s: s.replace(char, '') if type(s) == str else s)
         return df
+    
+    def apply_remove_null_columns(self, df, value_to_remove = ['__null__', '_ _ null _ _']):
+            """ NB! TODO: This is not optimal: some documents contain singular instances of __null__ marker to indicate that a 
+            word is missing. Others docs are comprised of several instances of _ _ null _ _ __null__.
+            Need to test what to do with this
+            """
+            for index, row in df.iterrows():
+                # Check if the row contains the value to remove in any column
+                for value in value_to_remove:
+                    if any(row == value):
+                        # If it contains the value, remove the entire row
+                        df.drop(index, inplace=True)
+            return df
 
 
     def preprocess_dataframe(self, path):

@@ -3,6 +3,8 @@ Project on multilingual translation for DLNLP
 
 ## Installation
 
+For installing environment compatible with all components of the project and clone relevant repos (linux/ubuntu)
+
 ``` Installing and configuring repo
 git clone https://github.com/OlineRanum/DLNLP_Project.git
 cd DLNLP_Project

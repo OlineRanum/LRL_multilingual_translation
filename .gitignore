@@ -2,4 +2,5 @@
 lang2vec/
 langrank/
 xnmt/
-Data/
+word-embeddings-for-nmt/
+*.tsv

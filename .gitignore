@@ -1,6 +1,13 @@
 ### ADditional Repos ###
 lang2vec/
 langrank/
+src/lang2vec/
+!src/langrank/
+src/langrank/tmp
+src/langrank/testing.ipynb
+src/langrank/indexed
+src/langrank/.gitignore
 xnmt/
 word-embeddings-for-nmt/
 *.tsv
+__pycache__

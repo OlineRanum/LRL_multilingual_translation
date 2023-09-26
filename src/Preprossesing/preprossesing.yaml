@@ -68,7 +68,7 @@
       - '{DATA_OUT}/train.tok.norm.be'
       - '{DATA_OUT}/train.tok.norm.en'
       out_files:
-      - '{DATA_OUT}/train.vocab.ja'
+      - '{DATA_OUT}/train.vocab.be'
       - '{DATA_OUT}/train.vocab.en'
       specs:
       - filenum: all

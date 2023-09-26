@@ -1,6 +1,8 @@
 from scipy.stats import rankdata
 import numpy as np
 import os
+import lightgbm as lgb
+from sklearn.datasets import load_svmlight_file
 
 # globals, hardcoded for the single language joint training from the paper
 I2L = [
@@ -64,6 +66,14 @@ RAW_DIR = os.path.join("ground_truth_rankings", "raw")
 ORIGINAL_PAPER_GROUND_TRUTH_FILENAME = (
     "LangRank Transfer Language Raw Data - MT Results.csv"
 )
+ORIGINAL_RANKER_HYPERPARAMS = {
+    "boosting_type": "gbdt",
+    "num_leaves": 16,
+    "max_depth": -1,
+    "learning_rate": 0.1,
+    "n_estimators": 100,
+    "min_child_samples": 5,
+}
 
 
 def get_ranking_from_raw_score(
@@ -82,3 +92,14 @@ def get_ranking_from_raw_score(
         ground_truth, method="ordinal", axis=0
     )
     return ordinal_ranking
+
+
+def train_ranker(
+    train_file, train_size, output_model, rank_hyperparams=ORIGINAL_RANKER_HYPERPARAMS
+):
+    # train_file = os.path.join(tmp_dir, "train_mt.csv")
+    # train_size = os.path.join(tmp_dir, "train_mt_size.csv")
+    X_train, y_train = load_svmlight_file(train_file)
+    model = lgb.LGBMRanker(**rank_hyperparams)
+    model.fit(X_train, y_train, group=np.loadtxt(train_size))
+    model.booster_.save_model(output_model)

@@ -3,28 +3,46 @@ Use for final training. Add function to be accessed from the command line.
 Import all need other functions from langrank.py and train_utils.py
 """
 
-import training_utils as tu
-import langrank as lr
-import os
+# import training_utils as tu
+# import langrank as lr
+# import os
 import argparse
 
 # Change to training:
-# parser = argparse.ArgumentParser(description='Langrank parser.')
-# parser.add_argument('-o', '--orig', type=str, required=True, help='unsegmented dataset')
-# parser.add_argument('-s', '--seg', type=str, help='segmented dataset')
-# parser.add_argument('-l', '--lang', type=str, required=True, help='language code')
-# parser.add_argument('-n', '--num', type=int, default=3, help='print top N')
-# parser.add_argument('-c', '--candidates', type=str, default="all",
-# 										  help="candidates of transfer languages, seperated by ;,"
-# 											   "use *abc to exclude language abc")
-# parser.add_argument('-t', '--task', type=str, default="MT", choices=["MT", "POS", "EL", "DEP"], help="The task of interested. Current options support 'MT': machine translation,"
-# 										  	   "'DEP': Dependency Parsing, 'POS': POS-tagging, and 'EL': Entity Linking")
-# parser.add_argument('-m', '--model', type=str, default="best", help="model to be used for prediction")
+parser = argparse.ArgumentParser(description="Langrank parser.")
+parser.add_argument("-t", "--test", type=str, required=True)
 
-# params = parser.parse_args()
+
+# parser.add_argument("-o", "--orig", type=str, required=True, help="unsegmented dataset")
+# parser.add_argument("-s", "--seg", type=str, help="segmented dataset")
+# parser.add_argument("-l", "--lang", type=str, required=True, help="language code")
+# parser.add_argument("-n", "--num", type=int, default=3, help="print top N")
+# parser.add_argument(
+#     "-c",
+#     "--candidates",
+#     type=str,
+#     default="all",
+#     help="candidates of transfer languages, seperated by ;,"
+#     "use *abc to exclude language abc",
+# )
+# parser.add_argument(
+#     "-t",
+#     "--task",
+#     type=str,
+#     default="MT",
+#     choices=["MT", "POS", "EL", "DEP"],
+#     help="The task of interested. Current options support 'MT': machine translation,"
+#     "'DEP': Dependency Parsing, 'POS': POS-tagging, and 'EL': Entity Linking",
+# )
+# parser.add_argument(
+#     "-m", "--model", type=str, default="best", help="model to be used for prediction"
+# )
+
+params = parser.parse_args()
+print(params.test)
 
 # assert os.path.isfile(params.orig)
-# assert (params.seg is None or os.path.isfile(params.seg))
+# assert params.seg is None or os.path.isfile(params.seg)
 
 # with open(params.orig) as inp:
 # 	lines = inp.readlines()

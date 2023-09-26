@@ -102,15 +102,12 @@ class MultiLingualAlignedCorpusReader(object):
 
             import pandas as pd
             reader = pd.read_csv(fp, delimiter='\t', quoting=csv.QUOTE_NONE)
-            print('reader', len(reader))
+            
             for index, row in reader.iterrows():
-                #print(row[s_lang])
-                #print('..............................')
+               
                 data_dict['source'].append(row[s_lang])
                 data_dict['target'].append(row[t_lang])
         
-        #This is 258000 long?
-        print('dat', len(data_dict['source']))
 
         if self.target_token:
             text = self.add_target_token(data_dict['source'], t_lang)

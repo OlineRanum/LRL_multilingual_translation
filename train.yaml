@@ -13,15 +13,15 @@
     placeholders:
       DATA_IN_PRO: src/preprocess/preprocessed_data/en_be
       DATA_IN_SNT: src/preprocess/split_data/en_be
-      DATA_OUT: src/preprocess
+      DATA_OUT: output
       SRC_LAN: be
       TAR_LAN: en
   # model architecture
   model: !DefaultTranslator
     src_reader: !PlainTextReader
-      vocab: !Vocab {vocab_file: '{DATA_IN_PRO}/train.vocab.{SRC_LAN}'
+      vocab: !Vocab {vocab_file: '{DATA_IN_PRO}/train.vocab.{SRC_LAN}'}
     trg_reader: !PlainTextReader
-      vocab: !Vocab {vocab_file: '{DATA_IN_PRO}/train.vocab.{TAR_LAN}'
+      vocab: !Vocab {vocab_file: '{DATA_IN_PRO}/train.vocab.{TAR_LAN}'}
     src_embedder: !SimpleWordEmbedder
       emb_dim: 512
     encoder: !BiLSTMSeqTransducer

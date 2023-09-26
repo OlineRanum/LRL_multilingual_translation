@@ -1,0 +1,79 @@
+# XNMT supports various ways to preprocess data as demonstrated in this example.
+# Note that some preprocessing functionality relies on third-party tools.
+!Experiment
+  name: preproc
+  exp_global: !ExpGlobal
+    # define some named strings that can be used throughout the experiment config:
+    placeholders:
+      DATA_IN: src/preprocess/split_data/en_be
+      DATA_OUT: src/preprocess/preprocessed_data/en_be
+      SRC_LAN: be
+      TAR_LAN: en
+  preproc: !PreprocRunner
+    overwrite: False
+    tasks:
+    - !PreprocTokenize
+      in_files:
+      - '{DATA_IN}/train.{SRC_LAN}'
+      - '{DATA_IN}/train.{TAR_LAN}'
+      - '{DATA_IN}/dev.{SRC_LAN}'
+      - '{DATA_IN}/dev.{TAR_LAN}'
+      - '{DATA_IN}/test.{SRC_LAN}'
+      - '{DATA_IN}/test.{TAR_LAN}'
+      out_files:
+      - '{DATA_OUT}/train.tok.{SRC_LAN}'
+      - '{DATA_OUT}/train.tok.{TAR_LAN}'
+      - '{DATA_OUT}/dev.tok.{SRC_LAN}'
+      - '{DATA_OUT}/dev.tok.{TAR_LAN}'
+      - '{DATA_OUT}/test.tok.{SRC_LAN}'
+      - '{DATA_OUT}/test.tok.{TAR_LAN}'
+      specs:
+      - filenum: all
+        tokenizers:
+        - !UnicodeTokenizer {}
+    - !PreprocNormalize
+      in_files:
+      - '{DATA_OUT}/train.tok.{SRC_LAN}'
+      - '{DATA_OUT}/train.tok.{TAR_LAN}'
+      - '{DATA_OUT}/dev.tok.{SRC_LAN}'
+      - '{DATA_OUT}/dev.tok.{TAR_LAN}'
+      - '{DATA_OUT}/test.tok.{SRC_LAN}'
+      - '{DATA_OUT}/test.tok.{TAR_LAN}'
+      - '{DATA_IN}/dev.{TAR_LAN}'
+      - '{DATA_IN}/test.{TAR_LAN}'
+      out_files:
+      - '{DATA_OUT}/train.tok.norm.{SRC_LAN}'
+      - '{DATA_OUT}/train.tok.norm.{TAR_LAN}'
+      - '{DATA_OUT}/dev.tok.norm.{SRC_LAN}'
+      - '{DATA_OUT}/dev.tok.norm.{TAR_LAN}'
+      - '{DATA_OUT}/test.tok.norm.{SRC_LAN}'
+      - '{DATA_OUT}/test.tok.norm.{TAR_LAN}'
+      - '{DATA_OUT}/dev.norm.{TAR_LAN}'
+      - '{DATA_OUT}/test.norm.{TAR_LAN}'
+      specs:
+      - filenum: all
+        normalizers:
+        - !NormalizerLower {}
+    - !PreprocFilter
+      in_files:
+      - '{DATA_OUT}/train.tok.norm.{SRC_LAN}'
+      - '{DATA_OUT}/train.tok.norm.{TAR_LAN}'
+      out_files:
+      - '{DATA_OUT}/train.tok.norm.filter.{SRC_LAN}'
+      - '{DATA_OUT}/train.tok.norm.filter.{TAR_LAN}'
+      specs:
+      - !SentenceFiltererLength
+        min_all: 1
+        max_all: 60
+    - !PreprocVocab
+      in_files:
+      - '{DATA_OUT}/train.tok.norm.{SRC_LAN}'
+      - '{DATA_OUT}/train.tok.norm.{TAR_LAN}'
+      out_files:
+      - '{DATA_OUT}/train.vocab.{SRC_LAN}'
+      - '{DATA_OUT}/train.vocab.{TAR_LAN}'
+      specs:
+      - filenum: all
+        filters:
+        - !VocabFiltererFreq
+            min_freq: 2

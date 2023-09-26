@@ -1,12 +1,12 @@
 # XNMT supports various ways to preprocess data as demonstrated in this example.
 # Note that some preprocessing functionality relies on third-party tools.
 !Experiment
-  name: preproc
+  name: model_preprocessed
   exp_global: !ExpGlobal
     # define some named strings that can be used throughout the experiment config:
     placeholders:
-      DATA_IN: src/Preprossesing/preproc/en_be
-      DATA_OUT: output
+      DATA_IN: src/preprocess/preprocessed_data/en_be
+      DATA_OUT: output/en_be
       SRC_LAN: be
       TRG_LAN: en
   model: !DefaultTranslator

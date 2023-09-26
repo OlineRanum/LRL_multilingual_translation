@@ -11,3 +11,8 @@ xnmt/
 word-embeddings-for-nmt/
 *.tsv
 __pycache__
+src/preprocess/split_data/
+src/preprocess/preprocessed_data/
+models/
+src/preprocess/logs/
+logs/

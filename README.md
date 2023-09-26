@@ -14,3 +14,12 @@ conda activate dlnlp
 
 bash setup_ubuntu_gpu.sh
 ```
+
+
+## Get Data
+
+Download data to correct folder (I've also added this to the setup file, but for your convenience)
+
+```
+bash get_data.sh
+```

@@ -102,11 +102,16 @@ class MultiLingualAlignedCorpusReader(object):
 
             import pandas as pd
             reader = pd.read_csv(fp, delimiter='\t', quoting=csv.QUOTE_NONE)
-            #reader = pd.read_csv(fp, sep = '\t')
+            print('reader', len(reader))
             for index, row in reader.iterrows():
+                #print(row[s_lang])
+                #print('..............................')
                 data_dict['source'].append(row[s_lang])
                 data_dict['target'].append(row[t_lang])
-                
+        
+        #This is 258000 long?
+        print('dat', len(data_dict['source']))
+
         if self.target_token:
             text = self.add_target_token(data_dict['source'], t_lang)
             data_dict['source'] = text
@@ -128,7 +133,9 @@ class MultiLingualAlignedCorpusReader(object):
         elif self.bilingual:
             iterable = itertools.product(self.lang_dict['source'], self.lang_dict['target'])
 
+        
         for s_lang, t_lang in iterable:
+            
             if s_lang == t_lang:
                 continue
             if self.corpus_type == 'file':
@@ -146,8 +153,8 @@ class MultiLingualAlignedCorpusReader(object):
 if __name__ == "__main__":
 
     # TED Talks data directory
-    ted_data_path = "ted_data"
-    src_lang, trg_lang = "en", "be"
+    ted_data_path = "raw_ted_data"
+    src_lang, trg_lang = "en", "de"
     output_data_path = "data/{}_{}".format(src_lang, trg_lang)
 
     train_lang_dict={'source': [src_lang], 'target': [trg_lang]}

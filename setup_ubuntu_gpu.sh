@@ -32,6 +32,10 @@ pip uninstall protobuf
 pip install protobuf==3.20.0
 
 # Get data
+mkdir src/preprocess/raw_ted_data
+mkdir src/preprocess/split_data
+mkdir src/preprocess/preprocessed_data
+
 wget http://phontron.com/data/ted_talks.tar.gz 
 tar -xzvf ted_talks.tar.gz
 rm ted_talks.tar.gz

@@ -91,6 +91,9 @@ class MultiLingualAlignedCorpusReader(object):
         token = '__' + lang_id + '__'
         for sent in list_:
             new_list.append(token + ' ' + sent)
+        #for sent in list_:
+        #    new_list.append(sent)
+        
         return new_list
 
     def read_from_single_file(self, path_, s_lang, t_lang):
@@ -144,7 +147,7 @@ if __name__ == "__main__":
 
     # TED Talks data directory
     ted_data_path = "ted_data"
-    src_lang, trg_lang = "en", "es"
+    src_lang, trg_lang = "en", "be"
     output_data_path = "data/{}_{}".format(src_lang, trg_lang)
 
     train_lang_dict={'source': [src_lang], 'target': [trg_lang]}

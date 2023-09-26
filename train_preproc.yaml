@@ -36,8 +36,8 @@
       post_process: join-piece
   train: !SimpleTrainingRegimen
     run_for_epochs: 10
-    src_file: '{DATA_IN}/dev.tok.norm.{SRC_LAN}'
-    trg_file: '{DATA_IN}/dev.tok.norm.{TRG_LAN}'
+    src_file: '{DATA_IN}/train.tok.norm.{SRC_LAN}'
+    trg_file: '{DATA_IN}/train.tok.norm.{TRG_LAN}'
     dev_tasks:
       - !AccuracyEvalTask
         eval_metrics: bleu

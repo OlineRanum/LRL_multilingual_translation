@@ -5,8 +5,8 @@
   exp_global: !ExpGlobal
     # define some named strings that can be used throughout the experiment config:
     placeholders:
-      DATA_IN: data/en_be
-      DATA_OUT:  preproc/en_be
+      DATA_IN: src/Preprossesing/data/en_be
+      DATA_OUT: src/Preprossesing/preproc/en_be
   preproc: !PreprocRunner
     overwrite: False
     tasks:

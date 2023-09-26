@@ -23,3 +23,30 @@ Download data to correct folder (I've also added this to the setup file, but for
 ```
 bash get_data.sh
 ```
+
+
+## Run code 
+
+### Preprocess data
+
+NB! Language pairs is set in ted_reader and in all yaml files. 
+All commands run from main directory. 
+
+#### Split raw data into train-dev-test sets
+```
+python3 src/preprocess/ted_reader.py
+```
+#### Preprocess data
+```
+xnmt src/preprocess/preprocessing.yaml
+```
+
+#### Train models
+```
+xnmt train_preproc.yaml
+```
+or
+```
+xnmt train.yaml
+```
+

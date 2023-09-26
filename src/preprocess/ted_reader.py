@@ -154,7 +154,7 @@ if __name__ == "__main__":
 
     # TED Talks data directory
     ted_data_path = "src/preprocess/raw_ted_data"
-    src_lang, trg_lang = "en", "de"
+    src_lang, trg_lang = "en", "be"
     output_data_path = "src/preprocess/split_data/{}_{}".format(src_lang, trg_lang)
 
     train_lang_dict={'source': [src_lang], 'target': [trg_lang]}

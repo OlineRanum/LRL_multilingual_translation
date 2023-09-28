@@ -5,9 +5,9 @@
   exp_global: !ExpGlobal
     # define some named strings that can be used throughout the experiment config:
     placeholders:
-      DATA_IN: src/preprocess/preprocessed_data/en_ru
-      DATA_OUT: output/en_ru
-      SRC_LAN: ru
+      DATA_IN: src/preprocess/preprocessed_data/en_be
+      DATA_OUT: output/en_be
+      SRC_LAN: be
       TRG_LAN: en
   model: !DefaultTranslator
     src_reader: !PlainTextReader
@@ -17,7 +17,7 @@
       vocab: !Vocab
         vocab_file: '{DATA_IN}/train.vocab.{TRG_LAN}'
     src_embedder: !SimpleWordEmbedder
-      emb_dim: 512
+      emb_dim: 300
     encoder: !BiLSTMSeqTransducer
       layers: 1
     attender: !MlpAttender
@@ -35,6 +35,7 @@
     inference: !AutoRegressiveInference
       post_process: join-piece
   train: !SimpleTrainingRegimen
+    restart_trainer: True
     run_for_epochs: 100
     src_file: '{DATA_IN}/train.tok.norm.{SRC_LAN}'
     trg_file: '{DATA_IN}/train.tok.norm.{TRG_LAN}'

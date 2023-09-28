@@ -1,13 +1,13 @@
 # XNMT supports various ways to preprocess data as demonstrated in this example.
 # Note that some preprocessing functionality relies on third-party tools.
 !Experiment
-  name: model_preprocessed_be
+  name: model_preprocessed_ru
   exp_global: !ExpGlobal
     # define some named strings that can be used throughout the experiment config:
     placeholders:
-      DATA_IN: src/preprocess/preprocessed_data/en_be
-      DATA_OUT: output/en_be
-      SRC_LAN: be
+      DATA_IN: src/preprocess/preprocessed_data/en_ru
+      DATA_OUT: output/en_ru
+      SRC_LAN: ru
       TRG_LAN: en
   model: !DefaultTranslator
     src_reader: !PlainTextReader
@@ -17,7 +17,7 @@
       vocab: !Vocab
         vocab_file: '{DATA_IN}/train.vocab.{TRG_LAN}'
     src_embedder: !SimpleWordEmbedder
-      emb_dim: 300
+      emb_dim: 128
     encoder: !BiLSTMSeqTransducer
       layers: 1
     attender: !MlpAttender
@@ -35,8 +35,15 @@
     inference: !AutoRegressiveInference
       post_process: join-piece
   train: !SimpleTrainingRegimen
+    trainer: !AdamTrainer
+      alpha: 0.05
+    batcher: !WordSrcBatcher
+      avg_batch_size: 128
+    initial_patience: 10
+    patience: 3
+    lr_decay: 0.5
     restart_trainer: True
-    run_for_epochs: 100
+    run_for_epochs: 20
     src_file: '{DATA_IN}/train.tok.norm.{SRC_LAN}'
     trg_file: '{DATA_IN}/train.tok.norm.{TRG_LAN}'
     dev_tasks:

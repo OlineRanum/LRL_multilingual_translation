@@ -24,6 +24,7 @@ class MultiLingualAlignedCorpusReader(object):
         self.zero_shot = zero_shot
         self.eval_lang_dict = eval_lang_dict
         self.corpus_type = corpus_type
+        self.max_datapoints = 100000
 
         for list_ in self.lang_dict.values():
             for lang in list_:
@@ -102,12 +103,14 @@ class MultiLingualAlignedCorpusReader(object):
 
             import pandas as pd
             reader = pd.read_csv(fp, delimiter='\t', quoting=csv.QUOTE_NONE)
-            
+            it = 0
             for index, row in reader.iterrows():
-               
-                data_dict['source'].append(row[s_lang])
-                data_dict['target'].append(row[t_lang])
-        
+               if it < self.max_datapoints:
+                    data_dict['source'].append(row[s_lang])
+                    data_dict['target'].append(row[t_lang])
+                    it += 1
+               else:
+                   break
 
         if self.target_token:
             text = self.add_target_token(data_dict['source'], t_lang)
@@ -131,6 +134,7 @@ class MultiLingualAlignedCorpusReader(object):
             iterable = itertools.product(self.lang_dict['source'], self.lang_dict['target'])
 
         
+        it = 0
         for s_lang, t_lang in iterable:
             
             if s_lang == t_lang:
@@ -143,7 +147,10 @@ class MultiLingualAlignedCorpusReader(object):
                                                             t_lang=t_lang)
             data_dict['source'] += s_list
             data_dict['target'] += t_list
+ 
+        
         new_data_dict = self.filter_text(data_dict)
+
         return new_data_dict
 
 

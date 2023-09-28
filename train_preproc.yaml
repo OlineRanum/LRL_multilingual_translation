@@ -5,8 +5,8 @@
   exp_global: !ExpGlobal
     # define some named strings that can be used throughout the experiment config:
     placeholders:
-      DATA_IN: src/preprocess/preprocessed_data/en_be
-      DATA_OUT: output/en_be
+      DATA_IN: src/preprocess/preprocessed_data/en_ru
+      DATA_OUT: output/en_ru
       SRC_LAN: ru
       TRG_LAN: en
   model: !DefaultTranslator

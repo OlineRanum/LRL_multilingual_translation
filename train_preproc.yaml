@@ -1,7 +1,7 @@
 # XNMT supports various ways to preprocess data as demonstrated in this example.
 # Note that some preprocessing functionality relies on third-party tools.
 !Experiment
-  name: model_preprocessed
+  name: model_preprocessed_be
   exp_global: !ExpGlobal
     # define some named strings that can be used throughout the experiment config:
     placeholders:

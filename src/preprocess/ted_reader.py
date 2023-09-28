@@ -24,7 +24,7 @@ class MultiLingualAlignedCorpusReader(object):
         self.zero_shot = zero_shot
         self.eval_lang_dict = eval_lang_dict
         self.corpus_type = corpus_type
-        self.max_datapoints = 100000
+        self.max_datapoints = 30000
 
         for list_ in self.lang_dict.values():
             for lang in list_:
@@ -91,7 +91,7 @@ class MultiLingualAlignedCorpusReader(object):
         new_list = list()
         token = '__' + lang_id + '__'
         for sent in list_:
-            new_list.append(token + ' ' + sent)
+            new_list.append(sent)
         #for sent in list_:
         #    new_list.append(sent)
         

@@ -5,9 +5,9 @@
   exp_global: !ExpGlobal
     # define some named strings that can be used throughout the experiment config:
     placeholders:
-      DATA_IN: src/preprocess/preprocessed_data/en_ru
-      DATA_OUT: output/en_ru
-      SRC_LAN: ru
+      DATA_IN: src/preprocess/preprocessed_data/en_be
+      DATA_OUT: output/en_be
+      SRC_LAN: be
       TRG_LAN: en
   model: !DefaultTranslator
     src_reader: !PlainTextReader
@@ -21,22 +21,22 @@
     encoder: !BiLSTMSeqTransducer
       layers: 1
     attender: !MlpAttender
-      hidden_dim: 512
-      state_dim: 512
-      input_dim: 512
+      hidden_dim: 256
+      state_dim: 256
+      input_dim: 256
     decoder: !AutoRegressiveDecoder
       embedder: !SimpleWordEmbedder
-        emb_dim: 512
+        emb_dim: 256
       rnn: !UniLSTMSeqTransducer
         layers: 1
       transform: !AuxNonLinear
-        output_dim: 512
+        output_dim: 256
       bridge: !NoBridge {}
     inference: !AutoRegressiveInference
       post_process: join-piece
   train: !SimpleTrainingRegimen
     trainer: !AdamTrainer
-      alpha: 0.05
+      alpha: 0.001
     batcher: !WordSrcBatcher
       avg_batch_size: 128
     initial_patience: 10

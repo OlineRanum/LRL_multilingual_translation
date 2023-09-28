@@ -120,10 +120,13 @@ class MultiLingualAlignedCorpusReader(object):
         return data_dict['source'], data_dict['target']
 
     def remove_apos(self, sentence):
-        sentence = sentence.replace(" &apos;", "")
-        sentence = sentence.replace(" &quot;", "")
-        sentence = sentence.replace("&apos;", "")
-        sentence = sentence.replace("&quot;", "")
+        try:
+            sentence = sentence.replace(" &apos;", "")
+            sentence = sentence.replace(" &quot;", "")
+            sentence = sentence.replace("&apos;", "")
+            sentence = sentence.replace("&quot;", "")
+        except AttributeError:
+            pass
         return sentence
 
     def read_aligned_corpus(self, split_type='train'):
@@ -166,7 +169,7 @@ if __name__ == "__main__":
 
     # TED Talks data directory
     ted_data_path = "src/preprocess/raw_ted_data"
-    src_lang, trg_lang = "en", "be"
+    src_lang, trg_lang = "en", "es"
     output_data_path = "src/preprocess/split_data/{}_{}".format(src_lang, trg_lang)
 
     train_lang_dict={'source': [src_lang], 'target': [trg_lang]}

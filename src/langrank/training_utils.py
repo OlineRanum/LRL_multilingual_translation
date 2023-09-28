@@ -61,8 +61,8 @@ I2L = [
     "urd",
     "vie",
 ]
-l2I = {l: i for i, l in enumerate(I2L)}
-RAW_DIR = os.path.join("ground_truth_rankings", "raw")
+L2I = {l: i for i, l in enumerate(I2L)}
+GROUND_TRUTH_DIR = "ground_truth_rankings"
 ORIGINAL_PAPER_GROUND_TRUTH_FILENAME = (
     "LangRank Transfer Language Raw Data - MT Results.csv"
 )
@@ -76,30 +76,35 @@ ORIGINAL_RANKER_HYPERPARAMS = {
 }
 
 
-def get_ranking_from_raw_score(
-    dir=RAW_DIR,
-    raw_scores_file_name=ORIGINAL_PAPER_GROUND_TRUTH_FILENAME,
+def get_subset_rankings(
+    language_subset,
+    dir=GROUND_TRUTH_DIR,
+    file_name=ORIGINAL_PAPER_GROUND_TRUTH_FILENAME,
 ):
-    file_path = os.path.join(dir, raw_scores_file_name)
-    ground_truth = np.genfromtxt(
-        file_path,
+    assert len(language_subset) > 0, "give at least one language"
+    language_subset_indices = np.array([L2I[lang] for lang in language_subset])
+
+    raw_file_path = os.path.join(dir, file_name)
+    full_raw = np.genfromtxt(
+        raw_file_path,
         delimiter=",",
         skip_header=1,
         usecols=range(1, len(I2L) + 1),
         dtype=float,
     )[:-2]
-    ordinal_ranking = ground_truth.shape[0] - rankdata(
-        ground_truth, method="ordinal", axis=0
+    subset_raw = full_raw[language_subset_indices][:, language_subset_indices]
+    subset_ordinal = subset_raw.shape[0] - rankdata(
+        subset_raw, method="ordinal", axis=0
     )
-    return ordinal_ranking
+    return subset_ordinal.T
 
 
-def train_ranker(
-    train_file, train_size, output_model, rank_hyperparams=ORIGINAL_RANKER_HYPERPARAMS
-):
-    # train_file = os.path.join(tmp_dir, "train_mt.csv")
-    # train_size = os.path.join(tmp_dir, "train_mt_size.csv")
-    X_train, y_train = load_svmlight_file(train_file)
-    model = lgb.LGBMRanker(**rank_hyperparams)
-    model.fit(X_train, y_train, group=np.loadtxt(train_size))
-    model.booster_.save_model(output_model)
+# # basic check:
+# import langrank as lr
+# languages = ["aze", "ben", "fin"]
+# # Change path to your needs
+# path = "/home/job/Documents/DL4NLP/project/DLNLP_Project/src/langrank/sample-data/ted-train-fragment.orig."
+# datasets = [path + lang for lang in languages]
+# ranks = get_subset_rankings(languages)
+# lr.prepare_train_file(datasets, languages, ranks)
+# lr.train("tmp", "first_test_model")

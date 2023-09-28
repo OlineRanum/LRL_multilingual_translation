@@ -7,7 +7,7 @@
     placeholders:
       DATA_IN: src/preprocess/split_data/en_be
       DATA_OUT: src/preprocess/preprocessed_data/en_be
-      SRC_LAN: be
+      SRC_LAN: ru
       TAR_LAN: en
   preproc: !PreprocRunner
     overwrite: False

@@ -7,7 +7,7 @@
     placeholders:
       DATA_IN: src/preprocess/preprocessed_data/en_be
       DATA_OUT: output/en_be
-      SRC_LAN: be
+      SRC_LAN: ru
       TRG_LAN: en
   model: !DefaultTranslator
     src_reader: !PlainTextReader

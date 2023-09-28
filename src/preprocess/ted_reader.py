@@ -106,8 +106,9 @@ class MultiLingualAlignedCorpusReader(object):
             it = 0
             for index, row in reader.iterrows():
                if it < self.max_datapoints:
-                    data_dict['source'].append(row[s_lang])
-                    data_dict['target'].append(row[t_lang])
+                    
+                    data_dict['source'].append(self.remove_apos(row[s_lang]))
+                    data_dict['target'].append(self.remove_apos(row[t_lang]))
                     it += 1
                else:
                    break
@@ -117,6 +118,13 @@ class MultiLingualAlignedCorpusReader(object):
             data_dict['source'] = text
 
         return data_dict['source'], data_dict['target']
+
+    def remove_apos(self, sentence):
+        sentence = sentence.replace(" &apos;", "")
+        sentence = sentence.replace(" &quot;", "")
+        sentence = sentence.replace("&apos;", "")
+        sentence = sentence.replace("&quot;", "")
+        return sentence
 
     def read_aligned_corpus(self, split_type='train'):
         data_dict = defaultdict(list)
@@ -158,7 +166,7 @@ if __name__ == "__main__":
 
     # TED Talks data directory
     ted_data_path = "src/preprocess/raw_ted_data"
-    src_lang, trg_lang = "en", "ru"
+    src_lang, trg_lang = "en", "be"
     output_data_path = "src/preprocess/split_data/{}_{}".format(src_lang, trg_lang)
 
     train_lang_dict={'source': [src_lang], 'target': [trg_lang]}

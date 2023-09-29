@@ -91,7 +91,7 @@ class MultiLingualAlignedCorpusReader(object):
         new_list = list()
         token = '__' + lang_id + '__'
         for sent in list_:
-            new_list.append(sent)
+            new_list.append(token + ' ' + sent)
         #for sent in list_:
         #    new_list.append(sent)
         

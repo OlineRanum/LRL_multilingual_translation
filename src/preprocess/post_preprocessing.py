@@ -16,7 +16,26 @@ def replace_spaces_with_underscore(input_file, output_file):
 dir = 'preprocessed_data/en_es/dev.tok.norm.es'
 replace_spaces_with_underscore(dir, dir + '_')
 
-dir = 'preprocessed_data/en_es/dev.tok.norm.es'
+dir = 'preprocessed_data/en_es/dev.tok.norm.en'
 replace_spaces_with_underscore(dir, dir+ '_')
+
+dir = 'preprocessed_data/en_es/dev.norm.en'
+replace_spaces_with_underscore(dir, dir+ '_')
+
+
+dir = 'preprocessed_data/en_es/train.tok.norm.es'
+replace_spaces_with_underscore(dir, dir+ '_')
+
+
+dir = 'preprocessed_data/en_es/train.tok.norm.en'
+replace_spaces_with_underscore(dir, dir+ '_')
+
+
+dir = 'preprocessed_data/en_es/test.tok.norm.es'
+replace_spaces_with_underscore(dir, dir+ '_')
+
+dir = 'preprocessed_data/en_es/test.norm.en'
+replace_spaces_with_underscore(dir, dir+ '_')
+
 
 # d

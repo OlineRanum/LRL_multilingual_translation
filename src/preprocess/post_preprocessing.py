@@ -13,10 +13,10 @@ def replace_spaces_with_underscore(input_file, output_file):
 
 
 # Example usage:
-dir = 'en_be/dev.tok.norm.en'
-replace_spaces_with_underscore(dir, dir)
+dir = 'preprocessed_data/en_es/dev.tok.norm.es'
+replace_spaces_with_underscore(dir, dir + '_')
 
-dir = 'en_be/dev.tok.norm.es'
-replace_spaces_with_underscore(dir, dir)
+dir = 'preprocessed_data/en_es/dev.tok.norm.es'
+replace_spaces_with_underscore(dir, dir+ '_')
 
 # d

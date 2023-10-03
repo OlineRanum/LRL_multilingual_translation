@@ -24,7 +24,7 @@ class MultiLingualAlignedCorpusReader(object):
         self.zero_shot = zero_shot
         self.eval_lang_dict = eval_lang_dict
         self.corpus_type = corpus_type
-        self.max_datapoints = 30000
+        self.max_data = 300
 
         for list_ in self.lang_dict.values():
             for lang in list_:
@@ -82,11 +82,14 @@ class MultiLingualAlignedCorpusReader(object):
     def read_file(self, split_type, data_type):
         return self.data[split_type][data_type]
 
-    def save_file(self, path_, split_type, data_type):
+    def save_file(self, path_, split_type, data_type, keeplines = 1000000):
         with open(path_, 'w') as fp:
+            it = 0
             for line in self.data[split_type][data_type]:
-                fp.write(line + '\n')
-
+                if it < keeplines:
+                    fp.write(line + '\n')
+                    it +=1
+                
     def add_target_token(self, list_, lang_id):
         new_list = list()
         token = '__' + lang_id + '__'
@@ -103,15 +106,12 @@ class MultiLingualAlignedCorpusReader(object):
 
             import pandas as pd
             reader = pd.read_csv(fp, delimiter='\t', quoting=csv.QUOTE_NONE)
-            it = 0
             for index, row in reader.iterrows():
-               if it < self.max_datapoints:
                     
-                    data_dict['source'].append(self.remove_apos(row[s_lang]))
-                    data_dict['target'].append(self.remove_apos(row[t_lang]))
-                    it += 1
-               else:
-                   break
+                data_dict['source'].append(self.remove_apos(row[s_lang]))
+                data_dict['target'].append(self.remove_apos(row[t_lang]))
+               
+            
 
         if self.target_token:
             text = self.add_target_token(data_dict['source'], t_lang)
@@ -161,8 +161,29 @@ class MultiLingualAlignedCorpusReader(object):
  
         
         new_data_dict = self.filter_text(data_dict)
-
+        
         return new_data_dict
+    
+    def keep_first_400_lines(self, filename, keeplines = 4000):
+        """
+        Reads a text file, keeps only the first 400 lines, 
+        and then overwrites the file with those lines.
+        
+        Args:
+        - filename (str): The name of the file to modify.
+        
+        Returns:
+        None
+        """
+        
+        with open(filename, 'r') as file:
+            lines = file.readlines()
+        
+        with open(filename, 'w') as file:
+            file.writelines(lines[:keeplines])
+
+# Usage
+# keep_first_400_lines('path_to_your_file.txt')
 
 
 if __name__ == "__main__":
@@ -184,17 +205,24 @@ if __name__ == "__main__":
                                           bilingual=True)
 
     os.makedirs(output_data_path, exist_ok=True)
+    n_train = 6000
+    n_test = 1000 
+    n_dev = 600
     obj.save_file(output_data_path + "/train.{}".format(src_lang),
-                  split_type='train', data_type='source')
+                  split_type='train', data_type='source', keeplines=n_train)
     obj.save_file(output_data_path + "/train.{}".format(trg_lang),
-                  split_type='train', data_type='target')
+                  split_type='train', data_type='target',keeplines=n_train)
 
     obj.save_file(output_data_path + "/test.{}".format(src_lang),
-                  split_type='test', data_type='source')
+                  split_type='test', data_type='source', keeplines=n_test)
     obj.save_file(output_data_path + "/test.{}".format(trg_lang),
-                  split_type='test', data_type='target')
+                  split_type='test', data_type='target', keeplines=n_test)
 
     obj.save_file(output_data_path + "/dev.{}".format(src_lang),
-                  split_type='dev', data_type='source')
+                  split_type='dev', data_type='source', keeplines=n_dev)
     obj.save_file(output_data_path + "/dev.{}".format(trg_lang),
-                  split_type='dev', data_type='target')
+                  split_type='dev', data_type='target', keeplines=n_dev)
+   
+    
+    
+

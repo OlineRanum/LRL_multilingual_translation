@@ -205,9 +205,9 @@ if __name__ == "__main__":
                                           bilingual=True)
 
     os.makedirs(output_data_path, exist_ok=True)
-    n_train = 6000
-    n_test = 1000 
-    n_dev = 600
+    n_train = 1e7
+    n_test = 1e7
+    n_dev = 1e7
     obj.save_file(output_data_path + "/train.{}".format(src_lang),
                   split_type='train', data_type='source', keeplines=n_train)
     obj.save_file(output_data_path + "/train.{}".format(trg_lang),

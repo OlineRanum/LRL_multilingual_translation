@@ -29,6 +29,63 @@ def get_subset_rankings(
     return subset_ordinal.T
 
 
+# preparing the file for training
+def prepare_train_file(
+    datasets, langs, rank, segmented_datasets=None, task="MT", tmp_dir="tmp"
+):
+    """
+    dataset: [ted_aze, ted_tur, ted_ben]
+    lang: [aze, tur, ben]
+    rank: [[0, 1, 2], [1, 0, 2], [1, 2, 0]]
+    """
+    num_langs = len(langs)
+    REL_EXP_CUTOFF = num_langs - 1 - 9
+
+    if not isinstance(rank, np.ndarray):
+        rank = np.array(rank)
+    BLEU_level = -rank + len(langs)
+    rel_BLEU_level = lgbm_rel_exp(BLEU_level, REL_EXP_CUTOFF)
+
+    features = {}
+    for i, (ds, lang) in enumerate(zip(datasets, langs)):
+        with open(ds, "r") as ds_f:
+            lines = ds_f.readlines()
+        seg_lines = None
+        if segmented_datasets is not None:
+            sds = segmented_datasets[i]
+            with open(sds, "r") as sds_f:
+                seg_lines = sds_f.readlines()
+        features[lang] = prepare_new_dataset(
+            lang=lang, dataset_source=lines, dataset_subword_source=seg_lines
+        )
+    uriel = uriel_distance_vec(langs)
+
+    if not os.path.exists(tmp_dir):
+        os.mkdir(tmp_dir)
+
+    train_file = os.path.join(tmp_dir, "train_mt.csv")
+    train_file_f = open(train_file, "w")
+    train_size = os.path.join(tmp_dir, "train_mt_size.csv")
+    train_size_f = open(train_size, "w")
+    for i, lang1 in enumerate(langs):
+        for j, lang2 in enumerate(langs):
+            if i != j:
+                uriel_features = [u[i, j] for u in uriel]
+                distance_vector = distance_vec(
+                    features[lang1], features[lang2], uriel_features, task
+                )
+                distance_vector = [
+                    "{}:{}".format(i, d) for i, d in enumerate(distance_vector)
+                ]
+                line = " ".join([str(rel_BLEU_level[i, j])] + distance_vector)
+                train_file_f.write(line + "\n")
+        train_size_f.write("{}\n".format(num_langs - 1))
+    train_file_f.close()
+    train_size_f.close()
+    print("Dump train file to {} ...".format(train_file_f))
+    print("Dump train size file to {} ...".format(train_size_f))
+
+
 # # basic check:
 # import langrank as lr
 # languages = ["aze", "ben", "fin"]

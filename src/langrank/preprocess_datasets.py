@@ -13,7 +13,7 @@ def preprocess_datasets(
     """
     for i, lang in enumerate(globals.L2TEDHEADER, 1):
         # Specify the column you want to extract (0-based index)
-        column_index = globals.TEDHEADER2I[globals.L2TEDHEADER["aze"]]
+        column_index = globals.TEDHEADER2I[globals.L2TEDHEADER[lang]]
 
         # Read the input TSV file, extract the desired column, and filter out lines containing "NULL"
         with open(raw_ted_file, "r") as input_f, open(

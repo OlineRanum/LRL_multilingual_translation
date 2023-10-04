@@ -1,13 +1,13 @@
 # XNMT supports various ways to preprocess data as demonstrated in this example.
 # Note that some preprocessing functionality relies on third-party tools.
 !Experiment
-  name: model_preprocessed_es_epoch400
+  name: model_preprocessed_be_epoch100_new
   exp_global: !ExpGlobal
     # define some named strings that can be used throughout the experiment config:
     placeholders:
-      DATA_IN: src/preprocess/preprocessed_data/en_es
-      DATA_OUT: output/en_es
-      SRC_LAN: es
+      DATA_IN: src/preprocess/pereprocessed_data/en_be
+      DATA_OUT: output/en_be
+      SRC_LAN: be
       TRG_LAN: en
   model: !DefaultTranslator
     src_reader: !PlainTextReader
@@ -40,7 +40,7 @@
     batcher: !WordSrcBatcher
       avg_batch_size: 32
     lr_decay: 0.5
-    run_for_epochs: 400
+    run_for_epochs: 100
     patience: 500
     initial_patience: 500
     src_file: '{DATA_IN}/train.tok.norm.{SRC_LAN}'

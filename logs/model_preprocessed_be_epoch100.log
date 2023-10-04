@@ -1,0 +1,1493 @@
+running XNMT revision d93f8f3 on olineranum-Blade-15-Base-Model-Mid-2021-RZ09-0410 with DyNet on 2023-10-04 10:36:36
+initialized exp_global.param_init: GlorotInitializer@140232070705680({})
+initialized exp_global.bias_init: ZeroInitializer@140232070705808({})
+initialized exp_global: ExpGlobal@140232070706448({'model_file': './models/model_preprocessed_be_epoch100.mod', 'log_file': './logs/model_preprocessed_be_epoch100.log', 'dropout': 0.3, 'weight_noise': 0.0, 'default_layer_dim': 512, 'param_init': GlorotInitializer@140232070700368, 'bias_init': ZeroInitializer@140232070699984, 'loss_comb_method': 'sum', 'commandline_args': {'dynet_mem': None, 'dynet_seed': None, 'dynet_autobatch': None, 'dynet_devices': None, 'dynet_viz': False, 'dynet_gpu': False, 'dynet_gpu_ids': None, 'dynet_gpus': None, 'dynet_weight_decay': None, 'dynet_profiling': None, 'settings': 'standard', 'resume': False, 'backend': 'dynet', 'experiments_file': 'train_preproc.yaml', 'experiment_name': [], 'generate_doc': False}, 'placeholders': {'DATA_IN': 'src/preprocess/preprocessed_data/en_be', 'DATA_OUT': 'output/en_be', 'SRC_LAN': 'be', 'TRG_LAN': 'en'}})
+initialized model.src_reader.vocab: Vocab@140232070706320({'vocab_file': 'src/preprocess/preprocessed_data/en_be/train.vocab.be'})
+initialized model.src_reader: PlainTextReader@140232070708240({'vocab': Vocab@140232070682320})
+initialized model.trg_reader.vocab: Vocab@140232070707472({'vocab_file': 'src/preprocess/preprocessed_data/en_be/train.vocab.en'})
+initialized model.trg_reader: PlainTextReader@140232070708432({'vocab': Vocab@140232070680720})
+for model.src_embedder.param_init: reusing previously initialized GlorotInitializer@140232070700368
+for model.src_embedder.src_reader: reusing previously initialized PlainTextReader@140232070682448
+for model.src_embedder.trg_reader: reusing previously initialized PlainTextReader@140232070125200
+initialized model.src_embedder: SimpleWordEmbedder@140232070706896({'emb_dim': 300, 'weight_noise': 0.0, 'param_init': GlorotInitializer@140232070700368, 'src_reader': PlainTextReader@140232070682448, 'trg_reader': PlainTextReader@140232070125200, 'yaml_path': model.src_embedder})
+for model.encoder.param_init: reusing previously initialized GlorotInitializer@140232070700368
+for model.encoder.bias_init: reusing previously initialized ZeroInitializer@140232070699984
+initialized model.encoder: BiLSTMSeqTransducer@140232070708560({'layers': 1, 'input_dim': 300, 'hidden_dim': 128, 'var_dropout': 0.3, 'param_init': GlorotInitializer@140232070700368, 'bias_init': ZeroInitializer@140232070699984})
+for model.attender.param_init: reusing previously initialized GlorotInitializer@140232070700368
+for model.attender.bias_init: reusing previously initialized ZeroInitializer@140232070699984
+initialized model.attender: MlpAttender@140232070706576({'input_dim': 128, 'state_dim': 128, 'hidden_dim': 128, 'param_init': GlorotInitializer@140232070700368, 'bias_init': ZeroInitializer@140232070699984})
+for model.decoder.embedder.weight_noise: reusing previously initialized 0.0
+for model.decoder.embedder.param_init: reusing previously initialized GlorotInitializer@140232070700368
+for model.decoder.embedder.src_reader: reusing previously initialized PlainTextReader@140232070682448
+for model.decoder.embedder.trg_reader: reusing previously initialized PlainTextReader@140232070125200
+initialized model.decoder.embedder: SimpleWordEmbedder@140232070708752({'emb_dim': 128, 'weight_noise': 0.0, 'param_init': GlorotInitializer@140232070700368, 'src_reader': PlainTextReader@140232070682448, 'trg_reader': PlainTextReader@140232070125200, 'yaml_path': model.decoder.embedder})
+initialized model.decoder.bridge: NoBridge@140232102994448({'dec_layers': 1, 'dec_dim': 128})
+for model.decoder.rnn.var_dropout: reusing previously initialized 0.3
+for model.decoder.rnn.weightnoise_std: reusing previously initialized 0.0
+for model.decoder.rnn.param_init: reusing previously initialized GlorotInitializer@140232070700368
+for model.decoder.rnn.bias_init: reusing previously initialized ZeroInitializer@140232070699984
+initialized model.decoder.rnn: UniLSTMSeqTransducer@140232102970896({'layers': 1, 'input_dim': 128, 'hidden_dim': 128, 'var_dropout': 0.3, 'weightnoise_std': 0.0, 'param_init': GlorotInitializer@140232070700368, 'bias_init': ZeroInitializer@140232070699984, 'decoder_input_dim': 128, 'yaml_path': model.decoder.rnn})
+for model.decoder.transform.param_init: reusing previously initialized GlorotInitializer@140232070700368
+for model.decoder.transform.bias_init: reusing previously initialized ZeroInitializer@140232070699984
+initialized model.decoder.transform: AuxNonLinear@140232102996176({'input_dim': 128, 'output_dim': 300, 'aux_input_dim': 128, 'param_init': GlorotInitializer@140232070700368, 'bias_init': ZeroInitializer@140232070699984})
+for model.decoder.scorer.trg_reader: reusing previously initialized PlainTextReader@140232070125200
+for model.decoder.scorer.param_init: reusing previously initialized GlorotInitializer@140232070700368
+for model.decoder.scorer.bias_init: reusing previously initialized ZeroInitializer@140232070699984
+initialized model.decoder.scorer: Softmax@140232070735120({'input_dim': 300, 'trg_reader': PlainTextReader@140232070125200, 'param_init': GlorotInitializer@140232070700368, 'bias_init': ZeroInitializer@140232070699984})
+initialized model.decoder: AutoRegressiveDecoder@140232070706064({'input_dim': 128, 'embedder': SimpleWordEmbedder@140232070751248, 'bridge': NoBridge@140232070621136, 'rnn': UniLSTMSeqTransducer@140232070750928, 'transform': AuxNonLinear@140232070697360, 'scorer': Softmax@140232070754000})
+initialized model.inference.search_strategy.len_norm: NoNormalization@140232070734480({})
+initialized model.inference.search_strategy: BeamSearch@140232070733968({'len_norm': NoNormalization@140232070699152})
+initialized model.inference.batcher: InOrderBatcher@140232070734224({'batch_size': 1})
+initialized model.inference: AutoRegressiveInference@140232070708496({'post_process': 'join-bpe', 'search_strategy': BeamSearch@140232070708752, 'batcher': InOrderBatcher@140232070699216})
+initialized model: DefaultTranslator@140232070707600({'src_reader': PlainTextReader@140232070682448, 'trg_reader': PlainTextReader@140232070125200, 'src_embedder': SimpleWordEmbedder@140232070619792, 'encoder': BiLSTMSeqTransducer@140232070683216, 'attender': MlpAttender@140232070622864, 'decoder': AutoRegressiveDecoder@140232102970896, 'inference': AutoRegressiveInference@140232070699728})
+for train.model: reusing previously initialized DefaultTranslator@140232070698960
+initialized train.batcher: WordSrcBatcher@140232070735312({'avg_batch_size': 32})
+initialized train.loss_calculator: MLELoss@140232070735504({})
+initialized train.trainer: AdamTrainer@140232070734096({'alpha': 0.0002})
+for train.dev_tasks.0.model: reusing previously initialized DefaultTranslator@140232070698960
+initialized train.dev_tasks.0: AccuracyEvalTask@140232070734736({'src_file': 'src/preprocess/preprocessed_data/en_be/dev.tok.norm.be', 'ref_file': 'src/preprocess/preprocessed_data/en_be/dev.norm.en', 'hyp_file': 'output/en_be/model_preprocessed_be_epoch100.dev_hyp', 'model': DefaultTranslator@140232070698960, 'eval_metrics': 'bleu'})
+for train.dev_tasks.1.model: reusing previously initialized DefaultTranslator@140232070698960
+for train.dev_tasks.1.batcher: reusing previously initialized WordSrcBatcher@140232069651856
+initialized train.dev_tasks.1.loss_calculator: MLELoss@140232070736976({})
+initialized train.dev_tasks.1: LossEvalTask@140232070735056({'src_file': 'src/preprocess/preprocessed_data/en_be/dev.tok.norm.be', 'ref_file': 'src/preprocess/preprocessed_data/en_be/dev.tok.norm.en', 'model': DefaultTranslator@140232070698960, 'batcher': WordSrcBatcher@140232069651856, 'loss_calculator': MLELoss@140232069781072})
+initialized train.train_loss_tracker: TrainLossTracker@140232070736208({})
+for train.dev_loss_tracker.loss_comb_method: reusing previously initialized sum
+initialized train.dev_loss_tracker: DevLossTracker@140232070737232({'loss_comb_method': 'sum'})
+initialized train: SimpleTrainingRegimen@140232070706384({'model': DefaultTranslator@140232070698960, 'src_file': 'src/preprocess/preprocessed_data/en_be/train.tok.norm.be', 'trg_file': 'src/preprocess/preprocessed_data/en_be/train.tok.norm.en', 'batcher': WordSrcBatcher@140232069651856, 'loss_calculator': MLELoss@140232069652048, 'trainer': AdamTrainer@140232069652176, 'run_for_epochs': 100, 'lr_decay': 0.5, 'patience': 500, 'initial_patience': 500, 'dev_tasks': [AccuracyEvalTask@140232069652432, LossEvalTask@140232070700560], 'name': 'model_preprocessed_be_epoch100', 'loss_comb_method': 'sum', 'train_loss_tracker': TrainLossTracker@140232070684432, 'dev_loss_tracker': DevLossTracker@140232070700624})
+for evaluate.0.model: reusing previously initialized DefaultTranslator@140232070698960
+initialized evaluate.0: AccuracyEvalTask@140232070736784({'src_file': 'src/preprocess/preprocessed_data/en_be/test.tok.norm.be', 'ref_file': 'src/preprocess/preprocessed_data/en_be/test.norm.en', 'hyp_file': 'output/en_be/model_preprocessed_be_epoch100.test_hyp', 'model': DefaultTranslator@140232070698960, 'eval_metrics': 'bleu'})
+initialized : Experiment@140232070706128({'name': 'model_preprocessed_be_epoch100', 'exp_global': ExpGlobal@140232104418960, 'model': DefaultTranslator@140232070698960, 'train': SimpleTrainingRegimen@140232070683280, 'evaluate': [AccuracyEvalTask@140232070681040]})
+> use randomly initialized neural network parameters for all components
+  neural network param count: 3773517
+> Training
+Starting to read src/preprocess/preprocessed_data/en_be/train.tok.norm.be and src/preprocess/preprocessed_data/en_be/train.tok.norm.en
+Done reading src/preprocess/preprocessed_data/en_be/train.tok.norm.be and src/preprocess/preprocessed_data/en_be/train.tok.norm.en. Packing into batches.
+Done packing batches.
+The dy.parameter(...) call is now DEPRECATED.
+        There is no longer need to explicitly add parameters to the computation graph.
+        Any used parameter will be added automatically.
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 0.2224: train_loss/word=8.521757 (steps=36, words/sec=1832.24, time=0-00:00:13)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 0.4471: train_loss/word=6.847490 (steps=79, words/sec=1849.29, time=0-00:00:27)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 0.6689: train_loss/word=5.748007 (steps=117, words/sec=1846.69, time=0-00:00:40)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 0.8940: train_loss/word=5.537720 (steps=157, words/sec=1816.29, time=0-00:00:54)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 1.0000: train_loss/word=5.343895 (steps=174, words/sec=1840.66, time=0-00:01:00)
+> Checkpoint [model_preprocessed_be_epoch100]
+Performing inference on src/preprocess/preprocessed_data/en_be/dev.tok.norm.be and src/preprocess/preprocessed_data/en_be/dev.norm.en
+Starting to read src/preprocess/preprocessed_data/en_be/dev.tok.norm.be and src/preprocess/preprocessed_data/en_be/dev.tok.norm.en
+Done reading src/preprocess/preprocessed_data/en_be/dev.tok.norm.be and src/preprocess/preprocessed_data/en_be/dev.tok.norm.en. Packing into batches.
+Done packing batches.
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 1.0000 dev BLEU4: 0.0, 0.012716/0.000000/0.000000/0.000000 (BP = 1.000000, ratio=5.43, hyp_len=24615, ref_len=4537) (time=0-00:01:18)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100]              dev auxiliary Loss: 4.820 (ref_len=5563)
+             checkpoint took 0-00:00:17
+  best dev score, writing out model
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 1.0038: train_loss/word=5.630194 (steps=175, words/sec=1740.51, time=0-00:01:22)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 1.2260: train_loss/word=5.212273 (steps=214, words/sec=1792.42, time=0-00:01:36)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 1.4513: train_loss/word=5.249486 (steps=257, words/sec=1788.98, time=0-00:01:52)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 1.6789: train_loss/word=5.057112 (steps=294, words/sec=1884.41, time=0-00:02:04)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 1.9062: train_loss/word=4.936930 (steps=329, words/sec=1851.51, time=0-00:02:16)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 2.0000: train_loss/word=5.172098 (steps=348, words/sec=1840.17, time=0-00:02:23)
+> Checkpoint [model_preprocessed_be_epoch100]
+Performing inference on src/preprocess/preprocessed_data/en_be/dev.tok.norm.be and src/preprocess/preprocessed_data/en_be/dev.norm.en
+Starting to read src/preprocess/preprocessed_data/en_be/dev.tok.norm.be and src/preprocess/preprocessed_data/en_be/dev.tok.norm.en
+Done reading src/preprocess/preprocessed_data/en_be/dev.tok.norm.be and src/preprocess/preprocessed_data/en_be/dev.tok.norm.en. Packing into batches.
+Done packing batches.
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 2.0000 dev BLEU4: 0.0, 0.018924/0.000000/0.000000/0.000000 (BP = 1.000000, ratio=3.84, hyp_len=17438, ref_len=4537) (time=0-00:02:35)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100]              dev auxiliary Loss: 4.584 (ref_len=5563)
+             checkpoint took 0-00:00:12
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 2.0031: train_loss/word=5.447088 (steps=349, words/sec=1834.57, time=0-00:02:35)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 2.2251: train_loss/word=4.965053 (steps=386, words/sec=1915.53, time=0-00:02:48)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 2.4507: train_loss/word=4.983970 (steps=426, words/sec=1911.45, time=0-00:03:01)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 2.6727: train_loss/word=5.014501 (steps=467, words/sec=1936.62, time=0-00:03:15)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 2.8980: train_loss/word=4.767973 (steps=502, words/sec=1919.63, time=0-00:03:26)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 3.0000: train_loss/word=4.959874 (steps=522, words/sec=1866.84, time=0-00:03:33)
+> Checkpoint [model_preprocessed_be_epoch100]
+Performing inference on src/preprocess/preprocessed_data/en_be/dev.tok.norm.be and src/preprocess/preprocessed_data/en_be/dev.norm.en
+Starting to read src/preprocess/preprocessed_data/en_be/dev.tok.norm.be and src/preprocess/preprocessed_data/en_be/dev.tok.norm.en
+Done reading src/preprocess/preprocessed_data/en_be/dev.tok.norm.be and src/preprocess/preprocessed_data/en_be/dev.tok.norm.en. Packing into batches.
+Done packing batches.
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 3.0000 dev BLEU4: 0.0, 0.037999/0.000165/0.000000/0.000000 (BP = 1.000000, ratio=2.73, hyp_len=12395, ref_len=4537) (time=0-00:03:42)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100]              dev auxiliary Loss: 4.415 (ref_len=5563)
+             checkpoint took 0-00:00:09
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 3.0055: train_loss/word=4.968779 (steps=523, words/sec=2086.34, time=0-00:03:42)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 3.2273: train_loss/word=4.811063 (steps=561, words/sec=1881.80, time=0-00:03:55)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 3.4533: train_loss/word=4.866441 (steps=602, words/sec=1945.90, time=0-00:04:08)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 3.6813: train_loss/word=4.792966 (steps=641, words/sec=1942.96, time=0-00:04:22)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 3.9031: train_loss/word=4.792755 (steps=681, words/sec=1891.46, time=0-00:04:35)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 4.0000: train_loss/word=4.525522 (steps=696, words/sec=1882.87, time=0-00:04:40)
+> Checkpoint [model_preprocessed_be_epoch100]
+Performing inference on src/preprocess/preprocessed_data/en_be/dev.tok.norm.be and src/preprocess/preprocessed_data/en_be/dev.norm.en
+Starting to read src/preprocess/preprocessed_data/en_be/dev.tok.norm.be and src/preprocess/preprocessed_data/en_be/dev.tok.norm.en
+Done reading src/preprocess/preprocessed_data/en_be/dev.tok.norm.be and src/preprocess/preprocessed_data/en_be/dev.tok.norm.en. Packing into batches.
+Done packing batches.
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 4.0000 dev BLEU4: 0.0, 0.035667/0.000201/0.000000/0.000000 (BP = 1.000000, ratio=3.34, hyp_len=15168, ref_len=4537) (time=0-00:04:51)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100]              dev auxiliary Loss: 4.268 (ref_len=5563)
+             checkpoint took 0-00:00:11
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 4.0022: train_loss/word=5.458443 (steps=697, words/sec=1864.07, time=0-00:04:51)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 4.2322: train_loss/word=4.619578 (steps=735, words/sec=1849.36, time=0-00:05:04)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 4.4589: train_loss/word=4.733450 (steps=776, words/sec=1866.54, time=0-00:05:18)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 4.6820: train_loss/word=4.748149 (steps=818, words/sec=1916.03, time=0-00:05:32)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 4.9046: train_loss/word=4.651154 (steps=857, words/sec=1952.71, time=0-00:05:45)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 5.0000: train_loss/word=4.277347 (steps=870, words/sec=1925.45, time=0-00:05:49)
+> Checkpoint [model_preprocessed_be_epoch100]
+Performing inference on src/preprocess/preprocessed_data/en_be/dev.tok.norm.be and src/preprocess/preprocessed_data/en_be/dev.norm.en
+Starting to read src/preprocess/preprocessed_data/en_be/dev.tok.norm.be and src/preprocess/preprocessed_data/en_be/dev.tok.norm.en
+Done reading src/preprocess/preprocessed_data/en_be/dev.tok.norm.be and src/preprocess/preprocessed_data/en_be/dev.tok.norm.en. Packing into batches.
+Done packing batches.
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 5.0000 dev BLEU4: 0.0, 0.095388/0.004369/0.000325/0.000000 (BP = 1.000000, ratio=1.47, hyp_len=6657, ref_len=4537) (time=0-00:05:55)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100]              dev auxiliary Loss: 4.175 (ref_len=5563)
+             checkpoint took 0-00:00:05
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 5.0062: train_loss/word=4.455085 (steps=871, words/sec=1979.94, time=0-00:05:55)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 5.2280: train_loss/word=4.479520 (steps=908, words/sec=1904.04, time=0-00:06:07)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 5.4538: train_loss/word=4.583950 (steps=949, words/sec=1877.98, time=0-00:06:21)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 5.6758: train_loss/word=4.542539 (steps=988, words/sec=1916.34, time=0-00:06:34)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 5.8998: train_loss/word=4.382110 (steps=1023, words/sec=1948.66, time=0-00:06:46)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 6.0000: train_loss/word=4.736821 (steps=1044, words/sec=1932.28, time=0-00:06:53)
+> Checkpoint [model_preprocessed_be_epoch100]
+Performing inference on src/preprocess/preprocessed_data/en_be/dev.tok.norm.be and src/preprocess/preprocessed_data/en_be/dev.norm.en
+Starting to read src/preprocess/preprocessed_data/en_be/dev.tok.norm.be and src/preprocess/preprocessed_data/en_be/dev.tok.norm.en
+Done reading src/preprocess/preprocessed_data/en_be/dev.tok.norm.be and src/preprocess/preprocessed_data/en_be/dev.tok.norm.en. Packing into batches.
+Done packing batches.
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 6.0000 dev BLEU4: 0.0, 0.149763/0.011468/0.000369/0.000000 (BP = 1.000000, ratio=1.30, hyp_len=5916, ref_len=4537) (time=0-00:06:58)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100]              dev auxiliary Loss: 4.045 (ref_len=5563)
+             checkpoint took 0-00:00:05
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 6.0086: train_loss/word=3.719375 (steps=1045, words/sec=1747.80, time=0-00:06:58)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 6.2324: train_loss/word=4.428173 (steps=1084, words/sec=1966.98, time=0-00:07:11)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 6.4546: train_loss/word=4.382290 (steps=1121, words/sec=1964.26, time=0-00:07:23)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 6.6866: train_loss/word=4.427242 (steps=1161, words/sec=1955.41, time=0-00:07:36)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 6.9182: train_loss/word=4.504743 (steps=1206, words/sec=1849.08, time=0-00:07:51)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 7.0000: train_loss/word=4.158319 (steps=1218, words/sec=1876.49, time=0-00:07:55)
+> Checkpoint [model_preprocessed_be_epoch100]
+Performing inference on src/preprocess/preprocessed_data/en_be/dev.tok.norm.be and src/preprocess/preprocessed_data/en_be/dev.norm.en
+Starting to read src/preprocess/preprocessed_data/en_be/dev.tok.norm.be and src/preprocess/preprocessed_data/en_be/dev.tok.norm.en
+Done reading src/preprocess/preprocessed_data/en_be/dev.tok.norm.be and src/preprocess/preprocessed_data/en_be/dev.tok.norm.en. Packing into batches.
+Done packing batches.
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 7.0000 dev BLEU4: 0.0, 0.172018/0.010994/0.000465/0.000000 (BP = 1.000000, ratio=1.06, hyp_len=4796, ref_len=4537) (time=0-00:08:00)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100]              dev auxiliary Loss: 3.965 (ref_len=5563)
+             checkpoint took 0-00:00:04
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 7.0027: train_loss/word=5.142259 (steps=1219, words/sec=2064.39, time=0-00:08:00)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 7.2342: train_loss/word=4.473653 (steps=1265, words/sec=1925.10, time=0-00:08:15)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 7.4582: train_loss/word=4.331504 (steps=1304, words/sec=1868.09, time=0-00:08:28)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 7.6824: train_loss/word=4.169287 (steps=1338, words/sec=1942.25, time=0-00:08:40)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 7.9077: train_loss/word=4.342604 (steps=1377, words/sec=1926.70, time=0-00:08:53)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 8.0000: train_loss/word=4.247494 (steps=1392, words/sec=1940.57, time=0-00:08:58)
+> Checkpoint [model_preprocessed_be_epoch100]
+Performing inference on src/preprocess/preprocessed_data/en_be/dev.tok.norm.be and src/preprocess/preprocessed_data/en_be/dev.norm.en
+Starting to read src/preprocess/preprocessed_data/en_be/dev.tok.norm.be and src/preprocess/preprocessed_data/en_be/dev.tok.norm.en
+Done reading src/preprocess/preprocessed_data/en_be/dev.tok.norm.be and src/preprocess/preprocessed_data/en_be/dev.tok.norm.en. Packing into batches.
+Done packing batches.
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 8.0000 dev BLEU4: 0.0, 0.145240/0.009622/0.000380/0.000000 (BP = 1.000000, ratio=1.27, hyp_len=5756, ref_len=4537) (time=0-00:09:03)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100]              dev auxiliary Loss: 3.924 (ref_len=5563)
+             checkpoint took 0-00:00:05
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 8.0049: train_loss/word=4.537388 (steps=1393, words/sec=1978.32, time=0-00:09:03)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 8.2273: train_loss/word=4.258610 (steps=1431, words/sec=1961.33, time=0-00:09:16)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 8.4529: train_loss/word=4.290126 (steps=1471, words/sec=1944.34, time=0-00:09:29)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 8.6786: train_loss/word=4.149226 (steps=1507, words/sec=1873.64, time=0-00:09:41)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 8.9006: train_loss/word=4.413012 (steps=1550, words/sec=1908.77, time=0-00:09:55)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 9.0000: train_loss/word=4.183068 (steps=1566, words/sec=1965.06, time=0-00:10:00)
+> Checkpoint [model_preprocessed_be_epoch100]
+Performing inference on src/preprocess/preprocessed_data/en_be/dev.tok.norm.be and src/preprocess/preprocessed_data/en_be/dev.norm.en
+Starting to read src/preprocess/preprocessed_data/en_be/dev.tok.norm.be and src/preprocess/preprocessed_data/en_be/dev.tok.norm.en
+Done reading src/preprocess/preprocessed_data/en_be/dev.tok.norm.be and src/preprocess/preprocessed_data/en_be/dev.tok.norm.en. Packing into batches.
+Done packing batches.
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 9.0000 dev BLEU4: 0.0, 0.132070/0.009768/0.000328/0.000000 (BP = 1.000000, ratio=1.45, hyp_len=6595, ref_len=4537) (time=0-00:10:06)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100]              dev auxiliary Loss: 3.892 (ref_len=5563)
+             checkpoint took 0-00:00:05
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 9.0064: train_loss/word=4.185500 (steps=1567, words/sec=2138.29, time=0-00:10:06)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 9.2302: train_loss/word=4.274770 (steps=1609, words/sec=1900.36, time=0-00:10:20)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 9.4564: train_loss/word=4.237697 (steps=1648, words/sec=1937.16, time=0-00:10:33)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 9.6829: train_loss/word=4.033831 (steps=1682, words/sec=1895.16, time=0-00:10:44)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 9.9075: train_loss/word=4.307396 (steps=1723, words/sec=1940.75, time=0-00:10:58)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 10.0000: train_loss/word=4.274237 (steps=1740, words/sec=1970.55, time=0-00:11:03)
+> Checkpoint [model_preprocessed_be_epoch100]
+Performing inference on src/preprocess/preprocessed_data/en_be/dev.tok.norm.be and src/preprocess/preprocessed_data/en_be/dev.norm.en
+Starting to read src/preprocess/preprocessed_data/en_be/dev.tok.norm.be and src/preprocess/preprocessed_data/en_be/dev.tok.norm.en
+Done reading src/preprocess/preprocessed_data/en_be/dev.tok.norm.be and src/preprocess/preprocessed_data/en_be/dev.tok.norm.en. Packing into batches.
+Done packing batches.
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 10.0000 dev BLEU4: 0.0, 0.151379/0.016390/0.000754/0.000000 (BP = 1.000000, ratio=1.28, hyp_len=5800, ref_len=4537) (time=0-00:11:09)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100]              dev auxiliary Loss: 3.850 (ref_len=5563)
+             checkpoint took 0-00:00:05
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 10.0055: train_loss/word=4.192189 (steps=1741, words/sec=2107.19, time=0-00:11:09)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 10.2284: train_loss/word=4.234741 (steps=1782, words/sec=1911.06, time=0-00:11:23)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 10.4551: train_loss/word=4.059180 (steps=1819, words/sec=1884.66, time=0-00:11:35)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 10.6786: train_loss/word=4.148222 (steps=1856, words/sec=1970.20, time=0-00:11:47)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 10.9006: train_loss/word=4.247805 (steps=1897, words/sec=1903.45, time=0-00:12:00)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 11.0000: train_loss/word=4.234849 (steps=1915, words/sec=1905.83, time=0-00:12:06)
+> Checkpoint [model_preprocessed_be_epoch100]
+Performing inference on src/preprocess/preprocessed_data/en_be/dev.tok.norm.be and src/preprocess/preprocessed_data/en_be/dev.norm.en
+Starting to read src/preprocess/preprocessed_data/en_be/dev.tok.norm.be and src/preprocess/preprocessed_data/en_be/dev.tok.norm.en
+Done reading src/preprocess/preprocessed_data/en_be/dev.tok.norm.be and src/preprocess/preprocessed_data/en_be/dev.tok.norm.en. Packing into batches.
+Done packing batches.
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 11.0000 dev BLEU4: 0.0, 0.149477/0.013407/0.000525/0.000000 (BP = 1.000000, ratio=1.37, hyp_len=6215, ref_len=4537) (time=0-00:12:12)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100]              dev auxiliary Loss: 3.833 (ref_len=5563)
+             checkpoint took 0-00:00:05
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 11.0109: train_loss/word=3.225380 (steps=1916, words/sec=2157.37, time=0-00:12:12)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 11.2373: train_loss/word=4.217903 (steps=1958, words/sec=1934.89, time=0-00:12:26)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 11.4666: train_loss/word=4.060952 (steps=1996, words/sec=1908.30, time=0-00:12:39)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 11.6897: train_loss/word=4.143231 (steps=2035, words/sec=1921.48, time=0-00:12:51)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 11.9135: train_loss/word=4.101623 (steps=2073, words/sec=1886.35, time=0-00:13:04)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 12.0000: train_loss/word=4.285197 (steps=2090, words/sec=1928.64, time=0-00:13:10)
+> Checkpoint [model_preprocessed_be_epoch100]
+Performing inference on src/preprocess/preprocessed_data/en_be/dev.tok.norm.be and src/preprocess/preprocessed_data/en_be/dev.norm.en
+Starting to read src/preprocess/preprocessed_data/en_be/dev.tok.norm.be and src/preprocess/preprocessed_data/en_be/dev.tok.norm.en
+Done reading src/preprocess/preprocessed_data/en_be/dev.tok.norm.be and src/preprocess/preprocessed_data/en_be/dev.tok.norm.en. Packing into batches.
+Done packing batches.
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 12.0000 dev BLEU4: 0.0, 0.132367/0.010494/0.001059/0.000000 (BP = 1.000000, ratio=1.57, hyp_len=7109, ref_len=4537) (time=0-00:13:15)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100]              dev auxiliary Loss: 3.817 (ref_len=5563)
+             checkpoint took 0-00:00:05
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 12.0086: train_loss/word=3.400204 (steps=2091, words/sec=1719.04, time=0-00:13:16)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 12.2304: train_loss/word=4.155487 (steps=2132, words/sec=1903.55, time=0-00:13:29)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 12.4560: train_loss/word=4.186306 (steps=2173, words/sec=1931.05, time=0-00:13:43)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 12.6824: train_loss/word=3.997171 (steps=2209, words/sec=1927.30, time=0-00:13:55)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 12.9082: train_loss/word=4.034078 (steps=2246, words/sec=1917.21, time=0-00:14:07)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 13.0000: train_loss/word=4.232594 (steps=2264, words/sec=1872.75, time=0-00:14:13)
+> Checkpoint [model_preprocessed_be_epoch100]
+Performing inference on src/preprocess/preprocessed_data/en_be/dev.tok.norm.be and src/preprocess/preprocessed_data/en_be/dev.norm.en
+Starting to read src/preprocess/preprocessed_data/en_be/dev.tok.norm.be and src/preprocess/preprocessed_data/en_be/dev.tok.norm.en
+Done reading src/preprocess/preprocessed_data/en_be/dev.tok.norm.be and src/preprocess/preprocessed_data/en_be/dev.tok.norm.en. Packing into batches.
+Done packing batches.
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 13.0000 dev BLEU4: 0.0, 0.127849/0.010106/0.000771/0.000000 (BP = 1.000000, ratio=1.54, hyp_len=6977, ref_len=4537) (time=0-00:14:19)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100]              dev auxiliary Loss: 3.788 (ref_len=5563)
+             checkpoint took 0-00:00:05
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 13.0022: train_loss/word=4.941289 (steps=2265, words/sec=1807.03, time=0-00:14:19)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 13.2264: train_loss/word=4.126571 (steps=2306, words/sec=1907.57, time=0-00:14:33)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 13.4515: train_loss/word=3.994091 (steps=2343, words/sec=1926.44, time=0-00:14:45)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 13.6744: train_loss/word=3.941219 (steps=2378, words/sec=1957.16, time=0-00:14:57)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 13.8984: train_loss/word=4.114020 (steps=2418, words/sec=1920.49, time=0-00:15:10)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 14.0000: train_loss/word=4.227131 (steps=2438, words/sec=1897.81, time=0-00:15:17)
+> Checkpoint [model_preprocessed_be_epoch100]
+Performing inference on src/preprocess/preprocessed_data/en_be/dev.tok.norm.be and src/preprocess/preprocessed_data/en_be/dev.norm.en
+Starting to read src/preprocess/preprocessed_data/en_be/dev.tok.norm.be and src/preprocess/preprocessed_data/en_be/dev.tok.norm.en
+Done reading src/preprocess/preprocessed_data/en_be/dev.tok.norm.be and src/preprocess/preprocessed_data/en_be/dev.tok.norm.en. Packing into batches.
+Done packing batches.
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 14.0000 dev BLEU4: 0.0, 0.129237/0.010060/0.001158/0.000000 (BP = 1.000000, ratio=1.63, hyp_len=7405, ref_len=4537) (time=0-00:15:23)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100]              dev auxiliary Loss: 3.776 (ref_len=5563)
+             checkpoint took 0-00:00:06
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 14.0122: train_loss/word=2.491415 (steps=2439, words/sec=1683.17, time=0-00:15:23)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 14.2371: train_loss/word=4.060138 (steps=2479, words/sec=1920.85, time=0-00:15:36)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 14.4622: train_loss/word=4.022982 (steps=2518, words/sec=1855.34, time=0-00:15:49)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 14.6875: train_loss/word=4.148292 (steps=2560, words/sec=1871.11, time=0-00:16:04)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 14.9111: train_loss/word=3.923812 (steps=2596, words/sec=1839.98, time=0-00:16:16)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 15.0000: train_loss/word=4.144431 (steps=2613, words/sec=1795.77, time=0-00:16:22)
+> Checkpoint [model_preprocessed_be_epoch100]
+Performing inference on src/preprocess/preprocessed_data/en_be/dev.tok.norm.be and src/preprocess/preprocessed_data/en_be/dev.norm.en
+Starting to read src/preprocess/preprocessed_data/en_be/dev.tok.norm.be and src/preprocess/preprocessed_data/en_be/dev.tok.norm.en
+Done reading src/preprocess/preprocessed_data/en_be/dev.tok.norm.be and src/preprocess/preprocessed_data/en_be/dev.tok.norm.en. Packing into batches.
+Done packing batches.
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 15.0000 dev BLEU4: 0.0, 0.136590/0.012333/0.001266/0.000000 (BP = 1.000000, ratio=1.50, hyp_len=6816, ref_len=4537) (time=0-00:16:28)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100]              dev auxiliary Loss: 3.753 (ref_len=5563)
+             checkpoint took 0-00:00:05
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 15.0095: train_loss/word=3.131205 (steps=2614, words/sec=1841.83, time=0-00:16:28)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 15.2333: train_loss/word=4.092169 (steps=2656, words/sec=1816.86, time=0-00:16:43)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 15.4606: train_loss/word=4.143399 (steps=2699, words/sec=1800.77, time=0-00:16:58)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 15.6904: train_loss/word=3.671083 (steps=2731, words/sec=1868.32, time=0-00:17:09)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 15.9151: train_loss/word=4.057936 (steps=2771, words/sec=1917.90, time=0-00:17:22)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 16.0000: train_loss/word=4.115447 (steps=2787, words/sec=1848.08, time=0-00:17:28)
+> Checkpoint [model_preprocessed_be_epoch100]
+Performing inference on src/preprocess/preprocessed_data/en_be/dev.tok.norm.be and src/preprocess/preprocessed_data/en_be/dev.norm.en
+Starting to read src/preprocess/preprocessed_data/en_be/dev.tok.norm.be and src/preprocess/preprocessed_data/en_be/dev.tok.norm.en
+Done reading src/preprocess/preprocessed_data/en_be/dev.tok.norm.be and src/preprocess/preprocessed_data/en_be/dev.tok.norm.en. Packing into batches.
+Done packing batches.
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 16.0000 dev BLEU4: 0.0, 0.125504/0.011020/0.001251/0.000000 (BP = 1.000000, ratio=1.69, hyp_len=7689, ref_len=4537) (time=0-00:17:34)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100]              dev auxiliary Loss: 3.741 (ref_len=5563)
+             checkpoint took 0-00:00:06
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 16.0058: train_loss/word=4.038825 (steps=2788, words/sec=1960.38, time=0-00:17:34)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 16.2386: train_loss/word=3.889911 (steps=2826, words/sec=1880.42, time=0-00:17:47)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 16.4633: train_loss/word=4.153244 (steps=2871, words/sec=1896.61, time=0-00:18:02)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 16.6875: train_loss/word=3.980681 (steps=2910, words/sec=1908.91, time=0-00:18:15)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 16.9111: train_loss/word=3.911412 (steps=2946, words/sec=1951.57, time=0-00:18:27)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 17.0000: train_loss/word=3.967989 (steps=2961, words/sec=1943.06, time=0-00:18:32)
+> Checkpoint [model_preprocessed_be_epoch100]
+Performing inference on src/preprocess/preprocessed_data/en_be/dev.tok.norm.be and src/preprocess/preprocessed_data/en_be/dev.norm.en
+Starting to read src/preprocess/preprocessed_data/en_be/dev.tok.norm.be and src/preprocess/preprocessed_data/en_be/dev.tok.norm.en
+Done reading src/preprocess/preprocessed_data/en_be/dev.tok.norm.be and src/preprocess/preprocessed_data/en_be/dev.tok.norm.en. Packing into batches.
+Done packing batches.
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 17.0000 dev BLEU4: 0.0048338470034968275, 0.140671/0.013673/0.001811/0.000157 (BP = 1.000000, ratio=1.57, hyp_len=7123, ref_len=4537) (time=0-00:18:38)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100]              dev auxiliary Loss: 3.733 (ref_len=5563)
+             checkpoint took 0-00:00:05
+  best dev score, writing out model
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 17.0055: train_loss/word=4.224507 (steps=2962, words/sec=2135.24, time=0-00:18:41)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 17.2298: train_loss/word=3.748187 (steps=2996, words/sec=1866.62, time=0-00:18:53)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 17.4575: train_loss/word=4.020903 (steps=3037, words/sec=1723.22, time=0-00:19:08)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 17.6835: train_loss/word=3.986443 (steps=3077, words/sec=1840.20, time=0-00:19:22)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 17.9071: train_loss/word=3.995867 (steps=3116, words/sec=1844.78, time=0-00:19:35)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 18.0000: train_loss/word=4.117935 (steps=3135, words/sec=1869.58, time=0-00:19:41)
+> Checkpoint [model_preprocessed_be_epoch100]
+Performing inference on src/preprocess/preprocessed_data/en_be/dev.tok.norm.be and src/preprocess/preprocessed_data/en_be/dev.norm.en
+Starting to read src/preprocess/preprocessed_data/en_be/dev.tok.norm.be and src/preprocess/preprocessed_data/en_be/dev.tok.norm.en
+Done reading src/preprocess/preprocessed_data/en_be/dev.tok.norm.be and src/preprocess/preprocessed_data/en_be/dev.tok.norm.en. Packing into batches.
+Done packing batches.
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 18.0000 dev BLEU4: 0.004717374910399269, 0.140728/0.012927/0.001697/0.000160 (BP = 1.000000, ratio=1.54, hyp_len=6978, ref_len=4537) (time=0-00:19:47)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100]              dev auxiliary Loss: 3.723 (ref_len=5563)
+             checkpoint took 0-00:00:05
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 18.0047: train_loss/word=4.107357 (steps=3136, words/sec=1627.26, time=0-00:19:48)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 18.2295: train_loss/word=3.852051 (steps=3173, words/sec=1906.96, time=0-00:20:00)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 18.4593: train_loss/word=3.986223 (steps=3214, words/sec=1867.42, time=0-00:20:14)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 18.6849: train_loss/word=4.048103 (steps=3257, words/sec=1945.44, time=0-00:20:28)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 18.9082: train_loss/word=3.986789 (steps=3297, words/sec=1931.84, time=0-00:20:41)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 19.0000: train_loss/word=3.464690 (steps=3309, words/sec=1807.60, time=0-00:20:46)
+> Checkpoint [model_preprocessed_be_epoch100]
+Performing inference on src/preprocess/preprocessed_data/en_be/dev.tok.norm.be and src/preprocess/preprocessed_data/en_be/dev.norm.en
+Starting to read src/preprocess/preprocessed_data/en_be/dev.tok.norm.be and src/preprocess/preprocessed_data/en_be/dev.tok.norm.en
+Done reading src/preprocess/preprocessed_data/en_be/dev.tok.norm.be and src/preprocess/preprocessed_data/en_be/dev.tok.norm.en. Packing into batches.
+Done packing batches.
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 19.0000 dev BLEU4: 0.004965615818793055, 0.143811/0.013849/0.001876/0.000163 (BP = 1.000000, ratio=1.52, hyp_len=6891, ref_len=4537) (time=0-00:20:51)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100]              dev auxiliary Loss: 3.705 (ref_len=5563)
+             checkpoint took 0-00:00:05
+  best dev score, writing out model
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 19.0049: train_loss/word=4.174529 (steps=3310, words/sec=1824.93, time=0-00:20:54)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 19.2326: train_loss/word=3.993068 (steps=3352, words/sec=1816.32, time=0-00:21:09)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 19.4551: train_loss/word=3.859101 (steps=3389, words/sec=1766.19, time=0-00:21:22)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 19.6786: train_loss/word=3.858752 (steps=3427, words/sec=1772.71, time=0-00:21:36)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 19.9069: train_loss/word=3.858293 (steps=3464, words/sec=1778.02, time=0-00:21:49)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 20.0000: train_loss/word=4.073253 (steps=3483, words/sec=1744.48, time=0-00:21:56)
+> Checkpoint [model_preprocessed_be_epoch100]
+Performing inference on src/preprocess/preprocessed_data/en_be/dev.tok.norm.be and src/preprocess/preprocessed_data/en_be/dev.norm.en
+Starting to read src/preprocess/preprocessed_data/en_be/dev.tok.norm.be and src/preprocess/preprocessed_data/en_be/dev.tok.norm.en
+Done reading src/preprocess/preprocessed_data/en_be/dev.tok.norm.be and src/preprocess/preprocessed_data/en_be/dev.tok.norm.en. Packing into batches.
+Done packing batches.
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 20.0000 dev BLEU4: 0.0045053744475028, 0.136007/0.012127/0.001627/0.000154 (BP = 1.000000, ratio=1.60, hyp_len=7257, ref_len=4537) (time=0-00:22:02)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100]              dev auxiliary Loss: 3.699 (ref_len=5563)
+             checkpoint took 0-00:00:06
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 20.0058: train_loss/word=4.034584 (steps=3484, words/sec=1935.09, time=0-00:22:03)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 20.2322: train_loss/word=3.901774 (steps=3525, words/sec=1888.01, time=0-00:22:16)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 20.4540: train_loss/word=3.780235 (steps=3561, words/sec=1842.27, time=0-00:22:29)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 20.6820: train_loss/word=3.968363 (steps=3603, words/sec=1892.77, time=0-00:22:43)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 20.9080: train_loss/word=3.927086 (steps=3642, words/sec=1912.85, time=0-00:22:56)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 21.0000: train_loss/word=3.844541 (steps=3657, words/sec=1765.75, time=0-00:23:01)
+> Checkpoint [model_preprocessed_be_epoch100]
+Performing inference on src/preprocess/preprocessed_data/en_be/dev.tok.norm.be and src/preprocess/preprocessed_data/en_be/dev.norm.en
+Starting to read src/preprocess/preprocessed_data/en_be/dev.tok.norm.be and src/preprocess/preprocessed_data/en_be/dev.tok.norm.en
+Done reading src/preprocess/preprocessed_data/en_be/dev.tok.norm.be and src/preprocess/preprocessed_data/en_be/dev.tok.norm.en. Packing into batches.
+Done packing batches.
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 21.0000 dev BLEU4: 0.006401299896445109, 0.146320/0.014636/0.002377/0.000330 (BP = 1.000000, ratio=1.50, hyp_len=6807, ref_len=4537) (time=0-00:23:08)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100]              dev auxiliary Loss: 3.684 (ref_len=5563)
+             checkpoint took 0-00:00:06
+  best dev score, writing out model
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 21.0058: train_loss/word=3.842756 (steps=3658, words/sec=1828.13, time=0-00:23:11)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 21.2293: train_loss/word=3.693572 (steps=3693, words/sec=1848.58, time=0-00:23:23)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 21.4524: train_loss/word=3.934123 (steps=3734, words/sec=1849.26, time=0-00:23:37)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 21.6742: train_loss/word=3.890017 (steps=3773, words/sec=1830.57, time=0-00:23:50)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 21.9033: train_loss/word=3.879972 (steps=3813, words/sec=1868.41, time=0-00:24:04)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 22.0000: train_loss/word=4.011704 (steps=3832, words/sec=1849.83, time=0-00:24:10)
+> Checkpoint [model_preprocessed_be_epoch100]
+Performing inference on src/preprocess/preprocessed_data/en_be/dev.tok.norm.be and src/preprocess/preprocessed_data/en_be/dev.norm.en
+Starting to read src/preprocess/preprocessed_data/en_be/dev.tok.norm.be and src/preprocess/preprocessed_data/en_be/dev.tok.norm.en
+Done reading src/preprocess/preprocessed_data/en_be/dev.tok.norm.be and src/preprocess/preprocessed_data/en_be/dev.tok.norm.en. Packing into batches.
+Done packing batches.
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 22.0000 dev BLEU4: 0.0, 0.144058/0.015764/0.001750/0.000000 (BP = 1.000000, ratio=1.49, hyp_len=6782, ref_len=4537) (time=0-00:24:16)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100]              dev auxiliary Loss: 3.672 (ref_len=5563)
+             checkpoint took 0-00:00:06
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 22.0098: train_loss/word=3.198183 (steps=3833, words/sec=2012.77, time=0-00:24:17)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 22.2377: train_loss/word=3.763465 (steps=3870, words/sec=1864.24, time=0-00:24:30)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 22.4768: train_loss/word=3.805937 (steps=3910, words/sec=1902.84, time=0-00:24:43)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 22.7008: train_loss/word=3.976852 (steps=3954, words/sec=1876.06, time=0-00:24:58)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 22.9233: train_loss/word=3.766229 (steps=3991, words/sec=1814.26, time=0-00:25:11)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 23.0000: train_loss/word=4.053537 (steps=4006, words/sec=1849.13, time=0-00:25:16)
+> Checkpoint [model_preprocessed_be_epoch100]
+Performing inference on src/preprocess/preprocessed_data/en_be/dev.tok.norm.be and src/preprocess/preprocessed_data/en_be/dev.norm.en
+Starting to read src/preprocess/preprocessed_data/en_be/dev.tok.norm.be and src/preprocess/preprocessed_data/en_be/dev.tok.norm.en
+Done reading src/preprocess/preprocessed_data/en_be/dev.tok.norm.be and src/preprocess/preprocessed_data/en_be/dev.tok.norm.en. Packing into batches.
+Done packing batches.
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 23.0000 dev BLEU4: 0.0, 0.134692/0.014184/0.001534/0.000000 (BP = 1.000000, ratio=1.55, hyp_len=7016, ref_len=4537) (time=0-00:25:22)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100]              dev auxiliary Loss: 3.662 (ref_len=5563)
+             checkpoint took 0-00:00:06
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 23.0089: train_loss/word=3.324904 (steps=4007, words/sec=2198.10, time=0-00:25:22)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 23.2371: train_loss/word=3.820407 (steps=4048, words/sec=1781.43, time=0-00:25:37)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 23.4609: train_loss/word=3.797363 (steps=4086, words/sec=1829.95, time=0-00:25:50)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 23.6846: train_loss/word=3.772100 (steps=4122, words/sec=1949.17, time=0-00:26:02)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 23.9095: train_loss/word=3.842548 (steps=4162, words/sec=1825.05, time=0-00:26:16)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 24.0000: train_loss/word=4.022240 (steps=4180, words/sec=1856.58, time=0-00:26:22)
+> Checkpoint [model_preprocessed_be_epoch100]
+Performing inference on src/preprocess/preprocessed_data/en_be/dev.tok.norm.be and src/preprocess/preprocessed_data/en_be/dev.norm.en
+Starting to read src/preprocess/preprocessed_data/en_be/dev.tok.norm.be and src/preprocess/preprocessed_data/en_be/dev.tok.norm.en
+Done reading src/preprocess/preprocessed_data/en_be/dev.tok.norm.be and src/preprocess/preprocessed_data/en_be/dev.tok.norm.en. Packing into batches.
+Done packing batches.
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 24.0000 dev BLEU4: 0.0, 0.143157/0.014168/0.001457/0.000000 (BP = 1.000000, ratio=1.47, hyp_len=6671, ref_len=4537) (time=0-00:26:28)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100]              dev auxiliary Loss: 3.657 (ref_len=5563)
+             checkpoint took 0-00:00:06
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 24.0031: train_loss/word=4.322854 (steps=4181, words/sec=1927.01, time=0-00:26:28)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 24.2284: train_loss/word=3.701558 (steps=4218, words/sec=1858.33, time=0-00:26:41)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 24.4509: train_loss/word=3.744799 (steps=4255, words/sec=1841.21, time=0-00:26:54)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 24.6755: train_loss/word=3.751041 (steps=4292, words/sec=1886.43, time=0-00:27:06)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 24.9040: train_loss/word=3.934533 (steps=4336, words/sec=1882.84, time=0-00:27:21)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 25.0000: train_loss/word=3.917027 (steps=4354, words/sec=1901.45, time=0-00:27:27)
+> Checkpoint [model_preprocessed_be_epoch100]
+Performing inference on src/preprocess/preprocessed_data/en_be/dev.tok.norm.be and src/preprocess/preprocessed_data/en_be/dev.norm.en
+Starting to read src/preprocess/preprocessed_data/en_be/dev.tok.norm.be and src/preprocess/preprocessed_data/en_be/dev.tok.norm.en
+Done reading src/preprocess/preprocessed_data/en_be/dev.tok.norm.be and src/preprocess/preprocessed_data/en_be/dev.tok.norm.en. Packing into batches.
+Done packing batches.
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 25.0000 dev BLEU4: 0.0, 0.148284/0.015605/0.001492/0.000000 (BP = 1.000000, ratio=1.44, hyp_len=6528, ref_len=4537) (time=0-00:27:33)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100]              dev auxiliary Loss: 3.654 (ref_len=5563)
+             checkpoint took 0-00:00:05
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 25.0084: train_loss/word=3.383546 (steps=4355, words/sec=2077.25, time=0-00:27:34)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 25.2360: train_loss/word=3.719250 (steps=4393, words/sec=1833.58, time=0-00:27:47)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 25.4582: train_loss/word=3.755255 (steps=4431, words/sec=1927.99, time=0-00:27:59)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 25.6864: train_loss/word=3.879521 (steps=4473, words/sec=1908.34, time=0-00:28:14)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 25.9126: train_loss/word=3.815300 (steps=4513, words/sec=1822.21, time=0-00:28:28)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 26.0000: train_loss/word=3.725292 (steps=4528, words/sec=1722.72, time=0-00:28:33)
+> Checkpoint [model_preprocessed_be_epoch100]
+Performing inference on src/preprocess/preprocessed_data/en_be/dev.tok.norm.be and src/preprocess/preprocessed_data/en_be/dev.norm.en
+Starting to read src/preprocess/preprocessed_data/en_be/dev.tok.norm.be and src/preprocess/preprocessed_data/en_be/dev.tok.norm.en
+Done reading src/preprocess/preprocessed_data/en_be/dev.tok.norm.be and src/preprocess/preprocessed_data/en_be/dev.tok.norm.en. Packing into batches.
+Done packing batches.
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 26.0000 dev BLEU4: 0.0, 0.156236/0.015588/0.001490/0.000000 (BP = 1.000000, ratio=1.44, hyp_len=6535, ref_len=4537) (time=0-00:28:39)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100]              dev auxiliary Loss: 3.644 (ref_len=5563)
+             checkpoint took 0-00:00:05
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 26.0071: train_loss/word=3.403087 (steps=4529, words/sec=2242.35, time=0-00:28:39)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 26.2293: train_loss/word=3.711659 (steps=4566, words/sec=1832.62, time=0-00:28:52)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 26.4522: train_loss/word=3.765138 (steps=4605, words/sec=1821.59, time=0-00:29:06)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 26.6798: train_loss/word=3.731223 (steps=4644, words/sec=1805.02, time=0-00:29:19)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 26.9120: train_loss/word=3.829450 (steps=4686, words/sec=1785.77, time=0-00:29:34)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 27.0000: train_loss/word=3.839586 (steps=4702, words/sec=1868.26, time=0-00:29:40)
+> Checkpoint [model_preprocessed_be_epoch100]
+Performing inference on src/preprocess/preprocessed_data/en_be/dev.tok.norm.be and src/preprocess/preprocessed_data/en_be/dev.norm.en
+Starting to read src/preprocess/preprocessed_data/en_be/dev.tok.norm.be and src/preprocess/preprocessed_data/en_be/dev.tok.norm.en
+Done reading src/preprocess/preprocessed_data/en_be/dev.tok.norm.be and src/preprocess/preprocessed_data/en_be/dev.tok.norm.en. Packing into batches.
+Done packing batches.
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 27.0000 dev BLEU4: 0.0, 0.152237/0.015913/0.001476/0.000000 (BP = 1.000000, ratio=1.45, hyp_len=6595, ref_len=4537) (time=0-00:29:46)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100]              dev auxiliary Loss: 3.635 (ref_len=5563)
+             checkpoint took 0-00:00:05
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 27.0086: train_loss/word=2.876694 (steps=4703, words/sec=1547.91, time=0-00:29:46)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 27.2358: train_loss/word=3.718702 (steps=4743, words/sec=1794.68, time=0-00:30:00)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 27.4597: train_loss/word=3.713197 (steps=4781, words/sec=1869.50, time=0-00:30:13)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 27.6826: train_loss/word=3.789977 (steps=4821, words/sec=1941.09, time=0-00:30:26)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 27.9057: train_loss/word=3.705011 (steps=4858, words/sec=1941.15, time=0-00:30:38)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 28.0000: train_loss/word=3.904783 (steps=4876, words/sec=1919.37, time=0-00:30:44)
+> Checkpoint [model_preprocessed_be_epoch100]
+Performing inference on src/preprocess/preprocessed_data/en_be/dev.tok.norm.be and src/preprocess/preprocessed_data/en_be/dev.norm.en
+Starting to read src/preprocess/preprocessed_data/en_be/dev.tok.norm.be and src/preprocess/preprocessed_data/en_be/dev.tok.norm.en
+Done reading src/preprocess/preprocessed_data/en_be/dev.tok.norm.be and src/preprocess/preprocessed_data/en_be/dev.tok.norm.en. Packing into batches.
+Done packing batches.
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 28.0000 dev BLEU4: 0.00529409760082871, 0.146472/0.016347/0.002025/0.000162 (BP = 1.000000, ratio=1.52, hyp_len=6916, ref_len=4537) (time=0-00:30:50)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100]              dev auxiliary Loss: 3.632 (ref_len=5563)
+             checkpoint took 0-00:00:05
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 28.0060: train_loss/word=3.815514 (steps=4877, words/sec=2073.63, time=0-00:30:50)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 28.2295: train_loss/word=3.712627 (steps=4916, words/sec=1891.22, time=0-00:31:04)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 28.4575: train_loss/word=3.569624 (steps=4952, words/sec=1903.70, time=0-00:31:15)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 28.6815: train_loss/word=3.892520 (steps=4996, words/sec=1876.61, time=0-00:31:30)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 28.9037: train_loss/word=3.630926 (steps=5032, words/sec=1917.27, time=0-00:31:42)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 29.0000: train_loss/word=3.837641 (steps=5050, words/sec=1883.09, time=0-00:31:48)
+> Checkpoint [model_preprocessed_be_epoch100]
+Performing inference on src/preprocess/preprocessed_data/en_be/dev.tok.norm.be and src/preprocess/preprocessed_data/en_be/dev.norm.en
+Starting to read src/preprocess/preprocessed_data/en_be/dev.tok.norm.be and src/preprocess/preprocessed_data/en_be/dev.tok.norm.en
+Done reading src/preprocess/preprocessed_data/en_be/dev.tok.norm.be and src/preprocess/preprocessed_data/en_be/dev.tok.norm.en. Packing into batches.
+Done packing batches.
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 29.0000 dev BLEU4: 0.0, 0.159887/0.017578/0.001866/0.000000 (BP = 1.000000, ratio=1.41, hyp_len=6392, ref_len=4537) (time=0-00:31:54)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100]              dev auxiliary Loss: 3.627 (ref_len=5563)
+             checkpoint took 0-00:00:05
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 29.0044: train_loss/word=4.086171 (steps=5051, words/sec=1778.46, time=0-00:31:54)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 29.2300: train_loss/word=3.625553 (steps=5089, words/sec=1881.48, time=0-00:32:07)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 29.4527: train_loss/word=3.634770 (steps=5126, words/sec=1896.42, time=0-00:32:19)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 29.6789: train_loss/word=3.760037 (steps=5167, words/sec=1930.16, time=0-00:32:33)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 29.9031: train_loss/word=3.831752 (steps=5209, words/sec=1921.65, time=0-00:32:47)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 30.0000: train_loss/word=3.544295 (steps=5224, words/sec=1887.85, time=0-00:32:52)
+> Checkpoint [model_preprocessed_be_epoch100]
+Performing inference on src/preprocess/preprocessed_data/en_be/dev.tok.norm.be and src/preprocess/preprocessed_data/en_be/dev.norm.en
+Starting to read src/preprocess/preprocessed_data/en_be/dev.tok.norm.be and src/preprocess/preprocessed_data/en_be/dev.tok.norm.en
+Done reading src/preprocess/preprocessed_data/en_be/dev.tok.norm.be and src/preprocess/preprocessed_data/en_be/dev.tok.norm.en. Packing into batches.
+Done packing batches.
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 30.0000 dev BLEU4: 0.0, 0.156995/0.016508/0.001818/0.000000 (BP = 1.000000, ratio=1.44, hyp_len=6548, ref_len=4537) (time=0-00:32:58)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100]              dev auxiliary Loss: 3.625 (ref_len=5563)
+             checkpoint took 0-00:00:05
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 30.0095: train_loss/word=2.856834 (steps=5225, words/sec=1775.67, time=0-00:32:58)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 30.2335: train_loss/word=3.714079 (steps=5265, words/sec=1961.83, time=0-00:33:11)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 30.4589: train_loss/word=3.711347 (steps=5305, words/sec=1891.49, time=0-00:33:25)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 30.6842: train_loss/word=3.610408 (steps=5342, words/sec=1806.08, time=0-00:33:38)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 30.9062: train_loss/word=3.735676 (steps=5382, words/sec=1842.25, time=0-00:33:51)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 31.0000: train_loss/word=3.639368 (steps=5398, words/sec=1813.93, time=0-00:33:57)
+> Checkpoint [model_preprocessed_be_epoch100]
+Performing inference on src/preprocess/preprocessed_data/en_be/dev.tok.norm.be and src/preprocess/preprocessed_data/en_be/dev.norm.en
+Starting to read src/preprocess/preprocessed_data/en_be/dev.tok.norm.be and src/preprocess/preprocessed_data/en_be/dev.tok.norm.en
+Done reading src/preprocess/preprocessed_data/en_be/dev.tok.norm.be and src/preprocess/preprocessed_data/en_be/dev.tok.norm.en. Packing into batches.
+Done packing batches.
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 31.0000 dev BLEU4: 0.005652017957724335, 0.161260/0.017683/0.002028/0.000176 (BP = 1.000000, ratio=1.41, hyp_len=6412, ref_len=4537) (time=0-00:34:03)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100]              dev auxiliary Loss: 3.614 (ref_len=5563)
+             checkpoint took 0-00:00:05
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 31.0098: train_loss/word=3.012034 (steps=5399, words/sec=2318.99, time=0-00:34:03)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 31.2324: train_loss/word=3.686626 (steps=5439, words/sec=1844.28, time=0-00:34:17)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 31.4620: train_loss/word=3.615216 (steps=5478, words/sec=1812.24, time=0-00:34:30)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 31.6891: train_loss/word=3.631389 (steps=5516, words/sec=1939.20, time=0-00:34:43)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 31.9126: train_loss/word=3.757606 (steps=5557, words/sec=1940.72, time=0-00:34:57)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 32.0000: train_loss/word=3.625646 (steps=5572, words/sec=1889.93, time=0-00:35:02)
+> Checkpoint [model_preprocessed_be_epoch100]
+Performing inference on src/preprocess/preprocessed_data/en_be/dev.tok.norm.be and src/preprocess/preprocessed_data/en_be/dev.norm.en
+Starting to read src/preprocess/preprocessed_data/en_be/dev.tok.norm.be and src/preprocess/preprocessed_data/en_be/dev.tok.norm.en
+Done reading src/preprocess/preprocessed_data/en_be/dev.tok.norm.be and src/preprocess/preprocessed_data/en_be/dev.tok.norm.en. Packing into batches.
+Done packing batches.
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 32.0000 dev BLEU4: 0.007819821043288502, 0.171419/0.020198/0.002780/0.000389 (BP = 1.000000, ratio=1.30, hyp_len=5892, ref_len=4537) (time=0-00:35:07)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100]              dev auxiliary Loss: 3.600 (ref_len=5563)
+             checkpoint took 0-00:00:05
+  best dev score, writing out model
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 32.0058: train_loss/word=3.662482 (steps=5573, words/sec=1945.57, time=0-00:35:10)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 32.2278: train_loss/word=3.538822 (steps=5610, words/sec=1897.60, time=0-00:35:22)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 32.4575: train_loss/word=3.819946 (steps=5656, words/sec=1877.70, time=0-00:35:38)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 32.6842: train_loss/word=3.628667 (steps=5695, words/sec=1922.88, time=0-00:35:51)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 32.9060: train_loss/word=3.639211 (steps=5732, words/sec=1973.48, time=0-00:36:03)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 33.0000: train_loss/word=3.452443 (steps=5746, words/sec=1913.91, time=0-00:36:07)
+> Checkpoint [model_preprocessed_be_epoch100]
+Performing inference on src/preprocess/preprocessed_data/en_be/dev.tok.norm.be and src/preprocess/preprocessed_data/en_be/dev.norm.en
+Starting to read src/preprocess/preprocessed_data/en_be/dev.tok.norm.be and src/preprocess/preprocessed_data/en_be/dev.tok.norm.en
+Done reading src/preprocess/preprocessed_data/en_be/dev.tok.norm.be and src/preprocess/preprocessed_data/en_be/dev.tok.norm.en. Packing into batches.
+Done packing batches.
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 33.0000 dev BLEU4: 0.0, 0.165139/0.018590/0.002097/0.000000 (BP = 1.000000, ratio=1.37, hyp_len=6219, ref_len=4537) (time=0-00:36:13)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100]              dev auxiliary Loss: 3.595 (ref_len=5563)
+             checkpoint took 0-00:00:05
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 33.0091: train_loss/word=2.716923 (steps=5747, words/sec=1893.50, time=0-00:36:13)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 33.2358: train_loss/word=3.655099 (steps=5787, words/sec=1919.21, time=0-00:36:27)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 33.4629: train_loss/word=3.683790 (steps=5828, words/sec=1923.89, time=0-00:36:40)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 33.6902: train_loss/word=3.511550 (steps=5864, words/sec=1859.04, time=0-00:36:53)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 33.9186: train_loss/word=3.626910 (steps=5904, words/sec=1863.05, time=0-00:37:06)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 34.0000: train_loss/word=3.766310 (steps=5920, words/sec=1857.82, time=0-00:37:12)
+> Checkpoint [model_preprocessed_be_epoch100]
+Performing inference on src/preprocess/preprocessed_data/en_be/dev.tok.norm.be and src/preprocess/preprocessed_data/en_be/dev.norm.en
+Starting to read src/preprocess/preprocessed_data/en_be/dev.tok.norm.be and src/preprocess/preprocessed_data/en_be/dev.tok.norm.en
+Done reading src/preprocess/preprocessed_data/en_be/dev.tok.norm.be and src/preprocess/preprocessed_data/en_be/dev.tok.norm.en. Packing into batches.
+Done packing batches.
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 34.0000 dev BLEU4: 0.0, 0.164160/0.018871/0.002110/0.000000 (BP = 1.000000, ratio=1.36, hyp_len=6183, ref_len=4537) (time=0-00:37:17)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100]              dev auxiliary Loss: 3.595 (ref_len=5563)
+             checkpoint took 0-00:00:05
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 34.0118: train_loss/word=1.979536 (steps=5921, words/sec=1669.89, time=0-00:37:17)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 34.2409: train_loss/word=3.498192 (steps=5958, words/sec=1764.77, time=0-00:37:31)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 34.4640: train_loss/word=3.536889 (steps=5995, words/sec=1706.06, time=0-00:37:44)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 34.6873: train_loss/word=3.602870 (steps=6034, words/sec=1856.27, time=0-00:37:58)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 34.9139: train_loss/word=3.745270 (steps=6077, words/sec=1920.00, time=0-00:38:12)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 35.0000: train_loss/word=3.766810 (steps=6094, words/sec=1906.32, time=0-00:38:18)
+> Checkpoint [model_preprocessed_be_epoch100]
+Performing inference on src/preprocess/preprocessed_data/en_be/dev.tok.norm.be and src/preprocess/preprocessed_data/en_be/dev.norm.en
+Starting to read src/preprocess/preprocessed_data/en_be/dev.tok.norm.be and src/preprocess/preprocessed_data/en_be/dev.tok.norm.en
+Done reading src/preprocess/preprocessed_data/en_be/dev.tok.norm.be and src/preprocess/preprocessed_data/en_be/dev.tok.norm.en. Packing into batches.
+Done packing batches.
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 35.0000 dev BLEU4: 0.008941987515246387, 0.162653/0.019551/0.002861/0.000703 (BP = 1.000000, ratio=1.42, hyp_len=6437, ref_len=4537) (time=0-00:38:24)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100]              dev auxiliary Loss: 3.593 (ref_len=5563)
+             checkpoint took 0-00:00:06
+  best dev score, writing out model
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 35.0022: train_loss/word=4.380785 (steps=6095, words/sec=1663.78, time=0-00:38:27)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 35.2251: train_loss/word=3.624194 (steps=6137, words/sec=1812.41, time=0-00:38:42)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 35.4513: train_loss/word=3.637095 (steps=6177, words/sec=1886.69, time=0-00:38:55)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 35.6753: train_loss/word=3.477405 (steps=6212, words/sec=1847.07, time=0-00:39:07)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 35.8995: train_loss/word=3.627344 (steps=6252, words/sec=1888.04, time=0-00:39:21)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 36.0000: train_loss/word=3.518870 (steps=6268, words/sec=1919.90, time=0-00:39:26)
+> Checkpoint [model_preprocessed_be_epoch100]
+Performing inference on src/preprocess/preprocessed_data/en_be/dev.tok.norm.be and src/preprocess/preprocessed_data/en_be/dev.norm.en
+Starting to read src/preprocess/preprocessed_data/en_be/dev.tok.norm.be and src/preprocess/preprocessed_data/en_be/dev.tok.norm.en
+Done reading src/preprocess/preprocessed_data/en_be/dev.tok.norm.be and src/preprocess/preprocessed_data/en_be/dev.tok.norm.en. Packing into batches.
+Done packing batches.
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 36.0000 dev BLEU4: 0.007929495121154624, 0.171270/0.021802/0.002845/0.000372 (BP = 1.000000, ratio=1.35, hyp_len=6119, ref_len=4537) (time=0-00:39:32)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100]              dev auxiliary Loss: 3.588 (ref_len=5563)
+             checkpoint took 0-00:00:05
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 36.0038: train_loss/word=3.737854 (steps=6269, words/sec=1689.20, time=0-00:39:32)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 36.2300: train_loss/word=3.685013 (steps=6313, words/sec=1786.34, time=0-00:39:48)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 36.4564: train_loss/word=3.605381 (steps=6355, words/sec=1801.50, time=0-00:40:02)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 36.6782: train_loss/word=3.501778 (steps=6391, words/sec=1897.11, time=0-00:40:14)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 36.9011: train_loss/word=3.528465 (steps=6428, words/sec=1956.09, time=0-00:40:26)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 37.0000: train_loss/word=3.451071 (steps=6443, words/sec=1936.23, time=0-00:40:31)
+> Checkpoint [model_preprocessed_be_epoch100]
+Performing inference on src/preprocess/preprocessed_data/en_be/dev.tok.norm.be and src/preprocess/preprocessed_data/en_be/dev.norm.en
+Starting to read src/preprocess/preprocessed_data/en_be/dev.tok.norm.be and src/preprocess/preprocessed_data/en_be/dev.tok.norm.en
+Done reading src/preprocess/preprocessed_data/en_be/dev.tok.norm.be and src/preprocess/preprocessed_data/en_be/dev.tok.norm.en. Packing into batches.
+Done packing batches.
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 37.0000 dev BLEU4: 0.010374610116901347, 0.178274/0.024096/0.003303/0.000816 (BP = 1.000000, ratio=1.24, hyp_len=5643, ref_len=4537) (time=0-00:40:37)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100]              dev auxiliary Loss: 3.577 (ref_len=5563)
+             checkpoint took 0-00:00:05
+  best dev score, writing out model
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 37.0044: train_loss/word=3.961091 (steps=6444, words/sec=2072.59, time=0-00:40:40)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 37.2271: train_loss/word=3.549963 (steps=6482, words/sec=1904.29, time=0-00:40:52)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 37.4500: train_loss/word=3.517421 (steps=6520, words/sec=1818.19, time=0-00:41:06)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 37.6720: train_loss/word=3.663372 (steps=6562, words/sec=1843.27, time=0-00:41:20)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 37.8958: train_loss/word=3.456359 (steps=6598, words/sec=1895.59, time=0-00:41:32)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 38.0000: train_loss/word=3.577890 (steps=6617, words/sec=1779.72, time=0-00:41:39)
+> Checkpoint [model_preprocessed_be_epoch100]
+Performing inference on src/preprocess/preprocessed_data/en_be/dev.tok.norm.be and src/preprocess/preprocessed_data/en_be/dev.norm.en
+Starting to read src/preprocess/preprocessed_data/en_be/dev.tok.norm.be and src/preprocess/preprocessed_data/en_be/dev.tok.norm.en
+Done reading src/preprocess/preprocessed_data/en_be/dev.tok.norm.be and src/preprocess/preprocessed_data/en_be/dev.tok.norm.en. Packing into batches.
+Done packing batches.
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 38.0000 dev BLEU4: 0.008699421512060188, 0.168733/0.020795/0.002975/0.000549 (BP = 1.000000, ratio=1.37, hyp_len=6211, ref_len=4537) (time=0-00:41:45)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100]              dev auxiliary Loss: 3.580 (ref_len=5563)
+             checkpoint took 0-00:00:05
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 38.0038: train_loss/word=3.869959 (steps=6618, words/sec=1750.98, time=0-00:41:45)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 38.2282: train_loss/word=3.503877 (steps=6657, words/sec=1724.71, time=0-00:41:59)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 38.4593: train_loss/word=3.573883 (steps=6699, words/sec=1855.79, time=0-00:42:14)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 38.6811: train_loss/word=3.483338 (steps=6735, words/sec=1809.92, time=0-00:42:27)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 38.9142: train_loss/word=3.511502 (steps=6775, words/sec=1843.04, time=0-00:42:40)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 39.0000: train_loss/word=3.697192 (steps=6792, words/sec=1757.45, time=0-00:42:46)
+> Checkpoint [model_preprocessed_be_epoch100]
+Performing inference on src/preprocess/preprocessed_data/en_be/dev.tok.norm.be and src/preprocess/preprocessed_data/en_be/dev.norm.en
+Starting to read src/preprocess/preprocessed_data/en_be/dev.tok.norm.be and src/preprocess/preprocessed_data/en_be/dev.tok.norm.en
+Done reading src/preprocess/preprocessed_data/en_be/dev.tok.norm.be and src/preprocess/preprocessed_data/en_be/dev.tok.norm.en. Packing into batches.
+Done packing batches.
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 39.0000 dev BLEU4: 0.008028838194969735, 0.162989/0.020524/0.002357/0.000527 (BP = 1.000000, ratio=1.42, hyp_len=6436, ref_len=4537) (time=0-00:42:52)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100]              dev auxiliary Loss: 3.585 (ref_len=5563)
+             checkpoint took 0-00:00:06
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 39.0095: train_loss/word=2.684553 (steps=6793, words/sec=1765.79, time=0-00:42:53)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 39.2315: train_loss/word=3.509552 (steps=6832, words/sec=1912.51, time=0-00:43:06)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 39.4580: train_loss/word=3.460826 (steps=6870, words/sec=1833.78, time=0-00:43:19)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 39.6831: train_loss/word=3.674883 (steps=6915, words/sec=1884.36, time=0-00:43:34)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 39.9115: train_loss/word=3.504074 (steps=6954, words/sec=1865.46, time=0-00:43:47)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 40.0000: train_loss/word=3.320248 (steps=6967, words/sec=1845.87, time=0-00:43:51)
+> Checkpoint [model_preprocessed_be_epoch100]
+Performing inference on src/preprocess/preprocessed_data/en_be/dev.tok.norm.be and src/preprocess/preprocessed_data/en_be/dev.norm.en
+Starting to read src/preprocess/preprocessed_data/en_be/dev.tok.norm.be and src/preprocess/preprocessed_data/en_be/dev.tok.norm.en
+Done reading src/preprocess/preprocessed_data/en_be/dev.tok.norm.be and src/preprocess/preprocessed_data/en_be/dev.tok.norm.en. Packing into batches.
+Done packing batches.
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 40.0000 dev BLEU4: 0.00998282244685155, 0.171865/0.022295/0.002905/0.000892 (BP = 1.000000, ratio=1.40, hyp_len=6348, ref_len=4537) (time=0-00:43:57)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100]              dev auxiliary Loss: 3.578 (ref_len=5563)
+             checkpoint took 0-00:00:05
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 40.0115: train_loss/word=2.379034 (steps=6968, words/sec=2045.93, time=0-00:43:57)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 40.2373: train_loss/word=3.504274 (steps=7008, words/sec=1884.61, time=0-00:44:11)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 40.4606: train_loss/word=3.460046 (steps=7046, words/sec=1860.98, time=0-00:44:24)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 40.6851: train_loss/word=3.435254 (steps=7083, words/sec=1816.33, time=0-00:44:37)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 40.9093: train_loss/word=3.665079 (steps=7127, words/sec=1890.52, time=0-00:44:52)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 41.0000: train_loss/word=3.385216 (steps=7141, words/sec=1819.77, time=0-00:44:56)
+> Checkpoint [model_preprocessed_be_epoch100]
+Performing inference on src/preprocess/preprocessed_data/en_be/dev.tok.norm.be and src/preprocess/preprocessed_data/en_be/dev.norm.en
+Starting to read src/preprocess/preprocessed_data/en_be/dev.tok.norm.be and src/preprocess/preprocessed_data/en_be/dev.tok.norm.en
+Done reading src/preprocess/preprocessed_data/en_be/dev.tok.norm.be and src/preprocess/preprocessed_data/en_be/dev.tok.norm.en. Packing into batches.
+Done packing batches.
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 41.0000 dev BLEU4: 0.008374110401299395, 0.170528/0.020994/0.002565/0.000536 (BP = 1.000000, ratio=1.40, hyp_len=6345, ref_len=4537) (time=0-00:45:02)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100]              dev auxiliary Loss: 3.578 (ref_len=5563)
+             checkpoint took 0-00:00:05
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 41.0038: train_loss/word=3.871614 (steps=7142, words/sec=2048.88, time=0-00:45:03)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 41.2293: train_loss/word=3.227460 (steps=7175, words/sec=1795.38, time=0-00:45:14)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 41.4531: train_loss/word=3.626992 (steps=7220, words/sec=1817.11, time=0-00:45:30)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 41.6771: train_loss/word=3.222545 (steps=7252, words/sec=1880.95, time=0-00:45:41)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 41.8991: train_loss/word=3.596565 (steps=7293, words/sec=1814.70, time=0-00:45:55)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 42.0000: train_loss/word=3.764562 (steps=7315, words/sec=1869.58, time=0-00:46:03)
+> Checkpoint [model_preprocessed_be_epoch100]
+Performing inference on src/preprocess/preprocessed_data/en_be/dev.tok.norm.be and src/preprocess/preprocessed_data/en_be/dev.norm.en
+Starting to read src/preprocess/preprocessed_data/en_be/dev.tok.norm.be and src/preprocess/preprocessed_data/en_be/dev.tok.norm.en
+Done reading src/preprocess/preprocessed_data/en_be/dev.tok.norm.be and src/preprocess/preprocessed_data/en_be/dev.tok.norm.en. Packing into batches.
+Done packing batches.
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 42.0000 dev BLEU4: 0.011775469845379407, 0.176567/0.025243/0.004630/0.000932 (BP = 1.000000, ratio=1.35, hyp_len=6111, ref_len=4537) (time=0-00:46:08)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100]              dev auxiliary Loss: 3.570 (ref_len=5563)
+             checkpoint took 0-00:00:05
+  best dev score, writing out model
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 42.0089: train_loss/word=2.813294 (steps=7316, words/sec=2021.10, time=0-00:46:11)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 42.2340: train_loss/word=3.406904 (steps=7354, words/sec=1906.59, time=0-00:46:23)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 42.4566: train_loss/word=3.439736 (steps=7392, words/sec=1899.95, time=0-00:46:36)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 42.6820: train_loss/word=3.594542 (steps=7436, words/sec=1841.82, time=0-00:46:51)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 42.9100: train_loss/word=3.427219 (steps=7474, words/sec=1883.40, time=0-00:47:04)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 43.0000: train_loss/word=3.509082 (steps=7489, words/sec=1941.08, time=0-00:47:09)
+> Checkpoint [model_preprocessed_be_epoch100]
+Performing inference on src/preprocess/preprocessed_data/en_be/dev.tok.norm.be and src/preprocess/preprocessed_data/en_be/dev.norm.en
+Starting to read src/preprocess/preprocessed_data/en_be/dev.tok.norm.be and src/preprocess/preprocessed_data/en_be/dev.tok.norm.en
+Done reading src/preprocess/preprocessed_data/en_be/dev.tok.norm.be and src/preprocess/preprocessed_data/en_be/dev.tok.norm.en. Packing into batches.
+Done packing batches.
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 43.0000 dev BLEU4: 0.011754323479171342, 0.187363/0.024863/0.004241/0.000966 (BP = 1.000000, ratio=1.30, hyp_len=5919, ref_len=4537) (time=0-00:47:14)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100]              dev auxiliary Loss: 3.577 (ref_len=5563)
+             checkpoint took 0-00:00:05
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 43.0060: train_loss/word=3.405470 (steps=7490, words/sec=1908.25, time=0-00:47:15)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 43.2282: train_loss/word=3.564120 (steps=7532, words/sec=1918.99, time=0-00:47:29)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 43.4571: train_loss/word=3.524791 (steps=7574, words/sec=1801.03, time=0-00:47:44)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 43.6829: train_loss/word=3.278265 (steps=7609, words/sec=1764.25, time=0-00:47:56)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 43.9066: train_loss/word=3.476780 (steps=7649, words/sec=1799.60, time=0-00:48:10)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 44.0000: train_loss/word=3.285955 (steps=7663, words/sec=1890.50, time=0-00:48:15)
+> Checkpoint [model_preprocessed_be_epoch100]
+Performing inference on src/preprocess/preprocessed_data/en_be/dev.tok.norm.be and src/preprocess/preprocessed_data/en_be/dev.norm.en
+Starting to read src/preprocess/preprocessed_data/en_be/dev.tok.norm.be and src/preprocess/preprocessed_data/en_be/dev.tok.norm.en
+Done reading src/preprocess/preprocessed_data/en_be/dev.tok.norm.be and src/preprocess/preprocessed_data/en_be/dev.tok.norm.en. Packing into batches.
+Done packing batches.
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 44.0000 dev BLEU4: 0.010526062022591055, 0.176403/0.023980/0.003906/0.000743 (BP = 1.000000, ratio=1.35, hyp_len=6128, ref_len=4537) (time=0-00:48:21)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100]              dev auxiliary Loss: 3.565 (ref_len=5563)
+             checkpoint took 0-00:00:05
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 44.0089: train_loss/word=2.908847 (steps=7664, words/sec=2210.63, time=0-00:48:21)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 44.2315: train_loss/word=3.510850 (steps=7706, words/sec=1830.77, time=0-00:48:36)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 44.4578: train_loss/word=3.350364 (steps=7744, words/sec=1815.85, time=0-00:48:49)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 44.6795: train_loss/word=3.527831 (steps=7785, words/sec=1858.38, time=0-00:49:03)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 44.9042: train_loss/word=3.389366 (steps=7822, words/sec=1883.29, time=0-00:49:15)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 45.0000: train_loss/word=3.378304 (steps=7838, words/sec=1929.09, time=0-00:49:20)
+> Checkpoint [model_preprocessed_be_epoch100]
+Performing inference on src/preprocess/preprocessed_data/en_be/dev.tok.norm.be and src/preprocess/preprocessed_data/en_be/dev.norm.en
+Starting to read src/preprocess/preprocessed_data/en_be/dev.tok.norm.be and src/preprocess/preprocessed_data/en_be/dev.tok.norm.en
+Done reading src/preprocess/preprocessed_data/en_be/dev.tok.norm.be and src/preprocess/preprocessed_data/en_be/dev.tok.norm.en. Packing into batches.
+Done packing batches.
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 45.0000 dev BLEU4: 0.011428990245760561, 0.180739/0.023894/0.004073/0.000970 (BP = 1.000000, ratio=1.30, hyp_len=5898, ref_len=4537) (time=0-00:49:26)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100]              dev auxiliary Loss: 3.567 (ref_len=5563)
+             checkpoint took 0-00:00:05
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 45.0047: train_loss/word=3.722499 (steps=7839, words/sec=2145.74, time=0-00:49:26)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 45.2311: train_loss/word=3.443477 (steps=7880, words/sec=1871.08, time=0-00:49:40)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 45.4569: train_loss/word=3.500806 (steps=7922, words/sec=1847.75, time=0-00:49:55)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 45.6802: train_loss/word=3.517395 (steps=7963, words/sec=1891.74, time=0-00:50:09)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 45.9060: train_loss/word=3.215581 (steps=7997, words/sec=1855.88, time=0-00:50:20)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 46.0000: train_loss/word=3.331114 (steps=8012, words/sec=1902.59, time=0-00:50:25)
+> Checkpoint [model_preprocessed_be_epoch100]
+Performing inference on src/preprocess/preprocessed_data/en_be/dev.tok.norm.be and src/preprocess/preprocessed_data/en_be/dev.norm.en
+Starting to read src/preprocess/preprocessed_data/en_be/dev.tok.norm.be and src/preprocess/preprocessed_data/en_be/dev.tok.norm.en
+Done reading src/preprocess/preprocessed_data/en_be/dev.tok.norm.be and src/preprocess/preprocessed_data/en_be/dev.tok.norm.en. Packing into batches.
+Done packing batches.
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 46.0000 dev BLEU4: 0.01052024014616844, 0.177793/0.023789/0.003811/0.000760 (BP = 1.000000, ratio=1.32, hyp_len=6007, ref_len=4537) (time=0-00:50:30)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100]              dev auxiliary Loss: 3.564 (ref_len=5563)
+             checkpoint took 0-00:00:05
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 46.0035: train_loss/word=4.043797 (steps=8013, words/sec=2011.82, time=0-00:50:31)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 46.2260: train_loss/word=3.280266 (steps=8049, words/sec=1812.20, time=0-00:50:43)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 46.4582: train_loss/word=3.360439 (steps=8088, words/sec=1890.46, time=0-00:50:57)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 46.6811: train_loss/word=3.370386 (steps=8126, words/sec=1874.57, time=0-00:51:09)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 46.9113: train_loss/word=3.569073 (steps=8171, words/sec=1845.33, time=0-00:51:25)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 47.0000: train_loss/word=3.408252 (steps=8186, words/sec=1948.09, time=0-00:51:30)
+> Checkpoint [model_preprocessed_be_epoch100]
+Performing inference on src/preprocess/preprocessed_data/en_be/dev.tok.norm.be and src/preprocess/preprocessed_data/en_be/dev.norm.en
+Starting to read src/preprocess/preprocessed_data/en_be/dev.tok.norm.be and src/preprocess/preprocessed_data/en_be/dev.tok.norm.en
+Done reading src/preprocess/preprocessed_data/en_be/dev.tok.norm.be and src/preprocess/preprocessed_data/en_be/dev.tok.norm.en. Packing into batches.
+Done packing batches.
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 47.0000 dev BLEU4: 0.012628741819903129, 0.166769/0.023627/0.004654/0.001387 (BP = 1.000000, ratio=1.44, hyp_len=6512, ref_len=4537) (time=0-00:51:36)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100]              dev auxiliary Loss: 3.569 (ref_len=5563)
+             checkpoint took 0-00:00:05
+  best dev score, writing out model
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 47.0040: train_loss/word=3.675585 (steps=8187, words/sec=1579.33, time=0-00:51:39)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 47.2300: train_loss/word=3.174511 (steps=8221, words/sec=1843.38, time=0-00:51:50)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 47.4593: train_loss/word=3.478412 (steps=8264, words/sec=1866.33, time=0-00:52:05)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 47.6837: train_loss/word=3.537571 (steps=8307, words/sec=1897.70, time=0-00:52:20)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 47.9062: train_loss/word=3.242690 (steps=8342, words/sec=1808.20, time=0-00:52:32)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 48.0000: train_loss/word=3.523546 (steps=8360, words/sec=1748.60, time=0-00:52:38)
+> Checkpoint [model_preprocessed_be_epoch100]
+Performing inference on src/preprocess/preprocessed_data/en_be/dev.tok.norm.be and src/preprocess/preprocessed_data/en_be/dev.norm.en
+Starting to read src/preprocess/preprocessed_data/en_be/dev.tok.norm.be and src/preprocess/preprocessed_data/en_be/dev.tok.norm.en
+Done reading src/preprocess/preprocessed_data/en_be/dev.tok.norm.be and src/preprocess/preprocessed_data/en_be/dev.tok.norm.en. Packing into batches.
+Done packing batches.
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 48.0000 dev BLEU4: 0.012830757824550893, 0.172017/0.026026/0.004988/0.001214 (BP = 1.000000, ratio=1.44, hyp_len=6511, ref_len=4537) (time=0-00:52:44)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100]              dev auxiliary Loss: 3.559 (ref_len=5563)
+             checkpoint took 0-00:00:05
+  best dev score, writing out model
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 48.0024: train_loss/word=4.095001 (steps=8361, words/sec=1885.50, time=0-00:52:47)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 48.2315: train_loss/word=3.304472 (steps=8399, words/sec=1775.52, time=0-00:53:00)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 48.4562: train_loss/word=3.510467 (steps=8443, words/sec=1876.03, time=0-00:53:15)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 48.6809: train_loss/word=3.310069 (steps=8480, words/sec=1865.16, time=0-00:53:28)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 48.9139: train_loss/word=3.327742 (steps=8519, words/sec=1794.12, time=0-00:53:42)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 49.0000: train_loss/word=3.411098 (steps=8534, words/sec=1782.15, time=0-00:53:47)
+> Checkpoint [model_preprocessed_be_epoch100]
+Performing inference on src/preprocess/preprocessed_data/en_be/dev.tok.norm.be and src/preprocess/preprocessed_data/en_be/dev.norm.en
+Starting to read src/preprocess/preprocessed_data/en_be/dev.tok.norm.be and src/preprocess/preprocessed_data/en_be/dev.tok.norm.en
+Done reading src/preprocess/preprocessed_data/en_be/dev.tok.norm.be and src/preprocess/preprocessed_data/en_be/dev.tok.norm.en. Packing into batches.
+Done packing batches.
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 49.0000 dev BLEU4: 0.009329458649977805, 0.178896/0.027064/0.004237/0.000369 (BP = 1.000000, ratio=1.36, hyp_len=6160, ref_len=4537) (time=0-00:53:53)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100]              dev auxiliary Loss: 3.560 (ref_len=5563)
+             checkpoint took 0-00:00:05
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 49.0095: train_loss/word=2.106740 (steps=8535, words/sec=1192.99, time=0-00:53:54)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 49.2338: train_loss/word=3.452806 (steps=8578, words/sec=1734.42, time=0-00:54:09)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 49.4555: train_loss/word=3.296396 (steps=8615, words/sec=1879.12, time=0-00:54:22)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 49.6775: train_loss/word=3.409781 (steps=8656, words/sec=1838.05, time=0-00:54:36)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 49.9082: train_loss/word=3.276766 (steps=8693, words/sec=1802.95, time=0-00:54:49)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 50.0000: train_loss/word=3.404825 (steps=8709, words/sec=1967.46, time=0-00:54:54)
+> Checkpoint [model_preprocessed_be_epoch100]
+Performing inference on src/preprocess/preprocessed_data/en_be/dev.tok.norm.be and src/preprocess/preprocessed_data/en_be/dev.norm.en
+Starting to read src/preprocess/preprocessed_data/en_be/dev.tok.norm.be and src/preprocess/preprocessed_data/en_be/dev.tok.norm.en
+Done reading src/preprocess/preprocessed_data/en_be/dev.tok.norm.be and src/preprocess/preprocessed_data/en_be/dev.tok.norm.en. Packing into batches.
+Done packing batches.
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 50.0000 dev BLEU4: 0.011948495978398255, 0.172078/0.025298/0.005273/0.000888 (BP = 1.000000, ratio=1.41, hyp_len=6375, ref_len=4537) (time=0-00:55:00)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100]              dev auxiliary Loss: 3.557 (ref_len=5563)
+             checkpoint took 0-00:00:05
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 50.0049: train_loss/word=3.590660 (steps=8710, words/sec=2099.72, time=0-00:55:00)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 50.2311: train_loss/word=3.346782 (steps=8749, words/sec=1948.13, time=0-00:55:13)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 50.4593: train_loss/word=3.385770 (steps=8791, words/sec=1828.91, time=0-00:55:27)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 50.6824: train_loss/word=3.291786 (steps=8828, words/sec=1869.46, time=0-00:55:40)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 50.9080: train_loss/word=3.435457 (steps=8870, words/sec=1880.99, time=0-00:55:54)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 51.0000: train_loss/word=3.065582 (steps=8883, words/sec=1906.37, time=0-00:55:58)
+> Checkpoint [model_preprocessed_be_epoch100]
+Performing inference on src/preprocess/preprocessed_data/en_be/dev.tok.norm.be and src/preprocess/preprocessed_data/en_be/dev.norm.en
+Starting to read src/preprocess/preprocessed_data/en_be/dev.tok.norm.be and src/preprocess/preprocessed_data/en_be/dev.tok.norm.en
+Done reading src/preprocess/preprocessed_data/en_be/dev.tok.norm.be and src/preprocess/preprocessed_data/en_be/dev.tok.norm.en. Packing into batches.
+Done packing batches.
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 51.0000 dev BLEU4: 0.012564318530019134, 0.186981/0.026230/0.005114/0.000994 (BP = 1.000000, ratio=1.27, hyp_len=5776, ref_len=4537) (time=0-00:56:04)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100]              dev auxiliary Loss: 3.557 (ref_len=5563)
+             checkpoint took 0-00:00:05
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 51.0144: train_loss/word=1.237271 (steps=8884, words/sec=1590.75, time=0-00:56:04)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 51.2377: train_loss/word=3.339063 (steps=8924, words/sec=1806.16, time=0-00:56:18)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 51.4597: train_loss/word=3.197993 (steps=8959, words/sec=1808.62, time=0-00:56:31)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 51.6851: train_loss/word=3.406400 (steps=9001, words/sec=1863.32, time=0-00:56:45)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 51.9082: train_loss/word=3.403539 (steps=9041, words/sec=1860.79, time=0-00:56:59)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 52.0000: train_loss/word=3.347924 (steps=9057, words/sec=1826.61, time=0-00:57:04)
+> Checkpoint [model_preprocessed_be_epoch100]
+Performing inference on src/preprocess/preprocessed_data/en_be/dev.tok.norm.be and src/preprocess/preprocessed_data/en_be/dev.norm.en
+Starting to read src/preprocess/preprocessed_data/en_be/dev.tok.norm.be and src/preprocess/preprocessed_data/en_be/dev.tok.norm.en
+Done reading src/preprocess/preprocessed_data/en_be/dev.tok.norm.be and src/preprocess/preprocessed_data/en_be/dev.tok.norm.en. Packing into batches.
+Done packing batches.
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 52.0000 dev BLEU4: 0.012960388187317942, 0.180239/0.026132/0.005350/0.001120 (BP = 1.000000, ratio=1.35, hyp_len=6103, ref_len=4537) (time=0-00:57:10)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100]              dev auxiliary Loss: 3.563 (ref_len=5563)
+             checkpoint took 0-00:00:05
+  best dev score, writing out model
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 52.0047: train_loss/word=3.636648 (steps=9058, words/sec=1893.36, time=0-00:57:13)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 52.2264: train_loss/word=3.336690 (steps=9098, words/sec=1884.55, time=0-00:57:27)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 52.4504: train_loss/word=3.286995 (steps=9136, words/sec=1920.45, time=0-00:57:39)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 52.6738: train_loss/word=3.220956 (steps=9172, words/sec=1912.83, time=0-00:57:51)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 52.8967: train_loss/word=3.329077 (steps=9210, words/sec=1952.63, time=0-00:58:04)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 53.0000: train_loss/word=3.460050 (steps=9230, words/sec=1927.70, time=0-00:58:10)
+> Checkpoint [model_preprocessed_be_epoch100]
+Performing inference on src/preprocess/preprocessed_data/en_be/dev.tok.norm.be and src/preprocess/preprocessed_data/en_be/dev.norm.en
+Starting to read src/preprocess/preprocessed_data/en_be/dev.tok.norm.be and src/preprocess/preprocessed_data/en_be/dev.tok.norm.en
+Done reading src/preprocess/preprocessed_data/en_be/dev.tok.norm.be and src/preprocess/preprocessed_data/en_be/dev.tok.norm.en. Packing into batches.
+Done packing batches.
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 53.0000 dev BLEU4: 0.011964837362688548, 0.186074/0.026688/0.005248/0.000786 (BP = 1.000000, ratio=1.29, hyp_len=5831, ref_len=4537) (time=0-00:58:16)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100]              dev auxiliary Loss: 3.558 (ref_len=5563)
+             checkpoint took 0-00:00:05
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 53.0067: train_loss/word=3.125016 (steps=9231, words/sec=2154.03, time=0-00:58:16)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 53.2291: train_loss/word=3.278074 (steps=9268, words/sec=1827.25, time=0-00:58:29)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 53.4589: train_loss/word=3.330522 (steps=9310, words/sec=1806.13, time=0-00:58:44)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 53.6873: train_loss/word=3.133823 (steps=9345, words/sec=1912.97, time=0-00:58:55)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 53.9135: train_loss/word=3.372701 (steps=9387, words/sec=1670.52, time=0-00:59:11)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 54.0000: train_loss/word=3.448582 (steps=9404, words/sec=1809.04, time=0-00:59:17)
+> Checkpoint [model_preprocessed_be_epoch100]
+Performing inference on src/preprocess/preprocessed_data/en_be/dev.tok.norm.be and src/preprocess/preprocessed_data/en_be/dev.norm.en
+Starting to read src/preprocess/preprocessed_data/en_be/dev.tok.norm.be and src/preprocess/preprocessed_data/en_be/dev.tok.norm.en
+Done reading src/preprocess/preprocessed_data/en_be/dev.tok.norm.be and src/preprocess/preprocessed_data/en_be/dev.tok.norm.en. Packing into batches.
+Done packing batches.
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 54.0000 dev BLEU4: 0.013125138119399587, 0.176106/0.024324/0.005328/0.001300 (BP = 1.000000, ratio=1.35, hyp_len=6127, ref_len=4537) (time=0-00:59:23)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100]              dev auxiliary Loss: 3.558 (ref_len=5563)
+             checkpoint took 0-00:00:05
+  best dev score, writing out model
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 54.0040: train_loss/word=3.708603 (steps=9405, words/sec=2067.29, time=0-00:59:26)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 54.2264: train_loss/word=3.267054 (steps=9444, words/sec=1855.94, time=0-00:59:39)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 54.4498: train_loss/word=3.271654 (steps=9482, words/sec=1896.85, time=0-00:59:52)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 54.6747: train_loss/word=3.137245 (steps=9517, words/sec=1856.19, time=0-01:00:04)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 54.8969: train_loss/word=3.365126 (steps=9558, words/sec=1751.36, time=0-01:00:19)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 55.0000: train_loss/word=3.434761 (steps=9578, words/sec=1959.03, time=0-01:00:25)
+> Checkpoint [model_preprocessed_be_epoch100]
+Performing inference on src/preprocess/preprocessed_data/en_be/dev.tok.norm.be and src/preprocess/preprocessed_data/en_be/dev.norm.en
+Starting to read src/preprocess/preprocessed_data/en_be/dev.tok.norm.be and src/preprocess/preprocessed_data/en_be/dev.tok.norm.en
+Done reading src/preprocess/preprocessed_data/en_be/dev.tok.norm.be and src/preprocess/preprocessed_data/en_be/dev.tok.norm.en. Packing into batches.
+Done packing batches.
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 55.0000 dev BLEU4: 0.014520438460683597, 0.178403/0.026436/0.005661/0.001665 (BP = 1.000000, ratio=1.36, hyp_len=6149, ref_len=4537) (time=0-01:00:31)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100]              dev auxiliary Loss: 3.562 (ref_len=5563)
+             checkpoint took 0-00:00:05
+  best dev score, writing out model
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 55.0035: train_loss/word=3.944471 (steps=9579, words/sec=2060.84, time=0-01:00:34)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 55.2293: train_loss/word=3.188812 (steps=9617, words/sec=1710.67, time=0-01:00:48)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 55.4562: train_loss/word=3.360538 (steps=9660, words/sec=1921.35, time=0-01:01:02)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 55.6782: train_loss/word=3.213340 (steps=9697, words/sec=1929.38, time=0-01:01:14)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 55.9000: train_loss/word=3.178131 (steps=9732, words/sec=1836.39, time=0-01:01:26)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 56.0000: train_loss/word=3.486265 (steps=9752, words/sec=1782.96, time=0-01:01:33)
+> Checkpoint [model_preprocessed_be_epoch100]
+Performing inference on src/preprocess/preprocessed_data/en_be/dev.tok.norm.be and src/preprocess/preprocessed_data/en_be/dev.norm.en
+Starting to read src/preprocess/preprocessed_data/en_be/dev.tok.norm.be and src/preprocess/preprocessed_data/en_be/dev.tok.norm.en
+Done reading src/preprocess/preprocessed_data/en_be/dev.tok.norm.be and src/preprocess/preprocessed_data/en_be/dev.tok.norm.en. Packing into batches.
+Done packing batches.
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 56.0000 dev BLEU4: 0.01215780943798127, 0.184763/0.025915/0.004759/0.000959 (BP = 1.000000, ratio=1.31, hyp_len=5959, ref_len=4537) (time=0-01:01:39)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100]              dev auxiliary Loss: 3.555 (ref_len=5563)
+             checkpoint took 0-00:00:05
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 56.0058: train_loss/word=3.472881 (steps=9753, words/sec=1915.21, time=0-01:01:40)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 56.2300: train_loss/word=3.119834 (steps=9788, words/sec=1651.95, time=0-01:01:53)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 56.4555: train_loss/word=3.366843 (steps=9832, words/sec=1602.75, time=0-01:02:10)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 56.6780: train_loss/word=3.268806 (steps=9871, words/sec=1712.17, time=0-01:02:25)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 56.9024: train_loss/word=3.317313 (steps=9911, words/sec=1847.99, time=0-01:02:39)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 57.0000: train_loss/word=3.068847 (steps=9926, words/sec=1627.34, time=0-01:02:45)
+> Checkpoint [model_preprocessed_be_epoch100]
+Performing inference on src/preprocess/preprocessed_data/en_be/dev.tok.norm.be and src/preprocess/preprocessed_data/en_be/dev.norm.en
+Starting to read src/preprocess/preprocessed_data/en_be/dev.tok.norm.be and src/preprocess/preprocessed_data/en_be/dev.tok.norm.en
+Done reading src/preprocess/preprocessed_data/en_be/dev.tok.norm.be and src/preprocess/preprocessed_data/en_be/dev.tok.norm.en. Packing into batches.
+Done packing batches.
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 57.0000 dev BLEU4: 0.011727258785910582, 0.177661/0.025216/0.004671/0.000904 (BP = 1.000000, ratio=1.38, hyp_len=6276, ref_len=4537) (time=0-01:02:51)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100]              dev auxiliary Loss: 3.563 (ref_len=5563)
+             checkpoint took 0-00:00:06
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 57.0040: train_loss/word=3.832384 (steps=9927, words/sec=1802.41, time=0-01:02:51)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 57.2258: train_loss/word=3.275564 (steps=9967, words/sec=1843.58, time=0-01:03:05)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 57.4504: train_loss/word=3.187256 (steps=10005, words/sec=1798.63, time=0-01:03:18)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 57.6749: train_loss/word=3.176731 (steps=10042, words/sec=1860.45, time=0-01:03:31)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 57.9035: train_loss/word=3.241189 (steps=10081, words/sec=1918.15, time=0-01:03:44)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 58.0000: train_loss/word=3.396610 (steps=10100, words/sec=1938.83, time=0-01:03:50)
+> Checkpoint [model_preprocessed_be_epoch100]
+Performing inference on src/preprocess/preprocessed_data/en_be/dev.tok.norm.be and src/preprocess/preprocessed_data/en_be/dev.norm.en
+Starting to read src/preprocess/preprocessed_data/en_be/dev.tok.norm.be and src/preprocess/preprocessed_data/en_be/dev.tok.norm.en
+Done reading src/preprocess/preprocessed_data/en_be/dev.tok.norm.be and src/preprocess/preprocessed_data/en_be/dev.tok.norm.en. Packing into batches.
+Done packing batches.
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 58.0000 dev BLEU4: 0.011810570644707655, 0.175337/0.024916/0.004885/0.000912 (BP = 1.000000, ratio=1.37, hyp_len=6228, ref_len=4537) (time=0-01:03:56)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100]              dev auxiliary Loss: 3.560 (ref_len=5563)
+             checkpoint took 0-00:00:05
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 58.0044: train_loss/word=3.447482 (steps=10101, words/sec=2172.27, time=0-01:03:56)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 58.2275: train_loss/word=3.279079 (steps=10142, words/sec=1831.44, time=0-01:04:10)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 58.4535: train_loss/word=2.992433 (steps=10175, words/sec=1907.36, time=0-01:04:21)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 58.6817: train_loss/word=3.354202 (steps=10218, words/sec=1961.29, time=0-01:04:35)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 58.9164: train_loss/word=3.257303 (steps=10260, words/sec=1873.14, time=0-01:04:50)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 59.0000: train_loss/word=3.160905 (steps=10274, words/sec=1789.17, time=0-01:04:54)
+> Checkpoint [model_preprocessed_be_epoch100]
+Performing inference on src/preprocess/preprocessed_data/en_be/dev.tok.norm.be and src/preprocess/preprocessed_data/en_be/dev.norm.en
+Starting to read src/preprocess/preprocessed_data/en_be/dev.tok.norm.be and src/preprocess/preprocessed_data/en_be/dev.tok.norm.en
+Done reading src/preprocess/preprocessed_data/en_be/dev.tok.norm.be and src/preprocess/preprocessed_data/en_be/dev.tok.norm.en. Packing into batches.
+Done packing batches.
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 59.0000 dev BLEU4: 0.013453354066202503, 0.166793/0.024830/0.005761/0.001373 (BP = 1.000000, ratio=1.45, hyp_len=6571, ref_len=4537) (time=0-01:05:00)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100]              dev auxiliary Loss: 3.558 (ref_len=5563)
+             checkpoint took 0-00:00:05
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 59.0091: train_loss/word=2.261509 (steps=10275, words/sec=1741.40, time=0-01:05:01)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 59.2393: train_loss/word=3.300828 (steps=10318, words/sec=1902.61, time=0-01:05:15)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 59.4644: train_loss/word=3.212474 (steps=10357, words/sec=1892.92, time=0-01:05:28)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 59.6904: train_loss/word=3.095076 (steps=10393, words/sec=1907.22, time=0-01:05:40)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 59.9162: train_loss/word=3.244584 (steps=10433, words/sec=1858.95, time=0-01:05:54)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 60.0000: train_loss/word=3.258881 (steps=10448, words/sec=1855.70, time=0-01:05:59)
+> Checkpoint [model_preprocessed_be_epoch100]
+Performing inference on src/preprocess/preprocessed_data/en_be/dev.tok.norm.be and src/preprocess/preprocessed_data/en_be/dev.norm.en
+Starting to read src/preprocess/preprocessed_data/en_be/dev.tok.norm.be and src/preprocess/preprocessed_data/en_be/dev.tok.norm.en
+Done reading src/preprocess/preprocessed_data/en_be/dev.tok.norm.be and src/preprocess/preprocessed_data/en_be/dev.tok.norm.en. Packing into batches.
+Done packing batches.
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 60.0000 dev BLEU4: 0.013501227770874326, 0.173721/0.024562/0.005462/0.001426 (BP = 1.000000, ratio=1.40, hyp_len=6355, ref_len=4537) (time=0-01:06:04)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100]              dev auxiliary Loss: 3.554 (ref_len=5563)
+             checkpoint took 0-00:00:05
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 60.0069: train_loss/word=2.950432 (steps=10449, words/sec=1808.44, time=0-01:06:05)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 60.2291: train_loss/word=3.182919 (steps=10488, words/sec=1882.25, time=0-01:06:18)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 60.4515: train_loss/word=3.129963 (steps=10525, words/sec=1866.66, time=0-01:06:31)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 60.6735: train_loss/word=3.270497 (steps=10566, words/sec=1881.73, time=0-01:06:44)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 60.9002: train_loss/word=3.189415 (steps=10604, words/sec=1893.49, time=0-01:06:57)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 61.0000: train_loss/word=3.299021 (steps=10622, words/sec=1886.61, time=0-01:07:03)
+> Checkpoint [model_preprocessed_be_epoch100]
+Performing inference on src/preprocess/preprocessed_data/en_be/dev.tok.norm.be and src/preprocess/preprocessed_data/en_be/dev.norm.en
+Starting to read src/preprocess/preprocessed_data/en_be/dev.tok.norm.be and src/preprocess/preprocessed_data/en_be/dev.tok.norm.en
+Done reading src/preprocess/preprocessed_data/en_be/dev.tok.norm.be and src/preprocess/preprocessed_data/en_be/dev.tok.norm.en. Packing into batches.
+Done packing batches.
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 61.0000 dev BLEU4: 0.013780778335677172, 0.181894/0.027182/0.006374/0.001144 (BP = 1.000000, ratio=1.32, hyp_len=5987, ref_len=4537) (time=0-01:07:09)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100]              dev auxiliary Loss: 3.555 (ref_len=5563)
+             checkpoint took 0-00:00:05
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 61.0055: train_loss/word=3.031118 (steps=10623, words/sec=1694.72, time=0-01:07:09)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 61.2291: train_loss/word=3.085209 (steps=10659, words/sec=1945.04, time=0-01:07:21)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 61.4531: train_loss/word=2.960133 (steps=10692, words/sec=1849.71, time=0-01:07:32)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 61.6764: train_loss/word=3.327533 (steps=10736, words/sec=1849.21, time=0-01:07:47)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 61.8995: train_loss/word=3.254979 (steps=10777, words/sec=1867.33, time=0-01:08:01)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 62.0000: train_loss/word=3.338380 (steps=10796, words/sec=1886.29, time=0-01:08:08)
+> Checkpoint [model_preprocessed_be_epoch100]
+Performing inference on src/preprocess/preprocessed_data/en_be/dev.tok.norm.be and src/preprocess/preprocessed_data/en_be/dev.norm.en
+Starting to read src/preprocess/preprocessed_data/en_be/dev.tok.norm.be and src/preprocess/preprocessed_data/en_be/dev.tok.norm.en
+Done reading src/preprocess/preprocessed_data/en_be/dev.tok.norm.be and src/preprocess/preprocessed_data/en_be/dev.tok.norm.en. Packing into batches.
+Done packing batches.
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 62.0000 dev BLEU4: 0.01381187812870978, 0.177101/0.026260/0.005475/0.001429 (BP = 1.000000, ratio=1.40, hyp_len=6341, ref_len=4537) (time=0-01:08:13)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100]              dev auxiliary Loss: 3.561 (ref_len=5563)
+             checkpoint took 0-00:00:05
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 62.0082: train_loss/word=2.800326 (steps=10797, words/sec=2182.11, time=0-01:08:14)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 62.2344: train_loss/word=3.126534 (steps=10835, words/sec=1934.72, time=0-01:08:26)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 62.4602: train_loss/word=3.185440 (steps=10875, words/sec=1900.10, time=0-01:08:40)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 62.6915: train_loss/word=3.107530 (steps=10914, words/sec=1837.36, time=0-01:08:53)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 62.9137: train_loss/word=3.127498 (steps=10951, words/sec=1907.91, time=0-01:09:05)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 63.0000: train_loss/word=3.485065 (steps=10971, words/sec=1866.35, time=0-01:09:12)
+> Checkpoint [model_preprocessed_be_epoch100]
+Performing inference on src/preprocess/preprocessed_data/en_be/dev.tok.norm.be and src/preprocess/preprocessed_data/en_be/dev.norm.en
+Starting to read src/preprocess/preprocessed_data/en_be/dev.tok.norm.be and src/preprocess/preprocessed_data/en_be/dev.tok.norm.en
+Done reading src/preprocess/preprocessed_data/en_be/dev.tok.norm.be and src/preprocess/preprocessed_data/en_be/dev.tok.norm.en. Packing into batches.
+Done packing batches.
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 63.0000 dev BLEU4: 0.013062627179080879, 0.170670/0.025159/0.005449/0.001244 (BP = 1.000000, ratio=1.40, hyp_len=6369, ref_len=4537) (time=0-01:09:17)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100]              dev auxiliary Loss: 3.560 (ref_len=5563)
+             checkpoint took 0-00:00:05
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 63.0040: train_loss/word=3.730158 (steps=10972, words/sec=2033.10, time=0-01:09:18)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 63.2287: train_loss/word=3.295930 (steps=11015, words/sec=1918.19, time=0-01:09:32)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 63.4542: train_loss/word=3.237740 (steps=11058, words/sec=1860.92, time=0-01:09:47)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 63.6766: train_loss/word=2.923900 (steps=11091, words/sec=1893.61, time=0-01:09:58)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 63.9004: train_loss/word=3.192573 (steps=11130, words/sec=1918.06, time=0-01:10:11)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 64.0000: train_loss/word=2.970017 (steps=11145, words/sec=1837.86, time=0-01:10:16)
+> Checkpoint [model_preprocessed_be_epoch100]
+Performing inference on src/preprocess/preprocessed_data/en_be/dev.tok.norm.be and src/preprocess/preprocessed_data/en_be/dev.norm.en
+Starting to read src/preprocess/preprocessed_data/en_be/dev.tok.norm.be and src/preprocess/preprocessed_data/en_be/dev.tok.norm.en
+Done reading src/preprocess/preprocessed_data/en_be/dev.tok.norm.be and src/preprocess/preprocessed_data/en_be/dev.tok.norm.en. Packing into batches.
+Done packing batches.
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 64.0000 dev BLEU4: 0.014990197965816009, 0.180089/0.027228/0.006366/0.001618 (BP = 1.000000, ratio=1.39, hyp_len=6308, ref_len=4537) (time=0-01:10:21)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100]              dev auxiliary Loss: 3.553 (ref_len=5563)
+             checkpoint took 0-00:00:05
+  best dev score, writing out model
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 64.0042: train_loss/word=3.509894 (steps=11146, words/sec=1845.12, time=0-01:10:24)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 64.2340: train_loss/word=3.138861 (steps=11186, words/sec=1906.61, time=0-01:10:38)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 64.4558: train_loss/word=3.120084 (steps=11224, words/sec=1877.74, time=0-01:10:51)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 64.6900: train_loss/word=3.155229 (steps=11265, words/sec=1884.33, time=0-01:11:04)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 64.9117: train_loss/word=3.181319 (steps=11305, words/sec=1901.74, time=0-01:11:18)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 65.0000: train_loss/word=3.116708 (steps=11319, words/sec=1960.57, time=0-01:11:22)
+> Checkpoint [model_preprocessed_be_epoch100]
+Performing inference on src/preprocess/preprocessed_data/en_be/dev.tok.norm.be and src/preprocess/preprocessed_data/en_be/dev.norm.en
+Starting to read src/preprocess/preprocessed_data/en_be/dev.tok.norm.be and src/preprocess/preprocessed_data/en_be/dev.tok.norm.en
+Done reading src/preprocess/preprocessed_data/en_be/dev.tok.norm.be and src/preprocess/preprocessed_data/en_be/dev.tok.norm.en. Packing into batches.
+Done packing batches.
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 65.0000 dev BLEU4: 0.013410606671768887, 0.170183/0.024820/0.005503/0.001392 (BP = 1.000000, ratio=1.43, hyp_len=6493, ref_len=4537) (time=0-01:11:28)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100]              dev auxiliary Loss: 3.556 (ref_len=5563)
+             checkpoint took 0-00:00:05
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 65.0104: train_loss/word=2.181163 (steps=11320, words/sec=1947.60, time=0-01:11:28)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 65.2322: train_loss/word=2.991013 (steps=11356, words/sec=1868.58, time=0-01:11:40)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 65.4571: train_loss/word=3.049710 (steps=11393, words/sec=1696.98, time=0-01:11:54)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 65.6964: train_loss/word=3.013112 (steps=11431, words/sec=1786.22, time=0-01:12:08)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 65.9219: train_loss/word=3.340734 (steps=11476, words/sec=1771.81, time=0-01:12:24)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 66.0000: train_loss/word=3.419205 (steps=11493, words/sec=1706.62, time=0-01:12:30)
+> Checkpoint [model_preprocessed_be_epoch100]
+Performing inference on src/preprocess/preprocessed_data/en_be/dev.tok.norm.be and src/preprocess/preprocessed_data/en_be/dev.norm.en
+Starting to read src/preprocess/preprocessed_data/en_be/dev.tok.norm.be and src/preprocess/preprocessed_data/en_be/dev.tok.norm.en
+Done reading src/preprocess/preprocessed_data/en_be/dev.tok.norm.be and src/preprocess/preprocessed_data/en_be/dev.tok.norm.en. Packing into batches.
+Done packing batches.
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 66.0000 dev BLEU4: 0.013242331274485809, 0.176237/0.025004/0.005526/0.001263 (BP = 1.000000, ratio=1.39, hyp_len=6287, ref_len=4537) (time=0-01:12:36)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100]              dev auxiliary Loss: 3.562 (ref_len=5563)
+             checkpoint took 0-00:00:05
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 66.0040: train_loss/word=3.404515 (steps=11494, words/sec=1124.08, time=0-01:12:37)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 66.2269: train_loss/word=3.215082 (steps=11537, words/sec=1826.61, time=0-01:12:52)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 66.4495: train_loss/word=3.035617 (steps=11573, words/sec=1862.16, time=0-01:13:04)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 66.6729: train_loss/word=2.997846 (steps=11609, words/sec=1823.14, time=0-01:13:16)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 66.8962: train_loss/word=3.160975 (steps=11648, words/sec=1864.59, time=0-01:13:30)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 67.0000: train_loss/word=3.212178 (steps=11667, words/sec=1862.93, time=0-01:13:37)
+> Checkpoint [model_preprocessed_be_epoch100]
+Performing inference on src/preprocess/preprocessed_data/en_be/dev.tok.norm.be and src/preprocess/preprocessed_data/en_be/dev.norm.en
+Starting to read src/preprocess/preprocessed_data/en_be/dev.tok.norm.be and src/preprocess/preprocessed_data/en_be/dev.tok.norm.en
+Done reading src/preprocess/preprocessed_data/en_be/dev.tok.norm.be and src/preprocess/preprocessed_data/en_be/dev.tok.norm.en. Packing into batches.
+Done packing batches.
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 67.0000 dev BLEU4: 0.014076959427927473, 0.174713/0.025691/0.006140/0.001425 (BP = 1.000000, ratio=1.40, hyp_len=6359, ref_len=4537) (time=0-01:13:42)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100]              dev auxiliary Loss: 3.559 (ref_len=5563)
+             checkpoint took 0-00:00:05
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 67.0109: train_loss/word=1.967459 (steps=11668, words/sec=2093.53, time=0-01:13:42)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 67.2335: train_loss/word=3.115341 (steps=11707, words/sec=1884.59, time=0-01:13:56)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 67.4606: train_loss/word=3.019180 (steps=11744, words/sec=1854.00, time=0-01:14:08)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 67.6840: train_loss/word=3.126977 (steps=11784, words/sec=1775.75, time=0-01:14:22)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 67.9113: train_loss/word=3.170600 (steps=11826, words/sec=1716.90, time=0-01:14:38)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 68.0000: train_loss/word=3.170420 (steps=11842, words/sec=1914.84, time=0-01:14:43)
+> Checkpoint [model_preprocessed_be_epoch100]
+Performing inference on src/preprocess/preprocessed_data/en_be/dev.tok.norm.be and src/preprocess/preprocessed_data/en_be/dev.norm.en
+Starting to read src/preprocess/preprocessed_data/en_be/dev.tok.norm.be and src/preprocess/preprocessed_data/en_be/dev.tok.norm.en
+Done reading src/preprocess/preprocessed_data/en_be/dev.tok.norm.be and src/preprocess/preprocessed_data/en_be/dev.tok.norm.en. Packing into batches.
+Done packing batches.
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 68.0000 dev BLEU4: 0.01384980772977051, 0.184758/0.026316/0.005749/0.001316 (BP = 1.000000, ratio=1.34, hyp_len=6062, ref_len=4537) (time=0-01:14:48)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100]              dev auxiliary Loss: 3.559 (ref_len=5563)
+             checkpoint took 0-00:00:05
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 68.0064: train_loss/word=2.967416 (steps=11843, words/sec=1740.25, time=0-01:14:49)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 68.2373: train_loss/word=2.971944 (steps=11880, words/sec=1764.25, time=0-01:15:02)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 68.4646: train_loss/word=3.124132 (steps=11921, words/sec=1697.36, time=0-01:15:18)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 68.6900: train_loss/word=3.163124 (steps=11963, words/sec=1741.97, time=0-01:15:33)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 68.9135: train_loss/word=3.130243 (steps=12002, words/sec=1947.62, time=0-01:15:46)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 69.0000: train_loss/word=3.039092 (steps=12016, words/sec=1902.66, time=0-01:15:50)
+> Checkpoint [model_preprocessed_be_epoch100]
+Performing inference on src/preprocess/preprocessed_data/en_be/dev.tok.norm.be and src/preprocess/preprocessed_data/en_be/dev.norm.en
+Starting to read src/preprocess/preprocessed_data/en_be/dev.tok.norm.be and src/preprocess/preprocessed_data/en_be/dev.tok.norm.en
+Done reading src/preprocess/preprocessed_data/en_be/dev.tok.norm.be and src/preprocess/preprocessed_data/en_be/dev.tok.norm.en. Packing into batches.
+Done packing batches.
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 69.0000 dev BLEU4: 0.01468707547947797, 0.175769/0.026290/0.006297/0.001599 (BP = 1.000000, ratio=1.40, hyp_len=6372, ref_len=4537) (time=0-01:15:56)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100]              dev auxiliary Loss: 3.563 (ref_len=5563)
+             checkpoint took 0-00:00:05
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 69.0109: train_loss/word=1.671694 (steps=12017, words/sec=1537.29, time=0-01:15:56)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 69.2340: train_loss/word=3.155423 (steps=12059, words/sec=1897.68, time=0-01:16:10)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 69.4597: train_loss/word=3.129113 (steps=12099, words/sec=1942.85, time=0-01:16:24)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 69.6860: train_loss/word=3.048204 (steps=12138, words/sec=1939.19, time=0-01:16:36)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 69.9155: train_loss/word=3.093825 (steps=12179, words/sec=1819.86, time=0-01:16:50)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 70.0000: train_loss/word=2.853724 (steps=12191, words/sec=1951.17, time=0-01:16:54)
+> Checkpoint [model_preprocessed_be_epoch100]
+Performing inference on src/preprocess/preprocessed_data/en_be/dev.tok.norm.be and src/preprocess/preprocessed_data/en_be/dev.norm.en
+Starting to read src/preprocess/preprocessed_data/en_be/dev.tok.norm.be and src/preprocess/preprocessed_data/en_be/dev.tok.norm.en
+Done reading src/preprocess/preprocessed_data/en_be/dev.tok.norm.be and src/preprocess/preprocessed_data/en_be/dev.tok.norm.en. Packing into batches.
+Done packing batches.
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 70.0000 dev BLEU4: 0.013744770063225161, 0.172733/0.025139/0.005784/0.001421 (BP = 1.000000, ratio=1.40, hyp_len=6374, ref_len=4537) (time=0-01:17:00)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100]              dev auxiliary Loss: 3.564 (ref_len=5563)
+             checkpoint took 0-00:00:05
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 70.0029: train_loss/word=3.789552 (steps=12192, words/sec=2048.44, time=0-01:17:00)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 70.2306: train_loss/word=3.082647 (steps=12233, words/sec=1860.34, time=0-01:17:14)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 70.4626: train_loss/word=3.107371 (steps=12274, words/sec=1896.79, time=0-01:17:28)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 70.6880: train_loss/word=3.122697 (steps=12315, words/sec=1914.21, time=0-01:17:42)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 70.9135: train_loss/word=2.944882 (steps=12351, words/sec=1882.66, time=0-01:17:54)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 71.0000: train_loss/word=3.011949 (steps=12365, words/sec=1961.60, time=0-01:17:58)
+> Checkpoint [model_preprocessed_be_epoch100]
+Performing inference on src/preprocess/preprocessed_data/en_be/dev.tok.norm.be and src/preprocess/preprocessed_data/en_be/dev.norm.en
+Starting to read src/preprocess/preprocessed_data/en_be/dev.tok.norm.be and src/preprocess/preprocessed_data/en_be/dev.tok.norm.en
+Done reading src/preprocess/preprocessed_data/en_be/dev.tok.norm.be and src/preprocess/preprocessed_data/en_be/dev.tok.norm.en. Packing into batches.
+Done packing batches.
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 71.0000 dev BLEU4: 0.014901462105792768, 0.183614/0.026769/0.006109/0.001642 (BP = 1.000000, ratio=1.37, hyp_len=6225, ref_len=4537) (time=0-01:18:04)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100]              dev auxiliary Loss: 3.563 (ref_len=5563)
+             checkpoint took 0-00:00:05
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 71.0064: train_loss/word=2.880147 (steps=12366, words/sec=1989.23, time=0-01:18:04)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 71.2300: train_loss/word=3.026997 (steps=12405, words/sec=1867.70, time=0-01:18:17)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 71.4604: train_loss/word=2.982088 (steps=12443, words/sec=1877.18, time=0-01:18:30)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 71.6880: train_loss/word=3.136762 (steps=12484, words/sec=1978.39, time=0-01:18:44)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 71.9131: train_loss/word=3.012987 (steps=12522, words/sec=1876.02, time=0-01:18:56)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 72.0000: train_loss/word=3.200622 (steps=12539, words/sec=1895.95, time=0-01:19:02)
+> Checkpoint [model_preprocessed_be_epoch100]
+Performing inference on src/preprocess/preprocessed_data/en_be/dev.tok.norm.be and src/preprocess/preprocessed_data/en_be/dev.norm.en
+Starting to read src/preprocess/preprocessed_data/en_be/dev.tok.norm.be and src/preprocess/preprocessed_data/en_be/dev.tok.norm.en
+Done reading src/preprocess/preprocessed_data/en_be/dev.tok.norm.be and src/preprocess/preprocessed_data/en_be/dev.tok.norm.en. Packing into batches.
+Done packing batches.
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 72.0000 dev BLEU4: 0.01467131076053215, 0.179097/0.026000/0.006085/0.001635 (BP = 1.000000, ratio=1.38, hyp_len=6248, ref_len=4537) (time=0-01:19:08)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100]              dev auxiliary Loss: 3.564 (ref_len=5563)
+             checkpoint took 0-00:00:05
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 72.0040: train_loss/word=3.217800 (steps=12540, words/sec=1578.51, time=0-01:19:08)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 72.2267: train_loss/word=3.088425 (steps=12580, words/sec=1931.65, time=0-01:19:21)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 72.4509: train_loss/word=3.007800 (steps=12618, words/sec=1903.48, time=0-01:19:34)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 72.6731: train_loss/word=3.042478 (steps=12657, words/sec=1875.05, time=0-01:19:47)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 72.9029: train_loss/word=2.934603 (steps=12694, words/sec=1879.66, time=0-01:19:59)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 73.0000: train_loss/word=3.215208 (steps=12713, words/sec=1858.12, time=0-01:20:06)
+> Checkpoint [model_preprocessed_be_epoch100]
+Performing inference on src/preprocess/preprocessed_data/en_be/dev.tok.norm.be and src/preprocess/preprocessed_data/en_be/dev.norm.en
+Starting to read src/preprocess/preprocessed_data/en_be/dev.tok.norm.be and src/preprocess/preprocessed_data/en_be/dev.tok.norm.en
+Done reading src/preprocess/preprocessed_data/en_be/dev.tok.norm.be and src/preprocess/preprocessed_data/en_be/dev.tok.norm.en. Packing into batches.
+Done packing batches.
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 73.0000 dev BLEU4: 0.014082005413447531, 0.172028/0.025318/0.005802/0.001556 (BP = 1.000000, ratio=1.44, hyp_len=6528, ref_len=4537) (time=0-01:20:12)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100]              dev auxiliary Loss: 3.566 (ref_len=5563)
+             checkpoint took 0-00:00:05
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 73.0055: train_loss/word=2.833910 (steps=12714, words/sec=1708.30, time=0-01:20:12)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 73.2311: train_loss/word=3.109736 (steps=12756, words/sec=1782.90, time=0-01:20:27)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 73.4569: train_loss/word=3.053483 (steps=12796, words/sec=1806.52, time=0-01:20:41)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 73.6822: train_loss/word=2.868193 (steps=12831, words/sec=1786.82, time=0-01:20:54)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 73.9086: train_loss/word=3.086070 (steps=12873, words/sec=1792.60, time=0-01:21:08)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 74.0000: train_loss/word=2.984589 (steps=12888, words/sec=1824.65, time=0-01:21:14)
+> Checkpoint [model_preprocessed_be_epoch100]
+Performing inference on src/preprocess/preprocessed_data/en_be/dev.tok.norm.be and src/preprocess/preprocessed_data/en_be/dev.norm.en
+Starting to read src/preprocess/preprocessed_data/en_be/dev.tok.norm.be and src/preprocess/preprocessed_data/en_be/dev.tok.norm.en
+Done reading src/preprocess/preprocessed_data/en_be/dev.tok.norm.be and src/preprocess/preprocessed_data/en_be/dev.tok.norm.en. Packing into batches.
+Done packing batches.
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 74.0000 dev BLEU4: 0.014758611570511553, 0.178194/0.027709/0.005982/0.001606 (BP = 1.000000, ratio=1.40, hyp_len=6347, ref_len=4537) (time=0-01:21:20)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100]              dev auxiliary Loss: 3.562 (ref_len=5563)
+             checkpoint took 0-00:00:05
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 74.0049: train_loss/word=3.088830 (steps=12889, words/sec=1741.16, time=0-01:21:20)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 74.2298: train_loss/word=3.134891 (steps=12932, words/sec=1791.72, time=0-01:21:35)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 74.4540: train_loss/word=3.066223 (steps=12974, words/sec=1783.62, time=0-01:21:50)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 74.6829: train_loss/word=2.851853 (steps=13010, words/sec=1742.38, time=0-01:22:03)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 74.9077: train_loss/word=3.083542 (steps=13051, words/sec=1812.97, time=0-01:22:17)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 75.0000: train_loss/word=2.660153 (steps=13063, words/sec=1952.40, time=0-01:22:21)
+> Checkpoint [model_preprocessed_be_epoch100]
+Performing inference on src/preprocess/preprocessed_data/en_be/dev.tok.norm.be and src/preprocess/preprocessed_data/en_be/dev.norm.en
+Starting to read src/preprocess/preprocessed_data/en_be/dev.tok.norm.be and src/preprocess/preprocessed_data/en_be/dev.tok.norm.en
+Done reading src/preprocess/preprocessed_data/en_be/dev.tok.norm.be and src/preprocess/preprocessed_data/en_be/dev.tok.norm.en. Packing into batches.
+Done packing batches.
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 75.0000 dev BLEU4: 0.01502290763726965, 0.177454/0.027858/0.006541/0.001575 (BP = 1.000000, ratio=1.42, hyp_len=6458, ref_len=4537) (time=0-01:22:27)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100]              dev auxiliary Loss: 3.572 (ref_len=5563)
+             checkpoint took 0-00:00:05
+  best dev score, writing out model
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 75.0047: train_loss/word=3.065363 (steps=13064, words/sec=1624.76, time=0-01:22:30)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 75.2287: train_loss/word=2.950199 (steps=13102, words/sec=1794.80, time=0-01:22:44)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 75.4520: train_loss/word=3.051514 (steps=13142, words/sec=1790.66, time=0-01:22:58)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 75.6775: train_loss/word=3.085771 (steps=13184, words/sec=1800.48, time=0-01:23:13)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 75.9046: train_loss/word=2.932894 (steps=13221, words/sec=1830.85, time=0-01:23:26)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 76.0000: train_loss/word=2.941423 (steps=13237, words/sec=1846.09, time=0-01:23:31)
+> Checkpoint [model_preprocessed_be_epoch100]
+Performing inference on src/preprocess/preprocessed_data/en_be/dev.tok.norm.be and src/preprocess/preprocessed_data/en_be/dev.norm.en
+Starting to read src/preprocess/preprocessed_data/en_be/dev.tok.norm.be and src/preprocess/preprocessed_data/en_be/dev.tok.norm.en
+Done reading src/preprocess/preprocessed_data/en_be/dev.tok.norm.be and src/preprocess/preprocessed_data/en_be/dev.tok.norm.en. Packing into batches.
+Done packing batches.
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 76.0000 dev BLEU4: 0.013795517485171254, 0.176582/0.027514/0.005975/0.001248 (BP = 1.000000, ratio=1.40, hyp_len=6354, ref_len=4537) (time=0-01:23:37)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100]              dev auxiliary Loss: 3.571 (ref_len=5563)
+             checkpoint took 0-00:00:05
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 76.0115: train_loss/word=1.915981 (steps=13238, words/sec=2093.18, time=0-01:23:37)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 76.2358: train_loss/word=3.065627 (steps=13280, words/sec=1863.36, time=0-01:23:51)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 76.4668: train_loss/word=2.894770 (steps=13318, words/sec=1779.83, time=0-01:24:04)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 76.6891: train_loss/word=2.887894 (steps=13354, words/sec=1879.68, time=0-01:24:17)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 76.9148: train_loss/word=3.069693 (steps=13395, words/sec=1828.19, time=0-01:24:31)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 77.0000: train_loss/word=3.119241 (steps=13412, words/sec=1816.22, time=0-01:24:37)
+> Checkpoint [model_preprocessed_be_epoch100]
+Performing inference on src/preprocess/preprocessed_data/en_be/dev.tok.norm.be and src/preprocess/preprocessed_data/en_be/dev.norm.en
+Starting to read src/preprocess/preprocessed_data/en_be/dev.tok.norm.be and src/preprocess/preprocessed_data/en_be/dev.tok.norm.en
+Done reading src/preprocess/preprocessed_data/en_be/dev.tok.norm.be and src/preprocess/preprocessed_data/en_be/dev.tok.norm.en. Packing into batches.
+Done packing batches.
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 77.0000 dev BLEU4: 0.01435501949358313, 0.175076/0.026224/0.005956/0.001553 (BP = 1.000000, ratio=1.44, hyp_len=6540, ref_len=4537) (time=0-01:24:43)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100]              dev auxiliary Loss: 3.573 (ref_len=5563)
+             checkpoint took 0-00:00:05
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 77.0031: train_loss/word=3.543070 (steps=13413, words/sec=1782.94, time=0-01:24:43)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 77.2269: train_loss/word=2.860891 (steps=13449, words/sec=1909.25, time=0-01:24:55)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 77.4487: train_loss/word=2.905615 (steps=13486, words/sec=1878.48, time=0-01:25:08)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 77.6711: train_loss/word=3.025593 (steps=13526, words/sec=1943.49, time=0-01:25:21)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 77.8964: train_loss/word=2.908049 (steps=13563, words/sec=1915.41, time=0-01:25:33)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 78.0000: train_loss/word=3.269385 (steps=13586, words/sec=1888.80, time=0-01:25:41)
+> Checkpoint [model_preprocessed_be_epoch100]
+Performing inference on src/preprocess/preprocessed_data/en_be/dev.tok.norm.be and src/preprocess/preprocessed_data/en_be/dev.norm.en
+Starting to read src/preprocess/preprocessed_data/en_be/dev.tok.norm.be and src/preprocess/preprocessed_data/en_be/dev.tok.norm.en
+Done reading src/preprocess/preprocessed_data/en_be/dev.tok.norm.be and src/preprocess/preprocessed_data/en_be/dev.tok.norm.en. Packing into batches.
+Done packing batches.
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 78.0000 dev BLEU4: 0.015476453837167453, 0.181630/0.028723/0.006753/0.001628 (BP = 1.000000, ratio=1.38, hyp_len=6271, ref_len=4537) (time=0-01:25:46)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100]              dev auxiliary Loss: 3.578 (ref_len=5563)
+             checkpoint took 0-00:00:05
+  best dev score, writing out model
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 78.0038: train_loss/word=3.405256 (steps=13587, words/sec=2047.11, time=0-01:25:49)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 78.2318: train_loss/word=2.886507 (steps=13625, words/sec=1884.34, time=0-01:26:02)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 78.4555: train_loss/word=2.807729 (steps=13660, words/sec=1962.06, time=0-01:26:13)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 78.6831: train_loss/word=2.993739 (steps=13700, words/sec=1909.53, time=0-01:26:27)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 78.9086: train_loss/word=3.157833 (steps=13745, words/sec=1921.35, time=0-01:26:42)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 79.0000: train_loss/word=2.843346 (steps=13760, words/sec=1797.38, time=0-01:26:47)
+> Checkpoint [model_preprocessed_be_epoch100]
+Performing inference on src/preprocess/preprocessed_data/en_be/dev.tok.norm.be and src/preprocess/preprocessed_data/en_be/dev.norm.en
+Starting to read src/preprocess/preprocessed_data/en_be/dev.tok.norm.be and src/preprocess/preprocessed_data/en_be/dev.tok.norm.en
+Done reading src/preprocess/preprocessed_data/en_be/dev.tok.norm.be and src/preprocess/preprocessed_data/en_be/dev.tok.norm.en. Packing into batches.
+Done packing batches.
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 79.0000 dev BLEU4: 0.01564701315758036, 0.171991/0.027581/0.006552/0.001928 (BP = 1.000000, ratio=1.42, hyp_len=6448, ref_len=4537) (time=0-01:26:53)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100]              dev auxiliary Loss: 3.579 (ref_len=5563)
+             checkpoint took 0-00:00:05
+  best dev score, writing out model
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 79.0024: train_loss/word=3.760675 (steps=13761, words/sec=1686.29, time=0-01:26:55)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 79.2295: train_loss/word=2.900830 (steps=13800, words/sec=1936.20, time=0-01:27:08)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 79.4533: train_loss/word=3.035496 (steps=13842, words/sec=1874.45, time=0-01:27:23)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 79.6762: train_loss/word=2.959303 (steps=13880, words/sec=1937.99, time=0-01:27:35)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 79.8982: train_loss/word=2.975935 (steps=13919, words/sec=1929.64, time=0-01:27:48)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 80.0000: train_loss/word=2.723418 (steps=13934, words/sec=1852.00, time=0-01:27:53)
+> Checkpoint [model_preprocessed_be_epoch100]
+Performing inference on src/preprocess/preprocessed_data/en_be/dev.tok.norm.be and src/preprocess/preprocessed_data/en_be/dev.norm.en
+Starting to read src/preprocess/preprocessed_data/en_be/dev.tok.norm.be and src/preprocess/preprocessed_data/en_be/dev.tok.norm.en
+Done reading src/preprocess/preprocessed_data/en_be/dev.tok.norm.be and src/preprocess/preprocessed_data/en_be/dev.tok.norm.en. Packing into batches.
+Done packing batches.
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 80.0000 dev BLEU4: 0.014483152359579766, 0.176176/0.027886/0.005608/0.001597 (BP = 1.000000, ratio=1.41, hyp_len=6380, ref_len=4537) (time=0-01:27:59)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100]              dev auxiliary Loss: 3.578 (ref_len=5563)
+             checkpoint took 0-00:00:05
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 80.0073: train_loss/word=2.372540 (steps=13935, words/sec=1786.79, time=0-01:27:59)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 80.2309: train_loss/word=2.986438 (steps=13975, words/sec=1898.78, time=0-01:28:13)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 80.4562: train_loss/word=2.810021 (steps=14011, words/sec=1951.70, time=0-01:28:24)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 80.6835: train_loss/word=2.980390 (steps=14052, words/sec=1926.21, time=0-01:28:38)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 80.9117: train_loss/word=2.845563 (steps=14089, words/sec=1927.79, time=0-01:28:50)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 81.0000: train_loss/word=3.202435 (steps=14108, words/sec=1820.03, time=0-01:28:57)
+> Checkpoint [model_preprocessed_be_epoch100]
+Performing inference on src/preprocess/preprocessed_data/en_be/dev.tok.norm.be and src/preprocess/preprocessed_data/en_be/dev.norm.en
+Starting to read src/preprocess/preprocessed_data/en_be/dev.tok.norm.be and src/preprocess/preprocessed_data/en_be/dev.tok.norm.en
+Done reading src/preprocess/preprocessed_data/en_be/dev.tok.norm.be and src/preprocess/preprocessed_data/en_be/dev.tok.norm.en. Packing into batches.
+Done packing batches.
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 81.0000 dev BLEU4: 0.013911958988350128, 0.179994/0.028641/0.005900/0.001232 (BP = 1.000000, ratio=1.42, hyp_len=6428, ref_len=4537) (time=0-01:29:02)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100]              dev auxiliary Loss: 3.586 (ref_len=5563)
+             checkpoint took 0-00:00:05
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 81.0095: train_loss/word=2.209405 (steps=14109, words/sec=2069.95, time=0-01:29:03)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 81.2313: train_loss/word=2.979019 (steps=14150, words/sec=1940.20, time=0-01:29:16)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 81.4558: train_loss/word=2.947146 (steps=14190, words/sec=1897.36, time=0-01:29:29)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 81.6866: train_loss/word=2.909767 (steps=14230, words/sec=1934.70, time=0-01:29:42)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 81.9111: train_loss/word=2.746986 (steps=14264, words/sec=1893.98, time=0-01:29:54)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 82.0000: train_loss/word=3.173324 (steps=14283, words/sec=1898.63, time=0-01:30:00)
+> Checkpoint [model_preprocessed_be_epoch100]
+Performing inference on src/preprocess/preprocessed_data/en_be/dev.tok.norm.be and src/preprocess/preprocessed_data/en_be/dev.norm.en
+Starting to read src/preprocess/preprocessed_data/en_be/dev.tok.norm.be and src/preprocess/preprocessed_data/en_be/dev.tok.norm.en
+Done reading src/preprocess/preprocessed_data/en_be/dev.tok.norm.be and src/preprocess/preprocessed_data/en_be/dev.tok.norm.en. Packing into batches.
+Done packing batches.
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 82.0000 dev BLEU4: 0.0146454655953891, 0.172705/0.026662/0.005875/0.001701 (BP = 1.000000, ratio=1.46, hyp_len=6624, ref_len=4537) (time=0-01:30:06)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100]              dev auxiliary Loss: 3.577 (ref_len=5563)
+             checkpoint took 0-00:00:05
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 82.0024: train_loss/word=3.649174 (steps=14284, words/sec=1831.33, time=0-01:30:06)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 82.2267: train_loss/word=2.780288 (steps=14319, words/sec=1938.08, time=0-01:30:18)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 82.4555: train_loss/word=2.925330 (steps=14360, words/sec=1892.95, time=0-01:30:31)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 82.6800: train_loss/word=2.812557 (steps=14396, words/sec=1928.29, time=0-01:30:43)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 82.9051: train_loss/word=2.958408 (steps=14437, words/sec=1897.73, time=0-01:30:57)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 83.0000: train_loss/word=3.181036 (steps=14457, words/sec=1911.64, time=0-01:31:04)
+> Checkpoint [model_preprocessed_be_epoch100]
+Performing inference on src/preprocess/preprocessed_data/en_be/dev.tok.norm.be and src/preprocess/preprocessed_data/en_be/dev.norm.en
+Starting to read src/preprocess/preprocessed_data/en_be/dev.tok.norm.be and src/preprocess/preprocessed_data/en_be/dev.tok.norm.en
+Done reading src/preprocess/preprocessed_data/en_be/dev.tok.norm.be and src/preprocess/preprocessed_data/en_be/dev.tok.norm.en. Packing into batches.
+Done packing batches.
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 83.0000 dev BLEU4: 0.016576223712064207, 0.185304/0.029441/0.006940/0.001994 (BP = 1.000000, ratio=1.38, hyp_len=6260, ref_len=4537) (time=0-01:31:09)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100]              dev auxiliary Loss: 3.586 (ref_len=5563)
+             checkpoint took 0-00:00:05
+  best dev score, writing out model
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 83.0029: train_loss/word=3.624767 (steps=14458, words/sec=1981.43, time=0-01:31:12)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 83.2322: train_loss/word=2.879164 (steps=14498, words/sec=1897.38, time=0-01:31:25)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 83.4611: train_loss/word=2.848295 (steps=14536, words/sec=1933.30, time=0-01:31:38)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 83.6857: train_loss/word=2.837817 (steps=14573, words/sec=1913.14, time=0-01:31:50)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 83.9115: train_loss/word=2.887986 (steps=14612, words/sec=1907.59, time=0-01:32:03)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 84.0000: train_loss/word=3.170900 (steps=14631, words/sec=1929.51, time=0-01:32:09)
+> Checkpoint [model_preprocessed_be_epoch100]
+Performing inference on src/preprocess/preprocessed_data/en_be/dev.tok.norm.be and src/preprocess/preprocessed_data/en_be/dev.norm.en
+Starting to read src/preprocess/preprocessed_data/en_be/dev.tok.norm.be and src/preprocess/preprocessed_data/en_be/dev.tok.norm.en
+Done reading src/preprocess/preprocessed_data/en_be/dev.tok.norm.be and src/preprocess/preprocessed_data/en_be/dev.tok.norm.en. Packing into batches.
+Done packing batches.
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 84.0000 dev BLEU4: 0.0131719457294608, 0.169627/0.026737/0.005807/0.001143 (BP = 1.000000, ratio=1.51, hyp_len=6868, ref_len=4537) (time=0-01:32:15)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100]              dev auxiliary Loss: 3.588 (ref_len=5563)
+             checkpoint took 0-00:00:05
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 84.0038: train_loss/word=3.350734 (steps=14632, words/sec=1987.47, time=0-01:32:15)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 84.2287: train_loss/word=2.852003 (steps=14670, words/sec=1942.86, time=0-01:32:28)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 84.4509: train_loss/word=2.847609 (steps=14708, words/sec=1909.10, time=0-01:32:41)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 84.6800: train_loss/word=2.845738 (steps=14746, words/sec=1918.79, time=0-01:32:53)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 84.9042: train_loss/word=2.891296 (steps=14786, words/sec=1853.24, time=0-01:33:07)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 85.0000: train_loss/word=3.097792 (steps=14806, words/sec=1922.31, time=0-01:33:13)
+> Checkpoint [model_preprocessed_be_epoch100]
+Performing inference on src/preprocess/preprocessed_data/en_be/dev.tok.norm.be and src/preprocess/preprocessed_data/en_be/dev.norm.en
+Starting to read src/preprocess/preprocessed_data/en_be/dev.tok.norm.be and src/preprocess/preprocessed_data/en_be/dev.tok.norm.en
+Done reading src/preprocess/preprocessed_data/en_be/dev.tok.norm.be and src/preprocess/preprocessed_data/en_be/dev.tok.norm.en. Packing into batches.
+Done packing batches.
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 85.0000 dev BLEU4: 0.015430531236391537, 0.181135/0.028300/0.006772/0.001633 (BP = 1.000000, ratio=1.38, hyp_len=6255, ref_len=4537) (time=0-01:33:19)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100]              dev auxiliary Loss: 3.589 (ref_len=5563)
+             checkpoint took 0-00:00:05
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 85.0084: train_loss/word=2.391267 (steps=14807, words/sec=2122.77, time=0-01:33:19)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 85.2380: train_loss/word=2.880331 (steps=14848, words/sec=1902.68, time=0-01:33:33)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 85.4631: train_loss/word=2.704086 (steps=14883, words/sec=1889.79, time=0-01:33:44)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 85.6882: train_loss/word=2.951646 (steps=14924, words/sec=1917.26, time=0-01:33:58)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 85.9144: train_loss/word=2.884971 (steps=14963, words/sec=1933.04, time=0-01:34:11)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 86.0000: train_loss/word=3.039270 (steps=14980, words/sec=1945.17, time=0-01:34:17)
+> Checkpoint [model_preprocessed_be_epoch100]
+Performing inference on src/preprocess/preprocessed_data/en_be/dev.tok.norm.be and src/preprocess/preprocessed_data/en_be/dev.norm.en
+Starting to read src/preprocess/preprocessed_data/en_be/dev.tok.norm.be and src/preprocess/preprocessed_data/en_be/dev.tok.norm.en
+Done reading src/preprocess/preprocessed_data/en_be/dev.tok.norm.be and src/preprocess/preprocessed_data/en_be/dev.tok.norm.en. Packing into batches.
+Done packing batches.
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 86.0000 dev BLEU4: 0.014274066217491832, 0.175549/0.026984/0.006318/0.001387 (BP = 1.000000, ratio=1.44, hyp_len=6511, ref_len=4537) (time=0-01:34:22)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100]              dev auxiliary Loss: 3.591 (ref_len=5563)
+             checkpoint took 0-00:00:05
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 86.0058: train_loss/word=2.735527 (steps=14981, words/sec=2177.29, time=0-01:34:23)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 86.2278: train_loss/word=2.928678 (steps=15022, words/sec=1925.22, time=0-01:34:36)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 86.4518: train_loss/word=2.741832 (steps=15057, words/sec=1963.10, time=0-01:34:48)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 86.6775: train_loss/word=2.933675 (steps=15099, words/sec=1883.75, time=0-01:35:02)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 86.9046: train_loss/word=2.778373 (steps=15137, words/sec=1861.45, time=0-01:35:14)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 87.0000: train_loss/word=2.973929 (steps=15155, words/sec=1869.83, time=0-01:35:20)
+> Checkpoint [model_preprocessed_be_epoch100]
+Performing inference on src/preprocess/preprocessed_data/en_be/dev.tok.norm.be and src/preprocess/preprocessed_data/en_be/dev.norm.en
+Starting to read src/preprocess/preprocessed_data/en_be/dev.tok.norm.be and src/preprocess/preprocessed_data/en_be/dev.tok.norm.en
+Done reading src/preprocess/preprocessed_data/en_be/dev.tok.norm.be and src/preprocess/preprocessed_data/en_be/dev.tok.norm.en. Packing into batches.
+Done packing batches.
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 87.0000 dev BLEU4: 0.015784628125010105, 0.178120/0.029295/0.006923/0.001719 (BP = 1.000000, ratio=1.45, hyp_len=6563, ref_len=4537) (time=0-01:35:26)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100]              dev auxiliary Loss: 3.593 (ref_len=5563)
+             checkpoint took 0-00:00:05
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 87.0047: train_loss/word=3.118468 (steps=15156, words/sec=2235.10, time=0-01:35:26)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 87.2287: train_loss/word=2.761409 (steps=15193, words/sec=1958.55, time=0-01:35:38)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 87.4535: train_loss/word=2.841282 (steps=15232, words/sec=1898.38, time=0-01:35:51)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 87.6782: train_loss/word=2.863285 (steps=15272, words/sec=1854.70, time=0-01:36:05)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 87.9009: train_loss/word=2.835532 (steps=15310, words/sec=1921.24, time=0-01:36:18)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 88.0000: train_loss/word=3.033757 (steps=15329, words/sec=1943.73, time=0-01:36:24)
+> Checkpoint [model_preprocessed_be_epoch100]
+Performing inference on src/preprocess/preprocessed_data/en_be/dev.tok.norm.be and src/preprocess/preprocessed_data/en_be/dev.norm.en
+Starting to read src/preprocess/preprocessed_data/en_be/dev.tok.norm.be and src/preprocess/preprocessed_data/en_be/dev.tok.norm.en
+Done reading src/preprocess/preprocessed_data/en_be/dev.tok.norm.be and src/preprocess/preprocessed_data/en_be/dev.tok.norm.en. Packing into batches.
+Done packing batches.
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 88.0000 dev BLEU4: 0.015915172672867, 0.187207/0.030288/0.006848/0.001652 (BP = 1.000000, ratio=1.36, hyp_len=6191, ref_len=4537) (time=0-01:36:29)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100]              dev auxiliary Loss: 3.591 (ref_len=5563)
+             checkpoint took 0-00:00:05
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 88.0055: train_loss/word=2.912872 (steps=15330, words/sec=2141.41, time=0-01:36:30)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 88.2278: train_loss/word=2.842757 (steps=15369, words/sec=1927.71, time=0-01:36:43)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 88.4509: train_loss/word=2.812718 (steps=15408, words/sec=1885.77, time=0-01:36:56)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 88.6753: train_loss/word=2.819010 (steps=15447, words/sec=1897.20, time=0-01:37:09)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 88.9020: train_loss/word=2.788755 (steps=15484, words/sec=1937.90, time=0-01:37:21)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 89.0000: train_loss/word=3.003544 (steps=15503, words/sec=1971.21, time=0-01:37:27)
+> Checkpoint [model_preprocessed_be_epoch100]
+Performing inference on src/preprocess/preprocessed_data/en_be/dev.tok.norm.be and src/preprocess/preprocessed_data/en_be/dev.norm.en
+Starting to read src/preprocess/preprocessed_data/en_be/dev.tok.norm.be and src/preprocess/preprocessed_data/en_be/dev.tok.norm.en
+Done reading src/preprocess/preprocessed_data/en_be/dev.tok.norm.be and src/preprocess/preprocessed_data/en_be/dev.tok.norm.en. Packing into batches.
+Done packing batches.
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 89.0000 dev BLEU4: 0.013751080143396916, 0.174240/0.028759/0.006016/0.001186 (BP = 1.000000, ratio=1.46, hyp_len=6646, ref_len=4537) (time=0-01:37:33)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100]              dev auxiliary Loss: 3.600 (ref_len=5563)
+             checkpoint took 0-00:00:05
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 89.0040: train_loss/word=3.396458 (steps=15504, words/sec=2144.97, time=0-01:37:33)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 89.2278: train_loss/word=2.791609 (steps=15543, words/sec=1915.13, time=0-01:37:46)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 89.4531: train_loss/word=2.783363 (steps=15581, words/sec=1858.12, time=0-01:37:59)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 89.6802: train_loss/word=2.829783 (steps=15620, words/sec=2003.17, time=0-01:38:12)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 89.9029: train_loss/word=2.926706 (steps=15662, words/sec=1903.09, time=0-01:38:25)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 90.0000: train_loss/word=2.684769 (steps=15677, words/sec=1910.67, time=0-01:38:30)
+> Checkpoint [model_preprocessed_be_epoch100]
+Performing inference on src/preprocess/preprocessed_data/en_be/dev.tok.norm.be and src/preprocess/preprocessed_data/en_be/dev.norm.en
+Starting to read src/preprocess/preprocessed_data/en_be/dev.tok.norm.be and src/preprocess/preprocessed_data/en_be/dev.tok.norm.en
+Done reading src/preprocess/preprocessed_data/en_be/dev.tok.norm.be and src/preprocess/preprocessed_data/en_be/dev.tok.norm.en. Packing into batches.
+Done packing batches.
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 90.0000 dev BLEU4: 0.01571326502278489, 0.188074/0.029377/0.007532/0.001465 (BP = 1.000000, ratio=1.37, hyp_len=6205, ref_len=4537) (time=0-01:38:36)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100]              dev auxiliary Loss: 3.595 (ref_len=5563)
+             checkpoint took 0-00:00:05
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 90.0018: train_loss/word=3.549480 (steps=15678, words/sec=1730.58, time=0-01:38:36)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 90.2267: train_loss/word=2.892259 (steps=15720, words/sec=1953.77, time=0-01:38:50)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 90.4524: train_loss/word=2.816745 (steps=15760, words/sec=1901.40, time=0-01:39:03)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 90.6760: train_loss/word=2.820096 (steps=15799, words/sec=1898.53, time=0-01:39:16)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 90.9044: train_loss/word=2.709566 (steps=15835, words/sec=1927.07, time=0-01:39:28)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 91.0000: train_loss/word=2.778300 (steps=15851, words/sec=1870.58, time=0-01:39:34)
+> Checkpoint [model_preprocessed_be_epoch100]
+Performing inference on src/preprocess/preprocessed_data/en_be/dev.tok.norm.be and src/preprocess/preprocessed_data/en_be/dev.norm.en
+Starting to read src/preprocess/preprocessed_data/en_be/dev.tok.norm.be and src/preprocess/preprocessed_data/en_be/dev.tok.norm.en
+Done reading src/preprocess/preprocessed_data/en_be/dev.tok.norm.be and src/preprocess/preprocessed_data/en_be/dev.tok.norm.en. Packing into batches.
+Done packing batches.
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 91.0000 dev BLEU4: 0.016147215118008925, 0.170252/0.028554/0.007258/0.001927 (BP = 1.000000, ratio=1.54, hyp_len=6972, ref_len=4537) (time=0-01:39:40)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100]              dev auxiliary Loss: 3.608 (ref_len=5563)
+             checkpoint took 0-00:00:05
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 91.0022: train_loss/word=3.663708 (steps=15852, words/sec=1615.36, time=0-01:39:40)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 91.2269: train_loss/word=2.864415 (steps=15893, words/sec=1950.43, time=0-01:39:54)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 91.4513: train_loss/word=2.908308 (steps=15936, words/sec=1923.77, time=0-01:40:08)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 91.6731: train_loss/word=2.786265 (steps=15974, words/sec=1913.52, time=0-01:40:20)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 91.9042: train_loss/word=2.670244 (steps=16010, words/sec=1939.56, time=0-01:40:32)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 92.0000: train_loss/word=2.616923 (steps=16025, words/sec=1858.50, time=0-01:40:37)
+> Checkpoint [model_preprocessed_be_epoch100]
+Performing inference on src/preprocess/preprocessed_data/en_be/dev.tok.norm.be and src/preprocess/preprocessed_data/en_be/dev.norm.en
+Starting to read src/preprocess/preprocessed_data/en_be/dev.tok.norm.be and src/preprocess/preprocessed_data/en_be/dev.tok.norm.en
+Done reading src/preprocess/preprocessed_data/en_be/dev.tok.norm.be and src/preprocess/preprocessed_data/en_be/dev.tok.norm.en. Packing into batches.
+Done packing batches.
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 92.0000 dev BLEU4: 0.017331555623065008, 0.187341/0.032039/0.008310/0.001809 (BP = 1.000000, ratio=1.38, hyp_len=6272, ref_len=4537) (time=0-01:40:43)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100]              dev auxiliary Loss: 3.601 (ref_len=5563)
+             checkpoint took 0-00:00:05
+  best dev score, writing out model
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 92.0031: train_loss/word=3.272913 (steps=16026, words/sec=1949.92, time=0-01:40:46)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 92.2258: train_loss/word=2.750845 (steps=16065, words/sec=1905.53, time=0-01:40:58)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 92.4480: train_loss/word=2.884700 (steps=16107, words/sec=1916.68, time=0-01:41:12)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 92.6782: train_loss/word=2.736057 (steps=16146, words/sec=1884.29, time=0-01:41:25)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 92.9102: train_loss/word=2.790546 (steps=16185, words/sec=1903.75, time=0-01:41:38)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 93.0000: train_loss/word=2.722015 (steps=16200, words/sec=1852.80, time=0-01:41:43)
+> Checkpoint [model_preprocessed_be_epoch100]
+Performing inference on src/preprocess/preprocessed_data/en_be/dev.tok.norm.be and src/preprocess/preprocessed_data/en_be/dev.norm.en
+Starting to read src/preprocess/preprocessed_data/en_be/dev.tok.norm.be and src/preprocess/preprocessed_data/en_be/dev.tok.norm.en
+Done reading src/preprocess/preprocessed_data/en_be/dev.tok.norm.be and src/preprocess/preprocessed_data/en_be/dev.tok.norm.en. Packing into batches.
+Done packing batches.
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 93.0000 dev BLEU4: 0.01865305564059095, 0.188327/0.032210/0.008485/0.002352 (BP = 1.000000, ratio=1.38, hyp_len=6271, ref_len=4537) (time=0-01:41:49)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100]              dev auxiliary Loss: 3.599 (ref_len=5563)
+             checkpoint took 0-00:00:05
+  best dev score, writing out model
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 93.0073: train_loss/word=2.387969 (steps=16201, words/sec=2035.16, time=0-01:41:52)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 93.2315: train_loss/word=2.593661 (steps=16236, words/sec=1902.07, time=0-01:42:03)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 93.4562: train_loss/word=2.829237 (steps=16278, words/sec=1909.37, time=0-01:42:17)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 93.6809: train_loss/word=2.833033 (steps=16319, words/sec=1923.06, time=0-01:42:31)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 93.9131: train_loss/word=2.775229 (steps=16358, words/sec=1922.69, time=0-01:42:44)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 94.0000: train_loss/word=2.934885 (steps=16375, words/sec=1841.18, time=0-01:42:50)
+> Checkpoint [model_preprocessed_be_epoch100]
+Performing inference on src/preprocess/preprocessed_data/en_be/dev.tok.norm.be and src/preprocess/preprocessed_data/en_be/dev.norm.en
+Starting to read src/preprocess/preprocessed_data/en_be/dev.tok.norm.be and src/preprocess/preprocessed_data/en_be/dev.tok.norm.en
+Done reading src/preprocess/preprocessed_data/en_be/dev.tok.norm.be and src/preprocess/preprocessed_data/en_be/dev.tok.norm.en. Packing into batches.
+Done packing batches.
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 94.0000 dev BLEU4: 0.015371284609004261, 0.173843/0.027701/0.007000/0.001656 (BP = 1.000000, ratio=1.49, hyp_len=6782, ref_len=4537) (time=0-01:42:55)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100]              dev auxiliary Loss: 3.605 (ref_len=5563)
+             checkpoint took 0-00:00:05
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 94.0024: train_loss/word=3.583181 (steps=16376, words/sec=1785.74, time=0-01:42:56)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 94.2267: train_loss/word=2.716970 (steps=16413, words/sec=1942.41, time=0-01:43:08)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 94.4502: train_loss/word=2.547524 (steps=16446, words/sec=1935.68, time=0-01:43:19)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 94.6762: train_loss/word=2.903013 (steps=16490, words/sec=1912.23, time=0-01:43:34)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 94.9026: train_loss/word=2.715010 (steps=16529, words/sec=1856.41, time=0-01:43:47)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 95.0000: train_loss/word=2.964908 (steps=16549, words/sec=1948.83, time=0-01:43:53)
+> Checkpoint [model_preprocessed_be_epoch100]
+Performing inference on src/preprocess/preprocessed_data/en_be/dev.tok.norm.be and src/preprocess/preprocessed_data/en_be/dev.norm.en
+Starting to read src/preprocess/preprocessed_data/en_be/dev.tok.norm.be and src/preprocess/preprocessed_data/en_be/dev.tok.norm.en
+Done reading src/preprocess/preprocessed_data/en_be/dev.tok.norm.be and src/preprocess/preprocessed_data/en_be/dev.tok.norm.en. Packing into batches.
+Done packing batches.
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 95.0000 dev BLEU4: 0.016341810709115126, 0.178293/0.031255/0.007432/0.001722 (BP = 1.000000, ratio=1.44, hyp_len=6551, ref_len=4537) (time=0-01:43:59)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100]              dev auxiliary Loss: 3.609 (ref_len=5563)
+             checkpoint took 0-00:00:05
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 95.0058: train_loss/word=2.882039 (steps=16550, words/sec=2109.02, time=0-01:43:59)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 95.2295: train_loss/word=2.658202 (steps=16587, words/sec=1879.19, time=0-01:44:12)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 95.4586: train_loss/word=2.817603 (steps=16629, words/sec=1916.82, time=0-01:44:25)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 95.6824: train_loss/word=2.666349 (steps=16666, words/sec=1917.85, time=0-01:44:38)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 95.9111: train_loss/word=2.828732 (steps=16708, words/sec=1886.28, time=0-01:44:52)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 96.0000: train_loss/word=2.820292 (steps=16724, words/sec=1966.25, time=0-01:44:57)
+> Checkpoint [model_preprocessed_be_epoch100]
+Performing inference on src/preprocess/preprocessed_data/en_be/dev.tok.norm.be and src/preprocess/preprocessed_data/en_be/dev.norm.en
+Starting to read src/preprocess/preprocessed_data/en_be/dev.tok.norm.be and src/preprocess/preprocessed_data/en_be/dev.tok.norm.en
+Done reading src/preprocess/preprocessed_data/en_be/dev.tok.norm.be and src/preprocess/preprocessed_data/en_be/dev.tok.norm.en. Packing into batches.
+Done packing batches.
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 96.0000 dev BLEU4: 0.01580480983792457, 0.177422/0.028733/0.006535/0.001873 (BP = 1.000000, ratio=1.46, hyp_len=6617, ref_len=4537) (time=0-01:45:03)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100]              dev auxiliary Loss: 3.613 (ref_len=5563)
+             checkpoint took 0-00:00:05
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 96.0042: train_loss/word=2.936193 (steps=16725, words/sec=1852.94, time=0-01:45:03)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 96.2282: train_loss/word=2.694933 (steps=16763, words/sec=1911.78, time=0-01:45:16)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 96.4529: train_loss/word=2.902139 (steps=16807, words/sec=1963.04, time=0-01:45:30)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 96.6771: train_loss/word=2.684221 (steps=16845, words/sec=1866.59, time=0-01:45:43)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 96.9042: train_loss/word=2.707066 (steps=16883, words/sec=1898.33, time=0-01:45:56)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 97.0000: train_loss/word=2.618059 (steps=16898, words/sec=1922.75, time=0-01:46:01)
+> Checkpoint [model_preprocessed_be_epoch100]
+Performing inference on src/preprocess/preprocessed_data/en_be/dev.tok.norm.be and src/preprocess/preprocessed_data/en_be/dev.norm.en
+Starting to read src/preprocess/preprocessed_data/en_be/dev.tok.norm.be and src/preprocess/preprocessed_data/en_be/dev.tok.norm.en
+Done reading src/preprocess/preprocessed_data/en_be/dev.tok.norm.be and src/preprocess/preprocessed_data/en_be/dev.tok.norm.en. Packing into batches.
+Done packing batches.
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 97.0000 dev BLEU4: 0.016100866206408677, 0.170864/0.029525/0.006932/0.001922 (BP = 1.000000, ratio=1.54, hyp_len=6988, ref_len=4537) (time=0-01:46:07)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100]              dev auxiliary Loss: 3.619 (ref_len=5563)
+             checkpoint took 0-00:00:05
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 97.0040: train_loss/word=3.114740 (steps=16899, words/sec=1988.00, time=0-01:46:07)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 97.2304: train_loss/word=2.791838 (steps=16940, words/sec=1905.11, time=0-01:46:21)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 97.4544: train_loss/word=2.653753 (steps=16978, words/sec=1925.88, time=0-01:46:33)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 97.6762: train_loss/word=2.799439 (steps=17019, words/sec=1878.96, time=0-01:46:47)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 97.8995: train_loss/word=2.635676 (steps=17055, words/sec=1913.58, time=0-01:46:59)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 98.0000: train_loss/word=2.738023 (steps=17072, words/sec=1952.25, time=0-01:47:05)
+> Checkpoint [model_preprocessed_be_epoch100]
+Performing inference on src/preprocess/preprocessed_data/en_be/dev.tok.norm.be and src/preprocess/preprocessed_data/en_be/dev.norm.en
+Starting to read src/preprocess/preprocessed_data/en_be/dev.tok.norm.be and src/preprocess/preprocessed_data/en_be/dev.tok.norm.en
+Done reading src/preprocess/preprocessed_data/en_be/dev.tok.norm.be and src/preprocess/preprocessed_data/en_be/dev.tok.norm.en. Packing into batches.
+Done packing batches.
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 98.0000 dev BLEU4: 0.01584116693994525, 0.181310/0.029065/0.006376/0.001874 (BP = 1.000000, ratio=1.46, hyp_len=6613, ref_len=4537) (time=0-01:47:10)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100]              dev auxiliary Loss: 3.617 (ref_len=5563)
+             checkpoint took 0-00:00:05
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 98.0038: train_loss/word=3.148486 (steps=17073, words/sec=2007.55, time=0-01:47:11)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 98.2275: train_loss/word=2.586917 (steps=17109, words/sec=1902.77, time=0-01:47:23)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 98.4507: train_loss/word=2.716916 (steps=17148, words/sec=1916.43, time=0-01:47:36)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 98.6744: train_loss/word=2.738851 (steps=17187, words/sec=1935.12, time=0-01:47:49)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 98.8971: train_loss/word=2.777208 (steps=17228, words/sec=1862.04, time=0-01:48:02)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 99.0000: train_loss/word=2.768720 (steps=17246, words/sec=1914.30, time=0-01:48:08)
+> Checkpoint [model_preprocessed_be_epoch100]
+Performing inference on src/preprocess/preprocessed_data/en_be/dev.tok.norm.be and src/preprocess/preprocessed_data/en_be/dev.norm.en
+Starting to read src/preprocess/preprocessed_data/en_be/dev.tok.norm.be and src/preprocess/preprocessed_data/en_be/dev.tok.norm.en
+Done reading src/preprocess/preprocessed_data/en_be/dev.tok.norm.be and src/preprocess/preprocessed_data/en_be/dev.tok.norm.en. Packing into batches.
+Done packing batches.
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 99.0000 dev BLEU4: 0.01696190642837558, 0.176453/0.030492/0.007605/0.002023 (BP = 1.000000, ratio=1.47, hyp_len=6676, ref_len=4537) (time=0-01:48:14)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100]              dev auxiliary Loss: 3.621 (ref_len=5563)
+             checkpoint took 0-00:00:05
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 99.0022: train_loss/word=3.557842 (steps=17247, words/sec=1680.50, time=0-01:48:15)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 99.2251: train_loss/word=2.834901 (steps=17290, words/sec=1928.38, time=0-01:48:29)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 99.4504: train_loss/word=2.711109 (steps=17330, words/sec=1902.33, time=0-01:48:42)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 99.6729: train_loss/word=2.449626 (steps=17363, words/sec=1874.37, time=0-01:48:53)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 99.8969: train_loss/word=2.758129 (steps=17403, words/sec=1933.24, time=0-01:49:07)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 100.0000: train_loss/word=2.668651 (steps=17420, words/sec=1943.58, time=0-01:49:12)
+> Checkpoint [model_preprocessed_be_epoch100]
+Performing inference on src/preprocess/preprocessed_data/en_be/dev.tok.norm.be and src/preprocess/preprocessed_data/en_be/dev.norm.en
+Starting to read src/preprocess/preprocessed_data/en_be/dev.tok.norm.be and src/preprocess/preprocessed_data/en_be/dev.tok.norm.en
+Done reading src/preprocess/preprocessed_data/en_be/dev.tok.norm.be and src/preprocess/preprocessed_data/en_be/dev.tok.norm.en. Packing into batches.
+Done packing batches.
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100] Epoch 100.0000 dev BLEU4: 0.01803032427096458, 0.188296/0.032739/0.008019/0.002138 (BP = 1.000000, ratio=1.40, hyp_len=6357, ref_len=4537) (time=0-01:49:18)
+[model_preprocessed_be_epoch100] [model_preprocessed_be_epoch100]              dev auxiliary Loss: 3.622 (ref_len=5563)
+             checkpoint took 0-00:00:05
+reverting learned weights to best checkpoint..
+> Performing final evaluation
+Performing inference on src/preprocess/preprocessed_data/en_be/test.tok.norm.be and src/preprocess/preprocessed_data/en_be/test.norm.en
+Experiment                    | Final Scores
+-----------------------------------------------------------------------
+model_preprocessed_be_epoch100| BLEU4: 0.01240552667091669, 0.171848/0.024559/0.006115/0.000918 (BP = 1.000000, ratio=1.27, hyp_len=18336, ref_len=14429)

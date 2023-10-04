@@ -1,0 +1,28 @@
+running XNMT revision d93f8f3 on gcn60.local.snellius.surf.nl with DyNet on 2023-10-04 08:59:07
+initialized exp_global.param_init: GlorotInitializer@23269901926032({})
+initialized exp_global.bias_init: ZeroInitializer@23269901923856({})
+initialized exp_global: ExpGlobal@23269901923344({'model_file': './models/model_preprocessed_az_epoch100_.mod', 'log_file': './logs/model_preprocessed_az_epoch100_.log', 'dropout': 0.3, 'weight_noise': 0.0, 'default_layer_dim': 512, 'param_init': GlorotInitializer@23269901880848, 'bias_init': ZeroInitializer@23269901980880, 'loss_comb_method': 'sum', 'commandline_args': {'dynet_mem': None, 'dynet_seed': None, 'dynet_autobatch': None, 'dynet_devices': None, 'dynet_viz': False, 'dynet_gpu': False, 'dynet_gpu_ids': None, 'dynet_gpus': None, 'dynet_weight_decay': None, 'dynet_profiling': None, 'settings': 'standard', 'resume': False, 'backend': 'dynet', 'experiments_file': 'train_preproc.yaml', 'experiment_name': [], 'generate_doc': False}, 'placeholders': {'DATA_IN': 'src/preprocess/pereprocessed_data/en_az', 'DATA_OUT': 'output/en_az', 'SRC_LAN': 'az', 'TRG_LAN': 'en'}})
+ERROR: ERROR: ------ Error Report ------
+ERROR: ERROR: *** yaml_path ***
+ERROR: ERROR: model.src_reader.vocab
+ERROR: Traceback (most recent call last):
+ERROR:   File "/home/scur0661/.conda/envs/dlnlp/lib/python3.7/site-packages/xnmt-0.0.1-py3.7.egg/xnmt/xnmt_run_experiments.py", line 109, in main
+ERROR:     experiment = initialize_if_needed(uninitialized_exp_args)
+ERROR:   File "/home/scur0661/.conda/envs/dlnlp/lib/python3.7/site-packages/xnmt-0.0.1-py3.7.egg/xnmt/persistence.py", line 1467, in initialize_if_needed
+ERROR:     return _YamlDeserializer().initialize_if_needed(root)
+ERROR:   File "/home/scur0661/.conda/envs/dlnlp/lib/python3.7/site-packages/xnmt-0.0.1-py3.7.egg/xnmt/persistence.py", line 1194, in initialize_if_needed
+ERROR:     else: return self.initialize_object(deserialized_yaml_wrapper=obj)
+ERROR:   File "/home/scur0661/.conda/envs/dlnlp/lib/python3.7/site-packages/xnmt-0.0.1-py3.7.egg/xnmt/persistence.py", line 1237, in initialize_object
+ERROR:     initialized = self.init_components_bottom_up(self.deserialized_yaml)
+ERROR:   File "/home/scur0661/.conda/envs/dlnlp/lib/python3.7/site-packages/xnmt-0.0.1-py3.7.egg/xnmt/persistence.py", line 1337, in init_components_bottom_up
+ERROR:     initialized_component = self.init_component(path)
+ERROR:   File "/home/scur0661/.conda/envs/dlnlp/lib/python3.7/site-packages/xnmt-0.0.1-py3.7.egg/xnmt/persistence.py", line 1373, in init_component
+ERROR:     initialized_obj = obj.__class__(**init_params)
+ERROR:   File "/home/scur0661/.conda/envs/dlnlp/lib/python3.7/site-packages/xnmt-0.0.1-py3.7.egg/xnmt/persistence.py", line 92, in wrapper
+ERROR:     f(obj, **serialize_params)
+ERROR:   File "/home/scur0661/.conda/envs/dlnlp/lib/python3.7/site-packages/xnmt-0.0.1-py3.7.egg/xnmt/vocabs.py", line 39, in __init__
+ERROR:     i2w = Vocab.i2w_from_vocab_file(vocab_file, sentencepiece_vocab)
+ERROR:   File "/home/scur0661/.conda/envs/dlnlp/lib/python3.7/site-packages/xnmt-0.0.1-py3.7.egg/xnmt/vocabs.py", line 62, in i2w_from_vocab_file
+ERROR:     with open(vocab_file, encoding='utf-8') as f:
+ERROR: FileNotFoundError: [Errno 2] No such file or directory: 'src/preprocess/pereprocessed_data/en_az/train.vocab.az'
+ERROR: 

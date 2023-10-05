@@ -60,20 +60,20 @@ def preprocess_subword_datasets(unsegmented_file_format="data/dataset/ted-train.
             print(f"{file_path} does not exist, ignore to segment for {lang} !")
             continue
         # settings for command of sentencepiece
-        vocab_size = 100
+        vocab_size = 8000
         model_name = lang + '-' + str(vocab_size)
         model_format = model_directory + model_name
         cmd = f'--input={file_path} --model_prefix={model_format} --vocab_size={vocab_size}'
         # train the sentencepiece
         spm.SentencePieceTrainer.train(cmd)
+        # to give a buffer for the checkpoint saved
+        time.sleep(1)
 
         model_path = model_format + '.model'
         # check if the checkpoint is there or not
         if not os.path.isfile(model_path):
             raise Exception(f"{model_path} is missing, require the tokenizer to segment words !")
         
-        # to give a buffer for the checkpoint saved
-        time.sleep(1)
         # load specific tokenizer
         sp = spm.SentencePieceProcessor()
         sp.load(model_path)

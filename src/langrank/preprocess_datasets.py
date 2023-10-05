@@ -28,7 +28,7 @@ def preprocess_datasets(
             next(input_f)
             for line in input_f:
                 # Split the line by tabs (assuming it's a TSV file)
-                print(line)
+                # print(line)
                 sentence = line.strip().split("\t")[column_index]
 
                 # Check if the line has enough columns and does not contain "NULL"
@@ -39,17 +39,20 @@ def preprocess_datasets(
 
 
 def preprocess_subword_datasets(unsegmented_file_format="data/dataset/ted-train.orig.",
-    output_file_format="data/dataset/sub-word/ted-train.orig.spm8000.", model_directory = 'tokenizer/train/'
+    output_file_format="data/dataset/subword/ted-train.orig.spm8000.",
+                                model_directory = 'tokenizer/train/',
+                                file_type="train" # file type can be "train, dev, test and all"
 ):
     """ "
     Perhaps not most efficient with many reads, but this only needs to be computed once
     Possible TODOS:
     TODO: Why not also include the dev and test set?
     """
-    
     # create the directory for subword files, checkpoint files
-    os.makedirs("./data/dataset/sub-word", exist_ok=True)
+    os.makedirs("./data/dataset/subword", exist_ok=True)
     os.makedirs(model_directory, exist_ok=True)
+    # these langs have less vocabs on train files
+    special_langs_size = {'ben': 6782, 'msa': 6456, 'tam': 6991, 'urd': 5789}
 
     # loop for languages
     for i, lang in enumerate(globals.L2TEDHEADER, 1):
@@ -60,7 +63,11 @@ def preprocess_subword_datasets(unsegmented_file_format="data/dataset/ted-train.
             print(f"{file_path} does not exist, ignore to segment for {lang} !")
             continue
         # settings for command of sentencepiece
-        vocab_size = 8000
+        if file_type in ['train', 'dev', 'test']:
+            vocab_size = special_langs_size[lang] if lang in special_langs_size.keys() else 8000
+        else:
+            vocab_size = 8000
+
         model_name = lang + '-' + str(vocab_size)
         model_format = model_directory + model_name
         cmd = f'--input={file_path} --model_prefix={model_format} --vocab_size={vocab_size}'
@@ -96,4 +103,4 @@ def preprocess_subword_datasets(unsegmented_file_format="data/dataset/ted-train.
 
 if __name__ == "__main__":
     preprocess_datasets()
-    #preprocess_subword_datasets()
+    preprocess_subword_datasets()

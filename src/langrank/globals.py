@@ -190,3 +190,20 @@ ORIGINAL_RANKER_HYPERPARAMS = {
     "n_estimators": 100,
     "min_child_samples": 5,
 }
+# Hardcoded from pretrained/MT/lgbm_model_mt_all.txt
+FEATURE_IMPORTANCE_BEST_RANKER = [
+    176,
+    200,
+    156,
+    98,
+    195,
+    94,
+    88,
+    139,
+    44,
+    126,
+    17,
+    47,
+    75,
+    45,
+]

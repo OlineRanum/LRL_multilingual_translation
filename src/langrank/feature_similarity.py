@@ -162,15 +162,15 @@ def plot_shap_pairs(
 #     "eu",
 #     "bs",
 # ]
-# Pick one of the languages from LRLs. Picking one is easier because then you get it's easier to tune theg tolerance
-# For example:
+# # Pick one of the languages from LRLs. Picking one is easier because then you get it's easier to tune theg tolerance
+# # For example:
 # LRLs = ["be"]
 # TEDHEADER2L = dict((v, k) for k, v in globals.L2TEDHEADER.items())
 # LRLs = [TEDHEADER2L[LRL] for LRL in LRLs]
-# So here a bit tuning of the tolerance parameter is needed.
-# Try to find a small tolerance that still gives enough candidates so there is a interesting difference difference in the distances.
-# That will differ per LRL
-# Yes, this tolerance measure is hard to qualitatively interpret.
+# # So here a bit tuning of the tolerance parameter is needed.
+# # Try to find a small tolerance that still gives enough candidates so there is a interesting difference difference in the distances.
+# # That will differ per LRL
+# # Yes, this tolerance measure is hard to qualitatively interpret.
 # (
 #     candidates_within_tol,
 #     predict_contribs_within_tol,
@@ -178,7 +178,7 @@ def plot_shap_pairs(
 #     order_by_contribs_within_tol,
 # ) = shap_within_tolerance(LRLs=LRLs, tolerance=0.7)
 
-# Leave this unchanged
+# # Leave this unchanged
 # heatmap_distances(LRLs, candidates_within_tol, distances_within_tol)
 # plot_shap_pairs(LRLs[0], LRLs, candidates_within_tol, predict_contribs_within_tol, distances_within_tol, order_by_contribs_within_tol)
 

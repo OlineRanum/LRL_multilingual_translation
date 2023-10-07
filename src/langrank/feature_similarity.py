@@ -80,8 +80,8 @@ def heatmap_distances(LRLs, candidates_within_tol, distances_within_tol):
     for LRL, candidates, distance in zip(
         LRLs, candidates_within_tol, distances_within_tol
     ):
-        plt.imshow(distance, cmap="viridis")  # You can change the colormap as needed
-        plt.colorbar()  # Add a colorbar to the plot
+        plt.imshow(distance, cmap="viridis")
+        plt.colorbar()
         plt.title(f"Heatmap source: {LRL}")
         plt.xlabel("X-axis")
         plt.ylabel("Y-axis")
@@ -90,12 +90,70 @@ def heatmap_distances(LRLs, candidates_within_tol, distances_within_tol):
         plt.show()
 
 
+def plot_shap_pairs(
+    LRL,
+    LRLs,
+    candidates_within_tol,
+    predict_contribs_within_tol,
+    distances_within_tol,
+    order_by_contribs_within_tol,
+):
+    # Get info for the specific LRL
+    assert LRL in LRLs
+    index = LRLs.index(LRL)
+    language_pairs = order_by_contribs_within_tol[index]
+    shap_values = predict_contribs_within_tol[index]
+    candidates = candidates_within_tol[index]
+    distances = distances_within_tol[index]
+
+    C2S = {candidate: shap for candidate, shap in zip(candidates, shap_values)}
+    C2I = {candidate: i for i, candidate in enumerate(candidates)}
+
+    num_pairs = len(language_pairs)
+    fig, axs = plt.subplots(num_pairs, figsize=(10, 6 * num_pairs))
+    x_values = np.arange(shap_values.shape[-1])
+    bar_width = 0.35
+
+    # Create a color map based on unique languages
+    unique_languages = list(set(np.ravel(language_pairs)))
+    color_map = {
+        lang: plt.cm.get_cmap("tab10")(i) for i, lang in enumerate(unique_languages)
+    }
+
+    # Plot bar plots for each pair
+    for i, pair in enumerate(language_pairs):
+        ax = axs[i]
+        for lang_idx, lang in enumerate(pair):
+            ax.bar(
+                x_values + lang_idx * bar_width,
+                C2S[lang],
+                width=bar_width,
+                label=lang,
+                color=color_map[lang],
+            )
+        distance_pair = distances[C2I[pair[0]], [C2I[pair[1]]]].item()
+
+        ax.set_xlabel("Features")
+        ax.set_ylabel("SHAP Values")
+        ax.set_title(
+            f"SHAP Values for {pair[0]} and {pair[1]} with distance {distance_pair:0.4f}"
+        )
+        ax.set_xticks(x_values + bar_width / 2)
+        ax.set_xticklabels(
+            globals.FEATURES_NAMES_MT, rotation=45, ha="right", fontsize=10
+        )
+        ax.legend()
+
+    plt.tight_layout()
+    plt.show()
+
+
 # # example:
-# LRLs=["aze"]
+# LRLs = ["aze"]
 # candidates_within_tol, predict_contribs_within_tol, distances_within_tol, order_by_contribs_within_tol = shap_within_tolerance(LRLs=LRLs, tolerance=1.5)
 
 # heatmap_distances(LRLs, candidates_within_tol, distances_within_tol)
-# print(order_by_contribs_within_tol)
+# plot_shap_pairs("aze", LRLs, candidates_within_tol, predict_contribs_within_tol, distances_within_tol, order_by_contribs_within_tol)
 
 
 """DEPRECATED!:"""

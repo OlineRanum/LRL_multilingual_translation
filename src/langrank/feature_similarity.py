@@ -40,8 +40,9 @@ def shap_within_tolerance(
     for LRL, mask_LRL, predict_contribs_LRL in zip(LRLs, k_mask, predict_contribs):
         # Track the indices of these candidates
         candidates_indices = np.where(mask_LRL)[0]
-        candidates_indices_corrected = candidates_indices[candidates_indices > LRL] + 1
-        candidates = np.array(globals.I2L)[candidates_indices_corrected]
+        # Correct indices for diagonal
+        candidates_indices[candidates_indices > LRL] += 1
+        candidates = np.array(globals.I2L)[candidates_indices]
         candidates_within_tol.append(candidates)
         # Get features of candidates with score within tolerance
         features_candidates = predict_contribs_LRL[mask_LRL]

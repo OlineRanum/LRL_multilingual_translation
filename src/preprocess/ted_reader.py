@@ -114,8 +114,8 @@ class MultiLingualAlignedCorpusReader(object):
             
 
         if self.target_token:
-            text = self.add_target_token(data_dict['source'], t_lang)
-            data_dict['source'] = text
+            text = self.add_target_token(data_dict['target'], s_lang)
+            data_dict['target'] = text
 
         return data_dict['source'], data_dict['target']
 

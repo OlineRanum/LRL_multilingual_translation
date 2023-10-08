@@ -2,8 +2,8 @@ import itertools
 import os
 import csv
 from collections import defaultdict
-from six.moves import zip
-
+from  six.moves import zip
+import argparse
 
 class MultiLingualAlignedCorpusReader(object):
     """A class to read TED talk dataset
@@ -83,7 +83,7 @@ class MultiLingualAlignedCorpusReader(object):
         return self.data[split_type][data_type]
 
     def save_file(self, path_, split_type, data_type, keeplines = 1000000):
-        with open(path_, 'w') as fp:
+        with open(path_, 'w',  encoding='utf-8') as fp:
             it = 0
             for line in self.data[split_type][data_type]:
                 if it < keeplines:
@@ -114,8 +114,8 @@ class MultiLingualAlignedCorpusReader(object):
             
 
         if self.target_token:
-            text = self.add_target_token(data_dict['source'], t_lang)
-            data_dict['source'] = text
+            text = self.add_target_token(data_dict['target'], s_lang)
+            data_dict['target'] = text
 
         return data_dict['source'], data_dict['target']
 
@@ -190,9 +190,21 @@ if __name__ == "__main__":
 
     # TED Talks data directory
     ted_data_path = "src/preprocess/raw_ted_data"
-    src_lang, trg_lang = "en", "es"
-    output_data_path = "src/preprocess/split_data/{}_{}".format(src_lang, trg_lang)
+    # Create the parser
+    parser = argparse.ArgumentParser(description="A simple script to demonstrate command line arguments")
 
+    # Add an argument to the parser
+    parser.add_argument("language", type=str, help="The language to extract", nargs = 1, default = 'be')
+    parser.add_argument("n_train", type=int, help="Number of training data points", nargs = 1, default = 100000)
+    parser.add_argument("n_test", type=int, help="Number of test data points", nargs = 1, default = 100000)
+    parser.add_argument("n_dev", type=int, help="Number of dev data points", nargs = 1, default = 100000)
+    # Parse the arguments
+    args = parser.parse_args()
+
+    # Call the main function with the passed argument
+    
+    src_lang, trg_lang = "en", args.language[0]
+    output_data_path = "src/preprocess/split_data/{}_{}".format(src_lang, trg_lang)
     train_lang_dict={'source': [src_lang], 'target': [trg_lang]}
     eval_lang_dict = {'source': [src_lang], 'target': [trg_lang]}
 
@@ -205,9 +217,9 @@ if __name__ == "__main__":
                                           bilingual=True)
 
     os.makedirs(output_data_path, exist_ok=True)
-    n_train = 1e7
-    n_test = 1e7
-    n_dev = 1e7
+    n_train = args.n_train[0]
+    n_test = args.n_test[0]
+    n_dev = args.n_dev[0]
     obj.save_file(output_data_path + "/train.{}".format(src_lang),
                   split_type='train', data_type='source', keeplines=n_train)
     obj.save_file(output_data_path + "/train.{}".format(trg_lang),

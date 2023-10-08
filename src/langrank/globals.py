@@ -179,6 +179,22 @@ L2TEDHEADER = {
     "urd": "ur",  # Urdu
     "vie": "vi",  # Vietnamese
 }
+FEATURES_NAMES_MT = [
+    "Overlap word-level",
+    "Overlap subword-level",
+    "Transfer lang dataset size",
+    "Target lang dataset size",
+    "Transfer over target size ratio",
+    "Transfer lang TTR",
+    "Target lang TTR",
+    "Transfer target TTR distance",
+    "GENETIC",
+    "SYNTACTIC",
+    "FEATURAL",
+    "PHONOLOGICAL",
+    "INVENTORY",
+    "GEOGRAPHIC",
+]
 
 GROUND_TRUTH_DIR = "ground_truth_rankings"
 ORIGINAL_PAPER_GROUND_TRUTH_FILENAME = (

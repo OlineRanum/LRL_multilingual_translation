@@ -40,8 +40,9 @@ def shap_within_tolerance(
     for LRL, mask_LRL, predict_contribs_LRL in zip(LRLs, k_mask, predict_contribs):
         # Track the indices of these candidates
         candidates_indices = np.where(mask_LRL)[0]
-        candidates_indices_corrected = candidates_indices[candidates_indices > LRL] + 1
-        candidates = np.array(globals.I2L)[candidates_indices_corrected]
+        # Correct indices for diagonal
+        candidates_indices[candidates_indices > LRL] += 1
+        candidates = np.array(globals.I2L)[candidates_indices]
         candidates_within_tol.append(candidates)
         # Get features of candidates with score within tolerance
         features_candidates = predict_contribs_LRL[mask_LRL]
@@ -80,8 +81,8 @@ def heatmap_distances(LRLs, candidates_within_tol, distances_within_tol):
     for LRL, candidates, distance in zip(
         LRLs, candidates_within_tol, distances_within_tol
     ):
-        plt.imshow(distance, cmap="viridis")  # You can change the colormap as needed
-        plt.colorbar()  # Add a colorbar to the plot
+        plt.imshow(distance, cmap="viridis")
+        plt.colorbar()
         plt.title(f"Heatmap source: {LRL}")
         plt.xlabel("X-axis")
         plt.ylabel("Y-axis")
@@ -90,12 +91,96 @@ def heatmap_distances(LRLs, candidates_within_tol, distances_within_tol):
         plt.show()
 
 
-# # example:
-# LRLs=["aze"]
-# candidates_within_tol, predict_contribs_within_tol, distances_within_tol, order_by_contribs_within_tol = shap_within_tolerance(LRLs=LRLs, tolerance=1.5)
+def plot_shap_pairs(
+    LRL,
+    LRLs,
+    candidates_within_tol,
+    predict_contribs_within_tol,
+    distances_within_tol,
+    order_by_contribs_within_tol,
+):
+    # Get info for the specific LRL
+    assert LRL in LRLs
+    index = LRLs.index(LRL)
+    language_pairs = order_by_contribs_within_tol[index]
+    shap_values = predict_contribs_within_tol[index]
+    candidates = candidates_within_tol[index]
+    distances = distances_within_tol[index]
 
+    C2S = {candidate: shap for candidate, shap in zip(candidates, shap_values)}
+    C2I = {candidate: i for i, candidate in enumerate(candidates)}
+
+    num_pairs = len(language_pairs)
+    fig, axs = plt.subplots(num_pairs, figsize=(10, 6 * num_pairs))
+    x_values = np.arange(shap_values.shape[-1])
+    bar_width = 0.35
+
+    # Create a color map based on unique languages
+    unique_languages = list(set(np.ravel(language_pairs)))
+    color_map = {
+        lang: plt.cm.get_cmap("tab10")(i) for i, lang in enumerate(unique_languages)
+    }
+
+    # Plot bar plots for each pair
+    for i, pair in enumerate(language_pairs):
+        ax = axs[i]
+        for lang_idx, lang in enumerate(pair):
+            ax.bar(
+                x_values + lang_idx * bar_width,
+                C2S[lang],
+                width=bar_width,
+                label=lang,
+                color=color_map[lang],
+            )
+        distance_pair = distances[C2I[pair[0]], [C2I[pair[1]]]].item()
+
+        ax.set_xlabel("Features")
+        ax.set_ylabel("SHAP Values")
+        ax.set_title(
+            f"SHAP Values for {pair[0]} and {pair[1]} with distance {distance_pair:0.4f}"
+        )
+        ax.set_xticks(x_values + bar_width / 2)
+        ax.set_xticklabels(
+            globals.FEATURES_NAMES_MT, rotation=45, ha="right", fontsize=10
+        )
+        ax.legend()
+
+    plt.tight_layout()
+    plt.show()
+
+
+# # example:
+# LRLs = [
+#     "ur",
+#     "eo",
+#     "ms",
+#     "az",
+#     "ta",
+#     "bn",
+#     "kk",
+#     "be",
+#     "eu",
+#     "bs",
+# ]
+# # Pick one of the languages from LRLs. Picking one is easier because then you get it's easier to tune theg tolerance
+# # For example:
+# LRLs = ["be"]
+# TEDHEADER2L = dict((v, k) for k, v in globals.L2TEDHEADER.items())
+# LRLs = [TEDHEADER2L[LRL] for LRL in LRLs]
+# # So here a bit tuning of the tolerance parameter is needed.
+# # Try to find a small tolerance that still gives enough candidates so there is a interesting difference difference in the distances.
+# # That will differ per LRL
+# # Yes, this tolerance measure is hard to qualitatively interpret.
+# (
+#     candidates_within_tol,
+#     predict_contribs_within_tol,
+#     distances_within_tol,
+#     order_by_contribs_within_tol,
+# ) = shap_within_tolerance(LRLs=LRLs, tolerance=0.7)
+
+# # Leave this unchanged
 # heatmap_distances(LRLs, candidates_within_tol, distances_within_tol)
-# print(order_by_contribs_within_tol)
+# plot_shap_pairs(LRLs[0], LRLs, candidates_within_tol, predict_contribs_within_tol, distances_within_tol, order_by_contribs_within_tol)
 
 
 """DEPRECATED!:"""

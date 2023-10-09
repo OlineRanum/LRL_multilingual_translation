@@ -1,0 +1,42 @@
+!Experiment
+  name: test_az_hu_fa_epoch100_multilingual
+  exp_global: !ExpGlobal
+    placeholders:
+    # Enter name of merged files
+        DATA_IN: src/preprocess/preprocessed_data/merged_files/az_hu_fa
+        DATA_EV: src/preprocess/preprocessed_data/en_az
+        DATA_OUT: output/en_az
+        SRC_LAN: az
+        TRG_LAN: en
+  model: !LoadSerialized
+    # Enter name of trained model
+    filename: 'models/preproc_az_hu_fa_epoch30_multilingual.mod'
+    path: model
+  train: !SimpleTrainingRegimen
+    trainer: !AdamTrainer
+      alpha: 0.0002
+    batcher: !WordSrcBatcher
+      avg_batch_size: 32
+    lr_decay: 0.5
+    run_for_epochs: 1
+    patience: 500
+    initial_patience: 500
+    src_file: '{DATA_IN}/merged_src_train.txt'
+    trg_file: '{DATA_IN}/merged_tar_train.txt'
+    dev_tasks:
+      - !AccuracyEvalTask
+        eval_metrics: bleu
+        src_file: '{DATA_IN}/merged_src_dev.txt'
+        ref_file: '{DATA_IN}/merged_tar_dev.txt'
+        hyp_file: '{DATA_OUT}/{EXP}.dev_hyp.txt'
+      - !LossEvalTask
+        src_file: '{DATA_IN}/merged_src_dev.txt'
+        ref_file: '{DATA_IN}/merged_tar_dev.txt'
+  evaluate:
+  - !AccuracyEvalTask
+    eval_metrics: bleu
+    src_file: '{DATA_EV}/test.tok.norm.{SRC_LAN}'
+    ref_file: '{DATA_EV}/test.norm.{TRG_LAN}'
+    hyp_file: '{DATA_OUT}/{EXP}.test_hyp'
+
+

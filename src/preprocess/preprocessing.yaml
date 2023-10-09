@@ -5,10 +5,10 @@
   exp_global: !ExpGlobal
     # define some named strings that can be used throughout the experiment config:
     placeholders:
-      DATA_IN: src/preprocess/split_data/en_es
-      DATA_OUT: src/preprocess/preprocessed_data/en_es
-      SRC_LAN: es
+      SRC_LAN: hu
       TAR_LAN: en
+      DATA_IN: src/preprocess/split_data/{TAR_LAN}_{SRC_LAN}
+      DATA_OUT: src/preprocess/preprocessed_data/{TAR_LAN}_{SRC_LAN}
   preproc: !PreprocRunner
     overwrite: False
     tasks:

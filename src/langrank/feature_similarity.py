@@ -149,6 +149,63 @@ def plot_shap_pairs(
     plt.show()
 
 
+def shap_language_group(
+    LRL,
+    language_group,
+    modelfilename=os.path.join("pretrained", "MT", "lgbm_model_mt_all.txt"),
+    X_file=os.path.join("tmp", "train_mt.csv"),
+):
+    n_candidates = 53
+    # LRLs = np.array([globals.L2I[LRL] for LRL in LRLs])
+    X, _ = lr.load_svmlight_file(X_file)
+    n_features = X.shape[-1]
+    total_n_lang = 54
+    X = X.toarray().reshape((total_n_lang, n_candidates, n_features))
+    X = X[globals.L2I[LRL]]
+    X = X.reshape((n_candidates, n_features))
+    X = X[np.array([globals.L2I[language] for language in language_group])]
+    bst = lgb.Booster(model_file=modelfilename)
+    # Predict with pred_contrib
+    predict_contribs = bst.predict(X, pred_contrib=True)
+    predict_contribs = predict_contribs.reshape((len(language_group), n_features + 1))
+    predict_contribs = predict_contribs[:, :-1]
+    return predict_contribs
+
+
+def plot_shap_groups(
+    LRL,
+    language_group,
+    shap_values,
+):
+    plt.figure(figsize=(10, 6))
+    x_values = np.arange(shap_values.shape[-1])
+    bar_width = 0.25
+
+    # Plot bar plots for each pair
+    for lang_idx, (lang, shap) in enumerate(zip(language_group, shap_values)):
+        plt.bar(
+            x_values + lang_idx * bar_width,
+            shap,
+            width=bar_width,
+            label=lang,
+        )
+
+    plt.xlabel("Features")
+    plt.ylabel("SHAP Values")
+    plt.title(f"SHAP Values for {language_group} with source {LRL}")
+    plt.xticks(
+        x_values + bar_width / 3,
+        labels=globals.FEATURES_NAMES_MT,
+        rotation=45,
+        ha="right",
+        fontsize=10,
+    )
+    plt.legend()
+
+    plt.tight_layout()
+    plt.show()
+
+
 # # example:
 # LRLs = [
 #     "ur",

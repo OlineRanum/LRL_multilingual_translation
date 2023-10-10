@@ -41,7 +41,7 @@ def shap_within_tolerance(
         # Track the indices of these candidates
         candidates_indices = np.where(mask_LRL)[0]
         # Correct indices for diagonal
-        candidates_indices[candidates_indices > LRL] += 1
+        candidates_indices[candidates_indices >= LRL] += 1
         candidates = np.array(globals.I2L)[candidates_indices]
         candidates_within_tol.append(candidates)
         # Get features of candidates with score within tolerance
@@ -163,7 +163,10 @@ def shap_language_group(
     X = X.toarray().reshape((total_n_lang, n_candidates, n_features))
     X = X[globals.L2I[LRL]]
     X = X.reshape((n_candidates, n_features))
-    X = X[np.array([globals.L2I[language] for language in language_group])]
+    group_indices = np.array([globals.L2I[language] for language in language_group])
+    # correct for missing diagonal X
+    group_indices[group_indices > globals.L2I[LRL]] -= 1
+    X = X[group_indices]
     bst = lgb.Booster(model_file=modelfilename)
     # Predict with pred_contrib
     predict_contribs = bst.predict(X, pred_contrib=True)

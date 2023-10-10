@@ -4,6 +4,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import lightgbm as lgb
 import os
+from sklearn.manifold import TSNE
 
 
 def shap_within_tolerance(
@@ -206,6 +207,65 @@ def plot_shap_groups(
     plt.legend()
 
     plt.tight_layout()
+    plt.show()
+
+
+def tnse_language_group(
+    LRL,
+    indices_candidates_to_cluster,
+    language_group,
+    modelfilename=os.path.join("pretrained", "MT", "lgbm_model_mt_all.txt"),
+    X_file=os.path.join("tmp", "train_mt.csv"),
+):
+    n_candidates = 53
+    # LRLs = np.array([globals.L2I[LRL] for LRL in LRLs])
+    X, _ = lr.load_svmlight_file(X_file)
+    n_features = X.shape[-1]
+    total_n_lang = 54
+    X = X.toarray().reshape((total_n_lang, n_candidates, n_features))
+    X = X[globals.L2I[LRL]]
+    X = X.reshape((n_candidates, n_features))
+    group_indices = np.array(
+        [globals.L2I[language] for language in indices_candidates_to_cluster]
+    )
+    # correct for missing diagonal X
+    group_indices[group_indices > globals.L2I[LRL]] -= 1
+    X = X[group_indices]
+    bst = lgb.Booster(model_file=modelfilename)
+
+    predict_contribs = bst.predict(X, pred_contrib=True)
+    predict_contribs = predict_contribs.reshape(
+        (len(indices_candidates_to_cluster), n_features + 1)
+    )
+    predict_scores = predict_contribs.sum(-1)
+    predict_contribs = predict_contribs[:, :-1]
+    tnse = TSNE()
+    X_tsne = tnse.fit_transform(predict_contribs)
+
+    # Create a scatter plot
+    plt.figure(figsize=(8, 6))
+    plt.scatter(
+        X_tsne[:, 0], X_tsne[:, 1], c=predict_scores, cmap="viridis"
+    )  # Color points by class label
+    # Highlight the data points with indices in 'language_group'
+    highlighted_points = X_tsne[np.array([globals.L2I[h] for h in language_group])]
+    plt.scatter(
+        highlighted_points[:, 0],
+        highlighted_points[:, 1],
+        c="red",
+        marker="o",
+        s=100,
+        label="Highlighted",
+    )
+    for i, lang in enumerate(language_group):
+        plt.text(
+            highlighted_points[i, 0], highlighted_points[i, 1], f"{lang}", fontsize=12
+        )
+
+    plt.title(f"t-SNE Visualization. Source LRL: {LRL}")
+    plt.xlabel("Dimension 1")
+    plt.ylabel("Dimension 2")
+    plt.colorbar(label="Relevance score")
     plt.show()
 
 

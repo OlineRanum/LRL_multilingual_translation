@@ -245,7 +245,6 @@ def tnse_language_group(
     tnse = TSNE()
     X_tsne = tnse.fit_transform(predict_contribs)
 
-    # Create a scatter plot
     plt.figure(figsize=(8, 6))
     plt.scatter(
         X_tsne[:, 0],
@@ -253,8 +252,8 @@ def tnse_language_group(
         c=predict_scores,
         cmap="viridis",
         s=scatter_point_size,
-    )  # Color points by class label
-    # Highlight the data points with indices in 'language_group'
+    )
+    plt.colorbar(label="Relevance score")
     highlighted_points_index = np.array([globals.L2I[h] for h in language_group])
     highlighted_points_index[highlighted_points_index > globals.L2I[LRL]] -= 1
     highlighted_points = X_tsne[highlighted_points_index]
@@ -281,7 +280,6 @@ def tnse_language_group(
     )
     plt.xlabel("t-SNE dimension 1")
     plt.ylabel("t-SNE dimension 2")
-    plt.colorbar(label="Relevance score")
     plt.show()
 
 
@@ -319,13 +317,19 @@ def tnse_language_group(
 # plot_shap_pairs(LRLs[0], LRLs, candidates_within_tol, predict_contribs_within_tol, distances_within_tol, order_by_contribs_within_tol)
 
 
-# groups = [["bel", ["rus", "ukr", "hun"]], ["aze", ["fas", "tur", "hun"]], ["spa", ["por", "glg", "kaz"]]]
+# groups = [["epo", ["deu", "bul", "vie"]], ["bel", ["rus", "ukr", "hun"]], ["aze", ["fas", "tur", "hun"]], ["spa", ["por", "glg", "kaz"]]]
 # for LRL, language_group in groups:
-#     shap_values = shap_language_group(LRL, language_group)
-#     plot_shap_groups(LRL, language_group, shap_values)
+#     # shap_values, relevance_scores = shap_language_group(LRL, language_group)
+#     # plot_shap_groups(LRL, language_group, shap_values, relevance_scores)
 #     all_candidates = [lang for lang in globals.I2L if lang != LRL]
 #     tnse_language_group(
 #         LRL,
 #         all_candidates,
 #         language_group,
 #     )
+#     # For seeing where all languages lay
+#     # tnse_language_group(
+#     #     LRL,
+#     #     all_candidates,
+#     #     all_candidates,
+#     # )

@@ -173,26 +173,30 @@ def shap_language_group(
     # Predict with pred_contrib
     predict_contribs = bst.predict(X, pred_contrib=True)
     predict_contribs = predict_contribs.reshape((len(language_group), n_features + 1))
-    predict_contribs = predict_contribs[:, :-1]
-    return predict_contribs
+    relevance_scores = predict_contribs.sum(-1)
+    shap_values = predict_contribs[:, :-1]
+    return shap_values, relevance_scores
 
 
 def plot_shap_groups(
     LRL,
     language_group,
     shap_values,
+    relevance_scores,
 ):
     plt.figure(figsize=(10, 6))
     x_values = np.arange(shap_values.shape[-1])
     bar_width = 0.25
 
     # Plot bar plots for each pair
-    for lang_idx, (lang, shap) in enumerate(zip(language_group, shap_values)):
+    for lang_idx, (lang, shap, rel_score) in enumerate(
+        zip(language_group, shap_values, relevance_scores)
+    ):
         plt.bar(
             x_values + lang_idx * bar_width,
             shap,
             width=bar_width,
-            label=globals.L2full_name[lang],
+            label=f"{globals.L2full_name[lang]}; relevance score: {rel_score:0.4f}",
         )
 
     plt.xlabel("Features")

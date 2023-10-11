@@ -64,9 +64,7 @@ def shap_within_tolerance(
             sorted_by_distance, distances_masked.shape
         )
         # Create a 2D array of pairs of indices with duplicate (by symmetry) or diagonals
-        pairs = np.column_stack((sorted_row_indices, sorted_col_indices))[
-            : mask_LRL.sum()
-        ]
+        pairs = np.column_stack((sorted_row_indices, sorted_col_indices))[: mask.sum()]
         # Translate these indices into the corresponding languages
         order_by_contribs_within_tol.append(candidates[pairs])
 

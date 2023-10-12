@@ -1,9 +1,9 @@
 # DLNLP_Project
-Project on multilingual translation for DLNLP
+Project on low-resource multilingual translation for DLNLP.
 
 ## Installation
 
-For installing environment compatible with all components of the project and clone relevant repos (linux/ubuntu)
+Installing the environment compatible with all components of the project and clone relevant repos (linux/ubuntu):
 
 ``` Installing and configuring repo
 git clone https://github.com/OlineRanum/DLNLP_Project.git
@@ -16,37 +16,133 @@ bash setup_ubuntu_gpu.sh
 ```
 
 
-## Get Data
+## Collecting data
 
-Download data to correct folder (I've also added this to the setup file, but for your convenience)
+Download data to correct folder (Data aquisition is also in the setup_ubuntu file, but for extra convenience)
 
 ```
 bash get_data.sh
 ```
 
+## Preprocessing
 
-## Run code 
+After setting up the environment, data can be preprocessed. Code for this is in the ```src/preprocess``` folder. 
 
-### Preprocess data
+Preprocessing MUST be ran from main directory. Languages are specified using their lowercase two-letter code from all_talks.tsv (English -> en, Belarussian -> be, etc.) 
 
-NB! Language pairs is set in ted_reader and in all yaml files. 
-All commands run from main directory. 
-
-#### Split raw data into train-dev-test sets
+NOTE: All yaml files have an experiment name:
 ```
-python3 src/preprocess/ted_reader.py
+!Experiment
+  name: preproc_eo_de_epoch100_multilingual
+``` 
+These must be changed each time the file is called, it will not start otherwise.
+
+#### **Create Belarussian to English corpus with 100k max sentences for train, dev and test set respectively:**
+``` 
+python src/preprocess/ted_reader.py be 100000 100000 100000
 ```
-#### Preprocess data
-```
+
+#### **Preprocess corpus (tokenization, normalization, length filtering):**
+```py
+# Specify source and target language through SRC_LAN and TAR_LAN in preprocessing.yaml
 xnmt src/preprocess/preprocessing.yaml
 ```
 
-#### Train models
+## Training
+
+### Training bilingual models
+To be able to train a bilingual model, ```src/preprocess/preprocessed_data``` must contain one folder named \<target language>_<source language\>, which was created by ```ted_reader.py```:
+
 ```
-xnmt train_preproc.yaml
-```
-or
-```
-xnmt train.yaml
+preprocess
+|
+└---preprocessed_data
+|    |   en_be
+    ...
+...
 ```
 
+Source and target language must be specified in through SRC_LAN and TAR_LAN ```train_preproc.yaml```, same as in the preprocessing step.
+
+#### **Train bilingual model on GPU through PyTorch**:
+```py
+# Specify source and target language through SRC_LAN and TAR_LAN in train_preproc.yaml
+xnmt train_preproc.yaml --backend torch --gpu
+```
+
+### Training multilingual models
+To be able to train a multilingual model with $n$ transfer languages, we will need to $n$ monolingual corpora. Thus, ```src/preprocess/preprocessed_data``` must contain $n$ folders with the same target language by using ```ted_reader.py``` for each language:
+
+```
+preprocess
+|
+└---preprocessed_data
+|    |   en_be
+|    |   en_hu
+|    |   en_az
+|    ...
+...
+```
+Create a folder to store your multilingual corpus in:
+```
+mkdir src/preprocess/preprocessed_data/merged_files/
+mkdir src/preprocess/preprocessed_data/merged_files/be_hu_az
+```
+
+Combine the corpora by editing and running the notebook:
+```py
+jupyter notebook src/preprocess/preprocessed_data/
+```
+
+```py
+###########################################
+### In build_multilingual_dataset.ipynb ###
+
+# SET languages
+languages = ['be', 'hu', 'fa']
+
+# SET number of sentences extracted per language for training
+n_points = [4500, 10000, 10000]
+
+# SET number of sentences extracted per language for dev
+n_points_dev = [450, 1000, 1000]
+###########################################
+
+```
+
+Finally, specify the multilingual corpus in ```train_preproc_multilingual.yml``` by editing ```DATA_IN```, ```DATA_EV``` and ```DATA_OUT``` and train the model.
+
+#### **Train multilingual model on GPU through PyTorch**:
+```py
+# Specify source and target language by editing SRC_LAN and TAR_LAN in this file. Also specify which corpus to use by editing DATA_IN, DATA_EV and where to save it by editing DATA_OUT.
+xnmt train_preproc_multilingual.yaml --backend torch --gpu
+```
+
+## Example
+We will train a ```be-hu-fa -> en``` model.
+
+```py
+# Load data 
+bash get_data.sh
+
+# Split the data into the desired source languages
+conda activate dlnlp
+python src/preprocess/ted_reader.py be 100000 100000 100000
+python src/preprocess/ted_reader.py hu 100000 100000 100000
+python src/preprocess/ted_reader.py fa 100000 100000 100000
+
+# Preprocess the data to usable formats for training.
+python src/preprocess/preprocessing.yaml # changed SRC_LAN to be
+python src/preprocess/preprocessing.yaml # changed SRC_LAN to hu
+python src/preprocess/preprocessing.yaml # changed SRC_LAN to fa
+
+# Create folders to put combined corpora in
+mkdir src/preprocess/preprocessed_data/merged_files/
+mkdir src/preprocess/preprocessed_data/merged_files/be_hu_az
+
+# Combine corpora by editing n_points and languages in the notebook
+jupyter notebook src/preprocess
+
+# Train multilingual model on GPU after editing SRC_LAN, TAR_LAN, DATA_IN, DATA_EV, and DATA_OUT
+xnmt train_preproc_multilingual.yaml --backend torch --gpu
+```

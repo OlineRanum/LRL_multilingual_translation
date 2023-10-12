@@ -4,6 +4,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import lightgbm as lgb
 import os
+from sklearn.manifold import TSNE
 
 
 def shap_within_tolerance(
@@ -41,7 +42,7 @@ def shap_within_tolerance(
         # Track the indices of these candidates
         candidates_indices = np.where(mask_LRL)[0]
         # Correct indices for diagonal
-        candidates_indices[candidates_indices > LRL] += 1
+        candidates_indices[candidates_indices >= LRL] += 1
         candidates = np.array(globals.I2L)[candidates_indices]
         candidates_within_tol.append(candidates)
         # Get features of candidates with score within tolerance
@@ -63,9 +64,7 @@ def shap_within_tolerance(
             sorted_by_distance, distances_masked.shape
         )
         # Create a 2D array of pairs of indices with duplicate (by symmetry) or diagonals
-        pairs = np.column_stack((sorted_row_indices, sorted_col_indices))[
-            : mask_LRL.sum()
-        ]
+        pairs = np.column_stack((sorted_row_indices, sorted_col_indices))[: mask.sum()]
         # Translate these indices into the corresponding languages
         order_by_contribs_within_tol.append(candidates[pairs])
 
@@ -83,11 +82,14 @@ def heatmap_distances(LRLs, candidates_within_tol, distances_within_tol):
     ):
         plt.imshow(distance, cmap="viridis")
         plt.colorbar()
-        plt.title(f"Heatmap source: {LRL}")
+        plt.title(f"Heatmap source: {globals.L2full_name[LRL]}")
         plt.xlabel("X-axis")
         plt.ylabel("Y-axis")
-        plt.xticks(np.arange(distance.shape[0]), candidates)
-        plt.yticks(np.arange(distance.shape[0]), candidates)
+        candidates_fullname = [
+            globals.L2full_name[candidate] for candidate in candidates
+        ]
+        plt.xticks(np.arange(distance.shape[0]), candidates_fullname)
+        plt.yticks(np.arange(distance.shape[0]), candidates_fullname)
         plt.show()
 
 
@@ -129,7 +131,7 @@ def plot_shap_pairs(
                 x_values + lang_idx * bar_width,
                 C2S[lang],
                 width=bar_width,
-                label=lang,
+                label=globals.L2full_name[lang],
                 color=color_map[lang],
             )
         distance_pair = distances[C2I[pair[0]], [C2I[pair[1]]]].item()
@@ -137,7 +139,7 @@ def plot_shap_pairs(
         ax.set_xlabel("Features")
         ax.set_ylabel("SHAP Values")
         ax.set_title(
-            f"SHAP Values for {pair[0]} and {pair[1]} with distance {distance_pair:0.4f}"
+            f"SHAP Values for {globals.L2full_name[pair[0]]} and {globals.L2full_name[pair[1]]} with distance {distance_pair:0.4f}"
         )
         ax.set_xticks(x_values + bar_width / 2)
         ax.set_xticklabels(
@@ -146,6 +148,142 @@ def plot_shap_pairs(
         ax.legend()
 
     plt.tight_layout()
+    plt.show()
+
+
+def shap_language_group(
+    LRL,
+    language_group,
+    modelfilename=os.path.join("pretrained", "MT", "lgbm_model_mt_all.txt"),
+    X_file=os.path.join("tmp", "train_mt.csv"),
+):
+    n_candidates = 53
+    # LRLs = np.array([globals.L2I[LRL] for LRL in LRLs])
+    X, _ = lr.load_svmlight_file(X_file)
+    n_features = X.shape[-1]
+    total_n_lang = 54
+    X = X.toarray().reshape((total_n_lang, n_candidates, n_features))
+    X = X[globals.L2I[LRL]]
+    X = X.reshape((n_candidates, n_features))
+    group_indices = np.array([globals.L2I[language] for language in language_group])
+    # correct for missing diagonal X
+    group_indices[group_indices > globals.L2I[LRL]] -= 1
+    X = X[group_indices]
+    bst = lgb.Booster(model_file=modelfilename)
+    # Predict with pred_contrib
+    predict_contribs = bst.predict(X, pred_contrib=True)
+    predict_contribs = predict_contribs.reshape((len(language_group), n_features + 1))
+    relevance_scores = predict_contribs.sum(-1)
+    shap_values = predict_contribs[:, :-1]
+    return shap_values, relevance_scores
+
+
+def plot_shap_groups(
+    LRL,
+    language_group,
+    shap_values,
+    relevance_scores,
+):
+    plt.figure(figsize=(10, 6))
+    x_values = np.arange(shap_values.shape[-1])
+    bar_width = 0.25
+
+    # Plot bar plots for each pair
+    for lang_idx, (lang, shap, rel_score) in enumerate(
+        zip(language_group, shap_values, relevance_scores)
+    ):
+        plt.bar(
+            x_values + lang_idx * bar_width,
+            shap,
+            width=bar_width,
+            label=f"{globals.L2full_name[lang]}; relevance score: {rel_score:0.4f}",
+        )
+
+    plt.xlabel("Features")
+    plt.ylabel("Shapley Values")
+    plt.title(
+        f"Shapley values of candidates from tested pairs for source LRL {globals.L2full_name[LRL]}"
+    )
+    plt.xticks(
+        x_values + bar_width / 3,
+        labels=globals.FEATURES_NAMES_MT,
+        rotation=45,
+        ha="right",
+        fontsize=10,
+    )
+    plt.legend()
+
+    plt.tight_layout()
+    plt.show()
+
+
+def tnse_language_group(
+    LRL,
+    candidates_to_cluster,
+    language_group,
+    modelfilename=os.path.join("pretrained", "MT", "lgbm_model_mt_all.txt"),
+    X_file=os.path.join("tmp", "train_mt.csv"),
+):
+    scatter_point_size = 40
+    n_candidates = 53
+    X, _ = lr.load_svmlight_file(X_file)
+    n_features = X.shape[-1]
+    total_n_lang = 54
+    X = X.toarray().reshape((total_n_lang, n_candidates, n_features))
+    X = X[globals.L2I[LRL]]
+    X = X.reshape((n_candidates, n_features))
+    group_indices = np.array(
+        [globals.L2I[language] for language in candidates_to_cluster]
+    )
+    # correct for missing diagonal X
+    group_indices[group_indices > globals.L2I[LRL]] -= 1
+    X = X[group_indices]
+    bst = lgb.Booster(model_file=modelfilename)
+
+    predict_contribs = bst.predict(X, pred_contrib=True)
+    predict_contribs = predict_contribs.reshape(
+        (len(candidates_to_cluster), n_features + 1)
+    )
+    predict_scores = predict_contribs.sum(-1)
+    predict_contribs = predict_contribs[:, :-1]
+    tnse = TSNE()
+    X_tsne = tnse.fit_transform(predict_contribs)
+
+    plt.figure(figsize=(8, 6))
+    plt.scatter(
+        X_tsne[:, 0],
+        X_tsne[:, 1],
+        c=predict_scores,
+        cmap="viridis",
+        s=scatter_point_size,
+    )
+    plt.colorbar(label="Relevance score")
+    highlighted_points_index = np.array([globals.L2I[h] for h in language_group])
+    highlighted_points_index[highlighted_points_index > globals.L2I[LRL]] -= 1
+    highlighted_points = X_tsne[highlighted_points_index]
+    plt.scatter(
+        highlighted_points[:, 0],
+        highlighted_points[:, 1],
+        marker="o",
+        facecolors="none",
+        s=scatter_point_size + 20,
+        edgecolors="r",
+        label="Highlighted",
+    )
+    for i, lang in enumerate(language_group):
+        plt.text(
+            highlighted_points[i, 0],
+            highlighted_points[i, 1],
+            f" {globals.L2full_name[lang]}",
+            fontsize=12,
+            horizontalalignment="left",
+        )
+
+    plt.title(
+        f"t-SNE Visualization candidates for source LRL {globals.L2full_name[LRL]}"
+    )
+    plt.xlabel("t-SNE dimension 1")
+    plt.ylabel("t-SNE dimension 2")
     plt.show()
 
 
@@ -183,85 +321,19 @@ def plot_shap_pairs(
 # plot_shap_pairs(LRLs[0], LRLs, candidates_within_tol, predict_contribs_within_tol, distances_within_tol, order_by_contribs_within_tol)
 
 
-"""DEPRECATED!:"""
-
-# def feature_similarity_top_k(
-#     k=10,
-#     model_filename=os.path.join("pretrained", "MT", "lgbm_model_mt_all.txt"),
-#     feature_importance_type="gain",
-# ):
-#     # Use the ground truth ranking
-#     rank = eu.get_subset_rankings(globals.I2L)
-#     # Don't consider the source language as candidate transfer language
-#     # 2 * cols ensure that the diagonals have the worst ranking
-#     rows, cols = rank.shape
-#     np.fill_diagonal(rank, 2 * cols)
-#     # Get the top-k transfer candidates
-#     top_k = np.argsort(rank, axis=1)[:, :k]
-#     # Load the precompute features
-#     train_file = "tmp/train_mt.csv"
-#     X_train, _ = lr.load_svmlight_file(train_file)
-#     n_features = X_train.shape[-1]
-#     features = X_train.toarray().reshape((rows, cols - 1, n_features))
-#     # Standardize the features
-#     features_shape = features.shape
-#     features_reshaped = features.reshape(-1, 14)
-#     mean = np.mean(features_reshaped, axis=0)
-#     std = np.std(features_reshaped, axis=0)
-#     features = ((features_reshaped - mean) / std).reshape(features_shape)
-#     # Correct for index mismatch since the features don't have the source language==candidate transfer cases in the array
-#     top_k_shifted = top_k.copy()
-#     for i, ranking in enumerate(top_k_shifted):
-#         ranking[ranking > i] -= 1
-#     # Get the top k features for each source language
-#     features_top_k = features[np.arange(rows)[:, None], top_k_shifted]
-#     # Reweight the features according to the importance weight of the ranker
-#     # We use their best checkpoint
-#     feature_importance = (
-#         lgb.Booster(model_file=model_filename)
-#         .feature_importance(feature_importance_type)
-#         .astype("float64")
+# groups = [["epo", ["deu", "bul", "vie"]], ["bel", ["rus", "ukr", "hun"]], ["aze", ["fas", "tur", "hun"]], ["spa", ["por", "glg", "kaz"]]]
+# for LRL, language_group in groups:
+#     # shap_values, relevance_scores = shap_language_group(LRL, language_group)
+#     # plot_shap_groups(LRL, language_group, shap_values, relevance_scores)
+#     all_candidates = [lang for lang in globals.I2L if lang != LRL]
+#     tnse_language_group(
+#         LRL,
+#         all_candidates,
+#         language_group,
 #     )
-#     feature_importance /= feature_importance.sum()
-#     features_top_k *= feature_importance[None, :][None, :]
-#     # Compute Euclidean distances
-#     distances = np.linalg.norm(
-#         features_top_k[:, :, np.newaxis, :] - features_top_k[:, np.newaxis, :, :],
-#         axis=-1,
-#     )
-#     # Distance is symmetric and we don't care about the diagonals
-#     mask = np.tri(k, k=-1, dtype=bool)
-#     n_meaningfull_indices = mask.sum()
-#     distances[:, mask] = -np.inf
-#     feature_similarity = np.empty((rows, n_meaningfull_indices, 2), dtype=int)
-#     for i, dist in enumerate(distances):
-#         # Find the indices that would sort the distances in descending order
-#         sorted_indices = np.argsort(dist, axis=None)[::-1]
-#         # Calculate the corresponding row and column indices
-#         sorted_row_indices, sorted_col_indices = np.unravel_index(
-#             sorted_indices, dist.shape
-#         )
-#         # Create a 2D array of pairs of indices with duplicate (by symmetry) or diagonals
-#         pairs = np.column_stack((sorted_row_indices, sorted_col_indices))[
-#             :n_meaningfull_indices
-#         ]
-#         # Translate these indices into the corresponding language indices
-#         feature_similarity[i] = top_k[i][pairs]
-#     # (ranking by feature similarity score, the rankings by ground truth)
-#     # TODO also add actual similarity score. Prob just make two function and sort only in the other one
-#     return feature_similarity, top_k, distances
-
-
-# feature_similarity, top_k, distances = feature_similarity_top_k()
-# # np.array(globals.I2L)[feature_similarity]
-
-# for i in range(5):
-#     plt.imshow(distances[i], cmap='viridis')  # You can change the colormap as needed
-#     plt.colorbar()  # Add a colorbar to the plot
-#     plt.title(f"Heatmap source: {globals.I2L[i]}")
-#     plt.xlabel("X-axis")
-#     plt.ylabel("Y-axis")
-#     lang_names = np.array(globals.I2L)[top_k[i]]
-#     plt.xticks(np.arange(distances[i].shape[0]), lang_names)
-#     plt.yticks(np.arange(distances[i].shape[0]), lang_names)
-#     plt.show()
+#     # For seeing where all languages lay
+#     # tnse_language_group(
+#     #     LRL,
+#     #     all_candidates,
+#     #     all_candidates,
+#     # )

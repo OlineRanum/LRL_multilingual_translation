@@ -31,18 +31,6 @@ python3 preprocess_datasets.py (uncomment  # preprocess_datasets())
 precompute_features.py
 ```
 
-
-
-
-
-## Collecting data
-
-Download data to correct folder (Data aquisition is also in the setup_ubuntu file, but for extra convenience)
-
-```
-bash get_data.sh
-```
-
 ## Preprocessing
 
 After setting up the environment, data can be preprocessed. Code for this is in the ```src/preprocess``` folder. 

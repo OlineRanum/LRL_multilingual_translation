@@ -15,6 +15,25 @@ conda activate dlnlp
 bash setup_ubuntu_gpu.sh
 ```
 
+For mac:
+```
+git clone https://github.com/OlineRanum/DLNLP_Project.git
+cd DLNLP_Project
+
+conda env create -f env.yml
+conda activate dlnlp
+
+cd src
+cd langrank
+get_data.sh
+get_data.sh
+python3 preprocess_datasets.py (uncomment  # preprocess_datasets())
+precompute_features.py
+```
+
+
+
+
 
 ## Get Data
 

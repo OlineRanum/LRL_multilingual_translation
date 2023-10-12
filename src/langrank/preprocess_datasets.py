@@ -112,5 +112,5 @@ def preprocess_subword_datasets(
 
 
 if __name__ == "__main__":
-    # preprocess_datasets()
+    preprocess_datasets()
     preprocess_subword_datasets()

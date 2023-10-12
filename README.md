@@ -31,7 +31,7 @@ precompute_features.py
 ```
 
 ## Analysis contrast 
-To do the analysis of contrast between candidates, use the functions defined in ```src/langrank/feature_similarity.py```. This involves a lot of plots, so it is conventient to use these functions in a notebook. See the comments and commented code at the bottom of ``` feature_similarity.py``` for examples and instructions for how to do the analysis. 
+To do the analysis of contrast between candidates, use the functions defined in ```src/langrank/feature_similarity.py```. This involves a lot of plots, so it is conventient to use these functions in a notebook. See the comments and commented code at the bottom of ```feature_similarity.py``` for examples and instructions for how to do the analysis. 
 
 ## Preprocessing
 

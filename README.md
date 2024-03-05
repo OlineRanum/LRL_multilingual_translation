@@ -1,5 +1,7 @@
-# DLNLP_Project
+# A contrast based heuristic for choosing transfer languages for multi-source neural machine translation with a low-resource language
 Project on low-resource multilingual translation for DLNLP.
+
+We propose and test a heuristic for choosing transfer languages for joint learning with a low-resource language (LRL) in neural machine translation (NMT). NMT from a LRL benefits substantially from training jointly with one or more other languages, but efficiently choosing such languages for more than one transfer language is an open problem. LangRank uses learning-to-rank to efficiently choose a single language. We propose an efficient method of choosing pairs of languages by taking into account to which degree the languages get their relevance score from LangRank for similar reasons. We observed preliminary results to the conclusion that high-contrast pairs can benefit learning more than low-contrast pairs. 
 
 ## Installation
 
